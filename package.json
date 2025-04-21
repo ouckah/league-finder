@@ -1,0 +1,28 @@
+{
+  "name": "league-finder",
+  "version": "1.0.0",
+  "description": "A web app for finding other League of Legends players to team up with!",
+  "main": "app.js",
+  "type": "module",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ouckah/league-finder.git"
+  },
+  "author": "Amane Chibana, Aidan Ouckama, Eddison So, Jimmy Zhang",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ouckah/league-finder/issues"
+  },
+  "homepage": "https://github.com/ouckah/league-finder#readme",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "cookie-parser": "^1.4.7",
+    "express": "^5.1.0",
+    "express-handlebars": "^8.0.1",
+    "express-session": "^1.18.1",
+    "mongodb": "^6.15.0"
+  }
+}
