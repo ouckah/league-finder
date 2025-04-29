@@ -3,7 +3,7 @@ const router = Router();
 import helpers from '../utils/helpers.js';
 
 router.route('/').get(async (req, res) => {
-    let isLog = false;
+    let isLog = true;
 
     if (req.session && req.session.user) {
         isLog = true;

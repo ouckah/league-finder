@@ -1,0 +1,24 @@
+
+{{#if profilePicture}}
+    <img src="{{profilePicture}}" alt="Profile Picture" class="profile-picture">
+{{else}}
+    <p>No profile picture provided.</p>
+{{/if}}
+
+<h1>{{username}}</h1>
+<p>Biography: {{#if biography}}{{biography}}{{else}}No bio yet.{{/if}}</p>
+<p>Riot ID: {{riotId}}</p>
+<p>Region:{{region}}</p>
+<p>Preferred Roles: 
+    {{#each preferredRoles}}
+    <span>{{this}}</span>
+    {{/each}}
+</p>
+
+<p>Rank: {{rank}}</p>
+
+<!-- Maybe don't directly show reputation... -->
+<p>Reputation: {{reputation}}</p>
+<!-- Maybe list friends -->
+<p>Friends: {{#if friends.length}}{{friends.length}} friends{{else}}No friends added.{{/if}}</p>
+<!-- Possible other data from riot api -->

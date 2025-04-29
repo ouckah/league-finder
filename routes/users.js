@@ -16,8 +16,31 @@ router
 router
   .route('/login')
   .get(async (req, res) => {
+    // login page
+    res.render('login');
+  })
+  .post(async (req, res) => {
+    // user login
+});
+
+router
+  .route('/login')
+  .get(async (req, res) => {
     // registeration page
     res.render('login');
+  })
+  .post(async (req, res) => {
+    // user registration
+});
+
+// profile based on user id... /:id, update this route and handlebars later
+router
+  .route('/profile')
+  .get(async (req, res) => {
+    // check if user is logged in(and its the correct user), get user data... 
+
+    // profile page
+    res.render('profile');
   })
   .post(async (req, res) => {
     // user registration

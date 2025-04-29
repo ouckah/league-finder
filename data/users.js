@@ -21,6 +21,11 @@ const createUser = async (
     // 2-20 characters again maybe
     username = helpers.checkString(username);
 
+    // check database if this username exists... then throw
+    const usersCollection = await users();
+    const existingUser = await usersCollection.findOne({ username: username });
+    if (existingUser) throw 'User with that username already exists';    
+
     // no spaces, atleast 1 capital, numbers, special characters
     helpers.checkString(password);
 
@@ -44,8 +49,21 @@ const createUser = async (
         friends: [], // default friends list
     };
 
-    
-    
+    const insertInfo = await usersCollection.insertOne(newUser);
+    if (!insertInfo) throw 'Could not add user';
+
+    return { registrationCompleted: true }; // not sure what we want atm
+}
+
+const findUser = async (username) => {
+    userId = helpers.checkString(username, 'username');
+    // has to be between certain length
+
+    const usersCollection = await users();
+    const user = await usersCollection.findOne({ username: username });
+    if (!user) throw 'Could not find user';
+
+    return user;
 }
 
 const editUser = async (
