@@ -1,8 +1,8 @@
 import express from 'express';
-const app = express();
 import exphbs from 'express-handlebars';
 import session from 'express-session';
 import configRoutes from './routes/index.js';
+import middlewares from './utils/middleware.js';
 
 const rewriteUnsupportedBrowserMethods = (req, res, next) => {
     if (req.body && req.body._method) {
@@ -12,6 +12,8 @@ const rewriteUnsupportedBrowserMethods = (req, res, next) => {
   
     next();
 };
+
+const app = express();
 
 app.use('/public', express.static('public'));
 app.use(express.json());
@@ -29,6 +31,7 @@ app.use(session({
 }))
 
 // setup middleware
+middlewares(app);
 
 configRoutes(app);
 
