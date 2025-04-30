@@ -12,7 +12,7 @@ const getPuuid = async (summonerName, tagline, region) => {
     let regionUrl = region
     if (region == "NA") {
         regionUrl = "americas"
-    } 
+    }
     const headers = { "X-Riot-Token": API_KEY };
     const puuidUrl = `https://${regionUrl}.api.riotgames.com/riot/account/v1/accounts/by-riot-id/${summonerName}/${tagline}`;
     try {
@@ -67,6 +67,48 @@ const getRank = async (puuid, region) => {
     }
 }
 
+const getMatchIds = async (puuid, region) => {
+    let regionUrl = region;
+    if (region == "NA") {
+        regionUrl = "americas";
+    }
+    const matches = 2;
+    const headers = { "X-Riot-Token": API_KEY };
+    const matchUrl = `https://${regionUrl}.api.riotgames.com/lol/match/v5/matches/by-puuid/${puuid}/ids?start=0&count=${matches}`;
+    try {
+        const response = await axios.get(matchUrl, { headers });
+        return response.data;
+    } catch (error) {
+        throw "Error: Failed to fetch matches.";
+    }
+}
+
+const getMatchData = async (puuid, matchId, region) => {
+    let regionUrl = region;
+    if (region == "NA") {
+        regionUrl = "americas";
+    }
+    const headers = { "X-Riot-Token": API_KEY };
+    const matchUrl = `https://${regionUrl}.api.riotgames.com/lol/match/v5/matches/${matchId}`;
+    try {
+        const response = await axios.get(matchUrl, { headers });
+        let matchData = response.data.info.participants;
+        let i = 0;
+        for (const player of matchData) {
+            if (player.puuid === puuid) {
+                break;
+            }
+            i++;
+        }
+        return {
+            kills: matchData[i].kills,
+            deaths: matchData[i].deaths,
+            assists: matchData[i].assists
+        };
+    } catch (error) {
+        throw "Error: Failed to fetch match data.";
+    }
+}
 
 
-export { getPuuid, getRank };
+export { getPuuid, getRank, getMatchIds, getMatchData };
