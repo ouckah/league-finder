@@ -2,6 +2,7 @@ import { users } from '../config/mongoCollections.js';
 import { MongoNetworkTimeoutError, ObjectId } from 'mongodb';
 import helpers from '../utils/helpers.js';
 import bcrypt from 'bcrypt';
+import {ObjectId} from 'mongodb';
 
 // not sure if we want to try to fill in all fields or let useres fill fields on profile page
 const createUser = async (
@@ -141,20 +142,36 @@ const editUser = async (
 ) => {
 }
 
-const deleteUser = async (username) => {
+const deleteUser = async (userId) => {
     // Check if user exists
+    try {
+	getUser(userId);
+    } catch (e) {
+	throw e;
+    }
+
     const usersCollection = await users();
-    const existingUser = await usersCollection.findOne({ username: username });
-    if (!existingUser) throw 'User does not exist';
     // Delete user from database
     const deletionInfo = await usersCollection.deleteOne({ username: username });
     if (deletionInfo.deletedCount === 0) throw 'Could not delete user';
     return { deletionCompleted: true };
 }
 
+const getUser = async (userId) => {
+    if (!userId) throw 'You must provide a userId';
+    if (typeof userId !== 'string') throw 'userId must be a string';
+    if (!ObjectId.isValid(userId)) throw 'userId is not a valid ObjectId';
+
+    const userCollection = await users();
+    const user = await userCollection.findOne({ _id: new ObjectId(userId)});
+    if (!user) throw 'User not found';
+    return user;
+}
+
 export default {
     createUser,
     editUser,
     loginUser,
-    deleteUser
+    deleteUser,
+    getUser
 }
