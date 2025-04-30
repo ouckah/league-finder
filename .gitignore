@@ -130,3 +130,4 @@ dist
 .pnp.*
 
 ./config/settings.js
+.config/settings.js
