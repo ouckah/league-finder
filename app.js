@@ -32,10 +32,11 @@ app.use(session({
 
 // setup middleware
 middlewares(app);
-
 configRoutes(app);
 
-app.listen(3000, () => {
-  console.log("We've now got a server!");
-  console.log('Your routes will be running on http://localhost:3000');
+const PORT = 3000
+const HOST = '0.0.0.0'
+
+app.listen(PORT, HOST, () => {
+  console.log(`Server is running on http://${HOST}:${PORT}`);
 });
