@@ -102,6 +102,19 @@ const deleteComment = async (
     return { commentDeleted: true };
 }
 
-export { createComment, likeComment, replyToComment, deleteComment };
+const getPostComments = async (
+    postId
+) => {
+    if (!postId) throw 'You must provide a postId';
+    if (typeof postId !== 'string') throw 'The postId must be a string';
+    if (!ObjectId.isValid(postId)) throw 'The postId is not a valid ObjectId';
+
+    const commentCollection = await comments();
+    const comments = await commentCollection.find({postId: ObjectId(postId)}).toArray();
+    if (!comments) throw 'No comments found';
+    return comments;
+}
+
+export { createComment, likeComment, replyToComment, deleteComment, getPostComments };
 
 
