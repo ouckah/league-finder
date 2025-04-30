@@ -9,7 +9,7 @@ const createUser = async (
     lastName,
     email,
     username,
-    password,
+    password
   ) => {
     // maybe like 2-20 characters for first and last name
     firstName = helpers.checkString(firstName);
@@ -42,7 +42,7 @@ const createUser = async (
         lastName: lastName,
         biography: "", // default biography
         riotId: "", // default riotId
-        region: null, // default region
+        region: "", // default region
         preferredRoles: [], // default preferred roles
         rank: "",
         reputation: 0,
@@ -55,15 +55,47 @@ const createUser = async (
     return { registrationCompleted: true }; // not sure what we want atm
 }
 
-const findUser = async (username) => {
-    userId = helpers.checkString(username, 'username');
-    // has to be between certain length
+const loginUser = async (username, password) => {
+    // 2-20 characters again maybe
+    username = helpers.checkString(username);
 
+    // no spaces, atleast 1 capital, numbers, special characters
+    helpers.checkString(password);
+
+    // check database if this username exists
     const usersCollection = await users();
-    const user = await usersCollection.findOne({ username: username });
-    if (!user) throw 'Could not find user';
+    const existingUser = await usersCollection.findOne({ username: username });
+    if (!existingUser) throw 'Either the username or password is invalid';   
 
-    return user;
+    // check if password is correct
+    let comparePassword;
+    try {
+      comparePassword = await bcrypt.compare(password, existingUser.password);
+    } catch (e) {
+        throw 'Server error occured';
+    }
+
+    if (!comparePassword) {
+      throw 'Either the userId or password is invalid';
+    }
+
+    // user info to store in session, not sure what we would like.
+    let userInfo ={
+        username: existingUser.username,
+        email: existingUser.email,
+        profilePicture: existingUser.profilePicture,
+        firstName: existingUser.firstName,
+        lastName: existingUser.lastName,
+        biography: existingUser.biography,
+        riotId: existingUser.riotId,
+        region: existingUser.region,
+        preferredRoles: existingUser.preferredRoles,
+        rank: existingUser.rank,
+        reputation: existingUser.reputation,
+        friends: existingUser.friends
+    }
+
+    return userInfo; 
 }
 
 const editUser = async (
@@ -88,5 +120,6 @@ const deleteUser = async (
 export default {
     createUser,
     editUser,
+    loginUser,
     deleteUser
 }
