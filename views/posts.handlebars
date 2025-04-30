@@ -1,0 +1,7 @@
+<h2>Your Post's Feed</h2>
+{{#each post}}
+    <h3>{{this.title}}</h3>
+    <img src="{{this.imageLink}}" alt="Post Image" class="post-picture">
+    <p id="post-author" name="post-author">{{this.author}}</p>
+    <p id="post-body" name="post-body">{{this.content}}</p>
+{{/each}}
