@@ -1,4 +1,4 @@
-import {ObjectId} from 'mongodb';
+import { ObjectId } from 'mongodb';
 
 // can fix later, it is lecture code atm
 const exportedMethods = {
@@ -36,7 +36,17 @@ const exportedMethods = {
     }
 
     return arr;
+  },
+
+  checkStringWithLength(str, minLength, maxLength, chars) {
+    if (str.length < minLength || str.length > maxLength) {
+      throw new Error('String must be between ' + minLength + ' and ' + maxLength + ' characters long.');
+    }
+    if (!chars.test(str)) {
+      throw new Error('String contains illegal characters.');
+    }
   }
+
 };
 
 export default exportedMethods;
