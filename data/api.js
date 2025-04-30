@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Key needs to be renewed daily
-const API_KEY = "RGAPI-550f23c5-d8bd-42f1-ad70-58343f9ee48a";
+const API_KEY = "PLACEHOLDER";
 
 let region = "na1"
 let BASE_URL = `https://${region}.api.riotgames.com`  // Adjust region if needed
