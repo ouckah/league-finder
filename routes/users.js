@@ -16,9 +16,9 @@ router
       return res.status(400).json({ error: 'All fields are required' }); // add render page with the error message
     }
 
-    const { firstName, lastName, email, username, password, confirmPassword } = req.body;
+    let { firstName, lastName, email, username, password, confirmPassword } = req.body;
 
-    try{
+    try {
       firstName = helpers.checkString(firstName);
       helpers.checkStringWithLength(firstName, 2, 20, /^[a-zA-Z]+$/);
       lastName = helpers.checkString(lastName);
@@ -36,19 +36,19 @@ router
       helpers.checkString(password);
       helpers.checkString(confirmPassword);
       if (password.length < 8) {
-        throw 'Password must be at least 8 characters long';
+        throw new Error('Password must be at least 8 characters long');
       }
       if (!/[A-Z]/.test(password)) {
-          throw 'Password must contain at least one uppercase letter';
+        throw new Error('Password must contain at least one uppercase letter');
       }
       if (!/[0-9]/.test(password)) {
-          throw 'Password must contain at least one number';
+        throw new Error('Password must contain at least one number');
       }
       if (!/[^a-zA-Z0-9 ]/.test(password)) {
-          throw 'Password must contain at least one special character';
+        throw new Error('Password must contain at least one special character');
       }
-    } catch(e){
-      return res.status(400).json({ error: e }); // create render page with the error message
+    } catch (e) {
+      return res.status(400).json({ error: e.message }); // create render page with the error message
     }
 
     // user registration
@@ -56,10 +56,9 @@ router
       const user = await data.createUser(firstName, lastName, email, username, password);
       res.redirect('/users/login'); // redirect to login page after successful registration
     } catch (e) {
-      return res.status(500).json({ error: e }); // add render page with the error message
+      return res.status(500).json({ error: e.message }); // add render page with the error message
     }
-
-});
+  });
 
 router
   .route('/login')
@@ -83,16 +82,16 @@ router
       helpers.checkString(password);
 
       if (password.length < 8) {
-          throw 'Password must be at least 8 characters long';
+          throw new Error('Password must be at least 8 characters long');
       }
       if (!/[A-Z]/.test(password)) {
-          throw 'Password must contain at least one uppercase letter';
+          throw new Error('Password must contain at least one uppercase letter');
       }
       if (!/[0-9]/.test(password)) {
-          throw 'Password must contain at least one number';
+          throw new Error('Password must contain at least one number');
       }
       if (!/[^a-zA-Z0-9 ]/.test(password)) {
-          throw 'Password must contain at least one special character';
+          throw new Error('Password must contain at least one special character');
       }
     } catch(e){
       return res.status(400).json({ error: e }); // create render page with the error message
