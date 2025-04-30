@@ -1,34 +1,125 @@
 import {posts} from '../config/mongoCollections.js';
+import {getUser} from './users.js';
 import {MongoNetworkTimeoutError, ObjectId} from 'mongodb';
 import helpers from '../utils/helpers.js';
 
 const createPost = async (
     userId,
     image,
+    title,
     content,
     tags
-  ) => {
+) => {
+    
+    const post = {
+	userId: userId,
+	image: image,
+	title: title,
+	content: content,
+	tags: tags,
+	createdAt: new Date()
+    }
+
+    const postsCollection = await posts();
+    const insertInformation = await postsCollection.insertOne(post);
+    if (!insertInformation) throw 'Could not add post';
+    
+    return { postCreated: true };
 }
 
 const getPost = async (
     postId,
+) => {
+    if (!postId) throw 'You must provide an id to search for';
+    if (typeof postId !== 'string') throw 'The id must be a string';
+    if (!ObjectId.isValid(postId)) throw 'The id is not a valid ObjectId';
+
+    const postsCollection = await posts();
+    const post = await postsCollection.findOne({ _id: ObjectId(postId) });
+    if (!post) throw 'No post with that id';
+
+    return post;
+}
+
+const getUserPosts = async (
     userId
 ) => {
+    if (!userId) throw 'You must provide an id to search for';
+    if (typeof userId !== 'string') throw 'The id must be a string';
+    if (!ObjectId.isValid(userId)) throw 'The id is not a valid ObjectId';
+
+    const postsCollection = await posts();
+    const posts = await postsCollection.find({ userId: ObjectId(userId) }).toArray();
+    if (!posts) throw 'User has no posts';
+
+    return posts;
 }
 
 const editPost = async (
     postId,
-    userId,
     image,
+    title,
     content,    
     tags
 ) => {
+    if (!postId) throw 'You must provide an id to search for';
+    if (!image) throw 'You must provide an image';
+    if (!title) throw 'You must provide a title';
+    if (!content) throw 'You must provide content';
+    if (!tags) throw 'You must provide tags';
+
+    if (typeof postId !== 'string') throw 'The id must be a string';
+    if (!ObjectId.isValid(postId)) throw 'The id is not a valid ObjectId';
+
+    if (typeof image !== 'string') throw 'The image must be a string';
+    if (image.trim() === '') throw 'The image cannot be an empty string';
+
+    if (typeof title !== 'string') throw 'The title must be a string';
+    if (title.trim() === '') throw 'The title cannot be an empty string';
+
+    if (typeof content !== 'string') throw 'The content must be a string';
+    if (content.trim() === '') throw 'The content cannot be an empty string';
+
+    if (!Array.isArray(tags)) throw 'The tags must be an array';
+    for (let i = 0; i < tags.length; i++) {
+	if (typeof tags[i] !== 'string') throw 'The tags must be strings';
+	if (tags[i].trim() === '') throw 'The tags cannot be empty strings';
+    }
+
+    try {
+	const post = await getPost(postId);
+	const postCollection = await posts();
+	const updatedPost = {
+	    image: image,
+	    title: title,
+	    content: content,
+	    tags: tags,
+	    createdAt: post.createdAt
+	};
+	await postCollection.updateOne(
+	    { _id: ObjectId(postId) },
+	    { $set: updatedPost }
+	);
+	return { postUpdated: true };
+    } catch (e) {
+	throw e;
+    }
 }
 
 const deletePost = async (
     postId,
-    userId
 ) => {
+    if (!postId) throw 'You must provide an id to search for';
+    if (typeof postId !== 'string') throw 'The id must be a string';
+    if (!ObjectId.isValid(postId)) throw 'The id is not a valid ObjectId';
+
+    const postsCollection = await posts();
+    const deletionInfo = await postsCollection.deleteOne({ _id: ObjectId(postId) });
+    if (deletionInfo.deletedCount === 0) {
+	throw `Could not delete post with id of ${postId}`;
+    }
+
+    return { postDeleted: true };
 }
 
-
+export { createPost, getPost, getUserPosts, editPost, deletePost };
