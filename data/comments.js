@@ -36,5 +36,72 @@ const createComment = async (
     throw 'Failed to create comment';
 }   
 
+const likeComment = async (
+    commentId
+) => {
+    if (!commentId) throw 'You must provide a commentId';
+    if (typeof commentId !== 'string') throw 'The commentId must be a string';
+    if (!ObjectId.isValid(commentId)) throw 'The commentId is not a valid ObjectId';
+
+    const commentCollection = await comments();
+    const comment = await commentCollection.findOne({_id: ObjectId(commentId)});
+    if (!comment) throw 'Comment not found';
+
+    const updatedComment = {
+        likes: comment.likes + 1
+    }
+
+    const updateInfo = await commentCollection.updateOne(
+        {_id: ObjectId(commentId)},
+        {$set: updatedComment}
+    );
+    if (updateInfo.modifiedCount === 0) throw 'Failed to like comment';
+    return { commentUpdated: true };
+}
+
+const replyToComment = async (
+    commentId,
+    content
+) => {
+    if (!commentId) throw 'You must provide a commentId';
+    if (typeof commentId !== 'string') throw 'The commentId must be a string';
+    if (!ObjectId.isValid(commentId)) throw 'The commentId is not a valid ObjectId';
+
+    const commentCollection = await comments();
+    const comment = await commentCollection.findOne({_id: ObjectId(commentId)});
+    if (!comment) throw 'Comment not found';
+
+    if (!content) throw 'You must provide a content';
+    if (typeof content !== 'string') throw 'The content must be a string';
+    if (content.trim() === '') throw 'The content cannot be an empty string';
+
+    const updatedComment = {
+        replies: [...comment.replies, content]
+    }
+
+    const updateInfo = await commentCollection.updateOne(
+        {_id: ObjectId(commentId)},
+        {$set: updatedComment}
+    );
+    if (updateInfo.modifiedCount === 0) throw 'Failed to reply to comment';
+    return { replyAdded: true };
+}
+
+const deleteComment = async (
+    commentId
+) => {
+    if (!commentId) throw 'You must provide a commentId';
+    if (typeof commentId !== 'string') throw 'The commentId must be a string';
+    if (!ObjectId.isValid(commentId)) throw 'The commentId is not a valid ObjectId';
+    const commentCollection = await comments();
+    const comment = await commentCollection.findOne({_id: ObjectId(commentId)});
+    if (!comment) throw 'Comment not found';
+
+    const deletionInfo = await commentCollection.deleteOne({_id: ObjectId(commentId)});
+    if (deletionInfo.deletedCount === 0) throw 'Failed to delete comment';
+    return { commentDeleted: true };
+}
+
+export { createComment, likeComment, replyToComment, deleteComment };
 
 
