@@ -73,8 +73,8 @@ router
 
     let {username,password} = req.body;
 
-    try{
-          // 2-20 characters again maybe
+    try {
+      // 2-20 characters again maybe
       username = helpers.checkString(username);
       helpers.checkStringWithLength(username, 2, 20, /^[a-zA-Z0-9]+$/);
 
@@ -82,23 +82,23 @@ router
       helpers.checkString(password);
 
       if (password.length < 8) {
-          throw new Error('Password must be at least 8 characters long');
+        throw new Error('Password must be at least 8 characters long');
       }
       if (!/[A-Z]/.test(password)) {
-          throw new Error('Password must contain at least one uppercase letter');
+        throw new Error('Password must contain at least one uppercase letter');
       }
       if (!/[0-9]/.test(password)) {
-          throw new Error('Password must contain at least one number');
+        throw new Error('Password must contain at least one number');
       }
       if (!/[^a-zA-Z0-9 ]/.test(password)) {
-          throw new Error('Password must contain at least one special character');
+        throw new Error('Password must contain at least one special character');
       }
-    } catch(e){
-      return res.status(400).json({ error: e }); // create render page with the error message
+    } catch(e) {
+      return res.status(400).json({ error: e.message }); // create render page with the error message
     }
 
     // user login
-    try{
+    try {
       const user = await data.loginUser(username, password);
 
       // store id
@@ -108,8 +108,8 @@ router
       };
 
       res.redirect('/'); // redirect to homepage after successful login 
-    }catch(e){
-      return res.status(400).json({ error: e }); 
+    } catch (e) {
+      return res.status(400).json({ error: e.message }); 
     }
 
 });
@@ -126,24 +126,24 @@ router
     let userId = "";
 
     if (req.session && req.session.user) {
-        isLog = true;
-        userId = req.session.user.userId; // get the user id from the session, not sure if we need it to validated
+      isLog = true;
+      userId = req.session.user.userId; // get the user id from the session, not sure if we need it to validated
     }
 
-    try{
+    try {
       req.params.id = helpers.checkId(req.params.id.toString(),"id");
-    } catch(e){
+    } catch(e) {
       console.log(e);
-      return res.status(400).json({ error: e });
+      return res.status(400).json({ error: e.message });
     }
 
-    try{
+    try {
       const user = await data.getUser(req.params.id); 
 
       res.render('profile',{title: user.username + "'s Profile",personalID: userId,isLoggedIn: isLog, profilePicture: user.profilePicture, username: user.username, biography: user.biography,riotId: user.riotId,region:user.region,preferredRoles:user.preferredRoles,rank:user.Rank, reputation: user.reputation, friends: user.friends}); // render the profile page with the user data
-    }catch(e){
+    } catch (e) {
       console.log(e);
-      return res.status(400).json({ error: e }); 
+      return res.status(400).json({ error: e.message }); 
     }
 
 
@@ -152,11 +152,11 @@ router
   })
   .post(async (req, res) => {
     // profile editing
-});
+  });
 
 router.route('/logout').get(async (req, res) => {
   req.session.destroy();
-  res.render('logout', {title: "Logged Out"});
+  res.render('logout', { title: "Logged Out" });
 });
 
 
