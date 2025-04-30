@@ -2,7 +2,6 @@ import { users } from '../config/mongoCollections.js';
 import { MongoNetworkTimeoutError, ObjectId } from 'mongodb';
 import helpers from '../utils/helpers.js';
 import bcrypt from 'bcrypt';
-import { ObjectId } from 'mongodb';
 
 // not sure if we want to try to fill in all fields or let useres fill fields on profile page
 const createUser = async (
@@ -20,6 +19,7 @@ const createUser = async (
 
     // email regex : /^[a-zA-Z0-9._-]+@[a-zA-Z0-9]+\.[a-zA-Z]+$/ maybe?
     email = helpers.checkString(email);
+    helpers.checkStringWithLength(email, 5, 255, /^[a-zA-Z0-9._-]+@[a-zA-Z0-9]+\.[a-zA-Z]+$/);
 
     // 2-20 characters again maybe
     username = helpers.checkString(username);
@@ -33,16 +33,16 @@ const createUser = async (
     // no spaces, atleast 1 capital, numbers, special characters
     helpers.checkString(password);
     if (password.length < 8) {
-        throw new Error('Password must be at least 8 characters long');
+        throw 'Password must be at least 8 characters long';
     }
     if (!/[A-Z]/.test(password)) {
-        throw new Error('Password must contain at least one uppercase letter');
+        throw 'Password must contain at least one uppercase letter';
     }
     if (!/[0-9]/.test(password)) {
-        throw new Error('Password must contain at least one number');
+        throw 'Password must contain at least one number';
     }
     if (!/[^a-zA-Z0-9 ]/.test(password)) {
-        throw new Error('Password must contain at least one special character');
+        throw 'Password must contain at least one special character';
     }
 
     // hash password
@@ -78,17 +78,18 @@ const loginUser = async (username, password) => {
 
     // no spaces, atleast 1 capital, numbers, special characters
     helpers.checkString(password);
+
     if (password.length < 8) {
-        throw new Error('Password must be at least 8 characters long');
+        throw 'Password must be at least 8 characters long';
     }
     if (!/[A-Z]/.test(password)) {
-        throw new Error('Password must contain at least one uppercase letter');
+        throw 'Password must contain at least one uppercase letter';
     }
     if (!/[0-9]/.test(password)) {
-        throw new Error('Password must contain at least one number');
+        throw 'Password must contain at least one number';
     }
     if (!/[^a-zA-Z0-9 ]/.test(password)) {
-        throw new Error('Password must contain at least one special character');
+        throw 'Password must contain at least one special character';
     }
 
     // check database if this username exists
@@ -112,18 +113,7 @@ const loginUser = async (username, password) => {
     let userInfo = {
         // store userId in session for use in other functions, converted to string
         userId: existingUser._id.toString(),
-        username: existingUser.username,
-        email: existingUser.email,
-        profilePicture: existingUser.profilePicture,
-        firstName: existingUser.firstName,
-        lastName: existingUser.lastName,
-        biography: existingUser.biography,
-        riotId: existingUser.riotId,
-        region: existingUser.region,
-        preferredRoles: existingUser.preferredRoles,
-        rank: existingUser.rank,
-        reputation: existingUser.reputation,
-        friends: existingUser.friends
+        myFavoriteBrainrot: "Cappucino Cappucino Assasino"
     }
 
     return userInfo;

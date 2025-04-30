@@ -35,7 +35,7 @@ middlewares(app);
 configRoutes(app);
 
 const PORT = 3000
-const HOST = '0.0.0.0'
+const HOST = 'localhost'
 
 app.listen(PORT, HOST, () => {
   console.log(`Server is running on http://${HOST}:${PORT}`);
