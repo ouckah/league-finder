@@ -1,6 +1,7 @@
 import { users } from '../config/mongoCollections.js';
 import { MongoNetworkTimeoutError, ObjectId } from 'mongodb';
 import helpers from '../utils/helpers.js';
+import validation from '../public/util/validation.js'
 import bcrypt from 'bcrypt';
 
 // not sure if we want to try to fill in all fields or let useres fill fields on profile page
@@ -11,39 +12,19 @@ const createUser = async (
     username,
     password
 ) => {
-    // maybe like 2-20 characters for first and last name
-    firstName = helpers.checkString(firstName);
-    helpers.checkStringWithLength(firstName, 2, 20, /^[a-zA-Z]+$/);
-    lastName = helpers.checkString(lastName);
-    helpers.checkStringWithLength(lastName, 2, 20, /^[a-zA-Z]+$/);
-
-    // email regex : /^[a-zA-Z0-9._-]+@[a-zA-Z0-9]+\.[a-zA-Z]+$/ maybe?
-    email = helpers.checkString(email);
-    helpers.checkStringWithLength(email, 5, 255, /^[a-zA-Z0-9._-]+@[a-zA-Z0-9]+\.[a-zA-Z]+$/);
-
-    // 2-20 characters again maybe
-    username = helpers.checkString(username);
-    helpers.checkStringWithLength(username, 2, 20, /^[a-zA-Z0-9]+$/);
+    // validate input
+    validation.validateRegistration(
+        firstName,
+        lastName,
+        email,
+        username,
+        password
+    )
 
     // check database if this username exists... then throw
     const usersCollection = await users();
     const existingUser = await usersCollection.findOne({ username: username });
     if (existingUser) throw 'User with that username already exists';
-
-    // no spaces, atleast 1 capital, numbers, special characters
-    helpers.checkString(password);
-    if (password.length < 8) {
-        throw 'Password must be at least 8 characters long';
-    }
-    if (!/[A-Z]/.test(password)) {
-        throw 'Password must contain at least one uppercase letter';
-    }
-    if (!/[0-9]/.test(password)) {
-        throw 'Password must contain at least one number';
-    }
-    if (!/[^a-zA-Z0-9 ]/.test(password)) {
-        throw 'Password must contain at least one special character';
-    }
 
     // hash password
     const saltRounds = 16;

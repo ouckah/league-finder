@@ -2,7 +2,7 @@ import express from 'express';
 import exphbs from 'express-handlebars';
 import session from 'express-session';
 import configRoutes from './routes/index.js';
-import middlewares from './utils/middleware.js';
+import setupMiddleware from './utils/middleware.js';
 
 const rewriteUnsupportedBrowserMethods = (req, res, next) => {
     if (req.body && req.body._method) {
@@ -31,7 +31,7 @@ app.use(session({
 }))
 
 // setup middleware
-middlewares(app);
+setupMiddleware(app);
 configRoutes(app);
 
 const PORT = 3000
