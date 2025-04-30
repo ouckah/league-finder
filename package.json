@@ -23,6 +23,6 @@
     "express": "^5.1.0",
     "express-handlebars": "^8.0.1",
     "express-session": "^1.18.1",
-    "mongodb": "^6.15.0"
+    "mongodb": "^6.16.0"
   }
 }
