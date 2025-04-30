@@ -1,6 +1,7 @@
 import {Router} from 'express';
 const router = Router();
 import helpers from '../utils/helpers.js';
+import validation from '../public/util/validation.js';
 import data from '../data/users.js';
 
 
@@ -19,34 +20,14 @@ router
     let { firstName, lastName, email, username, password, confirmPassword } = req.body;
 
     try {
-      firstName = helpers.checkString(firstName);
-      helpers.checkStringWithLength(firstName, 2, 20, /^[a-zA-Z]+$/);
-      lastName = helpers.checkString(lastName);
-      helpers.checkStringWithLength(lastName, 2, 20, /^[a-zA-Z]+$/);
-  
-      // email regex : /^[a-zA-Z0-9._-]+@[a-zA-Z0-9]+\.[a-zA-Z]+$/ maybe?
-      email = helpers.checkString(email);
-      helpers.checkStringWithLength(email, 5, 255, /^[a-zA-Z0-9._-]+@[a-zA-Z0-9]+\.[a-zA-Z]+$/);
-  
-      // 2-20 characters again maybe
-      username = helpers.checkString(username);
-      helpers.checkStringWithLength(username, 2, 20, /^[a-zA-Z0-9]+$/);
-
-      // password
-      helpers.checkString(password);
-      helpers.checkString(confirmPassword);
-      if (password.length < 8) {
-        throw new Error('Password must be at least 8 characters long');
-      }
-      if (!/[A-Z]/.test(password)) {
-        throw new Error('Password must contain at least one uppercase letter');
-      }
-      if (!/[0-9]/.test(password)) {
-        throw new Error('Password must contain at least one number');
-      }
-      if (!/[^a-zA-Z0-9 ]/.test(password)) {
-        throw new Error('Password must contain at least one special character');
-      }
+      validation.validateRegistration(
+        firstName,
+        lastName,
+        email,
+        username,
+        password,
+        confirmPassword
+      )
     } catch (e) {
       return res.status(400).json({ error: e.message }); // create render page with the error message
     }
