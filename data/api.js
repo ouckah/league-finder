@@ -6,7 +6,6 @@ let region = "na1"
 let BASE_URL = `https://${region}.api.riotgames.com`  // Adjust region if needed
 const BASE_URL_2 = "https://americas.api.riotgames.com";
 
-
 const getPuuid = async (summonerName, tagline, region) => {
     // Currently only have NA region, need to add other region codes
     if (region == "NA") {
