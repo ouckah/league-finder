@@ -129,6 +129,3 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
-./config/settings.js
-.config/settings.js
-config/settings.js
