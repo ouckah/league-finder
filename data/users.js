@@ -2,7 +2,7 @@ import { users } from '../config/mongoCollections.js';
 import { MongoNetworkTimeoutError, ObjectId } from 'mongodb';
 import helpers from '../utils/helpers.js';
 import bcrypt from 'bcrypt';
-import {ObjectId} from 'mongodb';
+import { ObjectId } from 'mongodb';
 
 // not sure if we want to try to fill in all fields or let useres fill fields on profile page
 const createUser = async (
@@ -110,6 +110,8 @@ const loginUser = async (username, password) => {
 
     // user info to store in session, not sure what we would like.
     let userInfo = {
+        // store userId in session for use in other functions, converted to string
+        userId: existingUser._id.toString(),
         username: existingUser.username,
         email: existingUser.email,
         profilePicture: existingUser.profilePicture,
@@ -145,14 +147,14 @@ const editUser = async (
 const deleteUser = async (userId) => {
     // Check if user exists
     try {
-	getUser(userId);
+        getUser(userId);
     } catch (e) {
-	throw e;
+        throw e;
     }
 
     const usersCollection = await users();
     // Delete user from database
-    const deletionInfo = await usersCollection.deleteOne({ username: username });
+    const deletionInfo = await usersCollection.deleteOne({ _id: new ObjectId(userId) });
     if (deletionInfo.deletedCount === 0) throw 'Could not delete user';
     return { deletionCompleted: true };
 }
@@ -163,7 +165,7 @@ const getUser = async (userId) => {
     if (!ObjectId.isValid(userId)) throw 'userId is not a valid ObjectId';
 
     const userCollection = await users();
-    const user = await userCollection.findOne({ _id: new ObjectId(userId)});
+    const user = await userCollection.findOne({ _id: new ObjectId(userId) });
     if (!user) throw 'User not found';
     return user;
 }
