@@ -1,11 +1,12 @@
 import {Router} from 'express';
 const router = Router();
 import { createPost, getAllPosts } from '../data/posts.js';
+import { protectedRoute } from '../utils/middleware.js';
 import helpers from '../utils/helpers.js';
 
 const createPostHandler = async (req, res) => {
   const { title, content, image, tags } = req.body
-  const userId = "68129fbdc3f5080de8c09fc0"
+  const userId = req.user.userId
 
   // TODO validate inputs
 
@@ -34,9 +35,10 @@ router
 
 router
   .route('/new')
+  .all(protectedRoute)
   .get(async (req, res) => {
     res.render('new_post')
   })
-  .post(createPostHandler) // TODO: add middleware for authed user 
+  .post(createPostHandler)
 
 export default router;
