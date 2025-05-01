@@ -1,7 +1,28 @@
 <h2>Your Post's Feed</h2>
-{{#each post}}
+
+{{#if message}}
+    <p id="message">{{message}}</p>
+{{/if}}
+
+{{#each posts}}
+  <div class="post">
     <h3>{{this.title}}</h3>
-    <img src="{{this.imageLink}}" alt="Post Image" class="post-picture">
-    <p id="post-author" name="post-author">{{this.author}}</p>
-    <p id="post-body" name="post-body">{{this.content}}</p>
+
+    {{#if this.image}}
+      <img src="{{this.image}}" alt="Post Image" class="post-picture">
+    {{/if}}
+
+    <p class="post-author">Posted by: {{this.username}}</p>
+    <p class="post-content">{{this.content}}</p>
+
+    {{#if this.tags.length}}
+      <p class="post-tags">Tags:
+        {{#each this.tags}}
+          <span class="tag">{{this}}</span>
+        {{/each}}
+      </p>
+    {{/if}}
+
+    <p class="post-date">{{this.createdAt}}</p>
+  </div>
 {{/each}}

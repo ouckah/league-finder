@@ -141,7 +141,7 @@ const getUser = async (userId) => {
     return user;
 }
 
-export default {
+export {
     createUser,
     editUser,
     loginUser,
