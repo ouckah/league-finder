@@ -53,12 +53,6 @@ const exportedMethods = {
   validateTeam (
       title, desiredRank, desiredRole, region, description
   ) {
-      if (typeof desiredRank === 'string') {
-	  desiredRank = [desiredRank];
-      }
-      if (typeof desiredRole === 'string') {
-	  desiredRole = [desiredRole];
-      }
       helpers.checkString(title);
       helpers.checkStringArray(desiredRank, 'desiredRank');
       helpers.checkStringArray(desiredRole, 'desiredRole');
