@@ -2,6 +2,7 @@
 
 const setupMiddleware = (app) => {
   app.use(logMiddleware)
+  app.use(authMiddleware)
 }
 
 function logMiddleware(req, res, next) {
@@ -9,11 +10,19 @@ function logMiddleware(req, res, next) {
   const method = req.method
   const path = req.path
 
-  // const loggedIn = req.loggedIn
-  // const isSuperUser = req.isSuperUser
+  const loggedIn = req.loggedIn
 
-  console.log(`${currentTimestamp}: ${method} ${path}`)
-  // console.log(`${currentTimestamp}: ${method} ${path} (${loggedIn ? ("Authenticated " + isSuperUser ? "Super User" : "User") : "Non-Authenticated"})`)
+  console.log(`${currentTimestamp}: ${method} ${path} (${loggedIn ? "Authenticated User" : "Non-Authenticated"})`)
+  next()
+}
+
+function authMiddleware(req, res, next) {
+  const user = req.session?.user || null;
+  const loggedIn = !!user
+
+  req.loggedIn = loggedIn
+
+  res.locals.loggedIn = loggedIn
   next()
 }
 
