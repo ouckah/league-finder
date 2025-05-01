@@ -1,11 +1,10 @@
 import axios from 'axios';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 // Key needs to be renewed daily
-const API_KEY = "PLACEHOLDER";
-
-let region = "na1"
-let BASE_URL = `https://${region}.api.riotgames.com`  // Adjust region if needed
-const BASE_URL_2 = "https://americas.api.riotgames.com";
+const API_KEY = process.env.RIOT_API_KEY;
 
 const getPuuid = async (summonerName, tagline, region) => {
     // Currently only have NA region, need to add other region codes
@@ -67,14 +66,13 @@ const getRank = async (puuid, region) => {
     }
 }
 
-const getMatchIds = async (puuid, region) => {
+const getMatchIds = async (puuid, count, region) => {
     let regionUrl = region;
     if (region == "NA") {
         regionUrl = "americas";
     }
-    const matches = 2;
     const headers = { "X-Riot-Token": API_KEY };
-    const matchUrl = `https://${regionUrl}.api.riotgames.com/lol/match/v5/matches/by-puuid/${puuid}/ids?start=0&count=${matches}`;
+    const matchUrl = `https://${regionUrl}.api.riotgames.com/lol/match/v5/matches/by-puuid/${puuid}/ids?start=0&count=${count}`;
     try {
         const response = await axios.get(matchUrl, { headers });
         return response.data;
@@ -101,6 +99,8 @@ const getMatchData = async (puuid, matchId, region) => {
             i++;
         }
         return {
+            mode: response.data.info.gameMode,
+            result: matchData[i].win ? "Win" : "Loss",
             kills: matchData[i].kills,
             deaths: matchData[i].deaths,
             assists: matchData[i].assists
@@ -110,5 +110,14 @@ const getMatchData = async (puuid, matchId, region) => {
     }
 }
 
+const getRecentMatches = async (puuid, count, region) => {
+    const matchIds = await getMatchIds(puuid, count, region);
+    let results = [];
+    for (const matchId of matchIds) {
+        const matchData = await getMatchData(puuid, matchId, region);
+        results.push(matchData);
+    }
+    return results;
+}
 
-export { getPuuid, getRank, getMatchIds, getMatchData };
+export { getPuuid, getRank, getMatchIds, getMatchData, getRecentMatches };
