@@ -1,8 +1,8 @@
 // middleware
 
 const setupMiddleware = (app) => {
-  app.use(authMiddleware)
-  app.use(logMiddleware)
+  app.use(authMiddleware);
+  app.use(logMiddleware);
 }
 
 function authMiddleware(req, res, next) {
@@ -10,15 +10,16 @@ function authMiddleware(req, res, next) {
   const isLoggedIn = !!user
 
   req.isLoggedIn = isLoggedIn
-
   res.locals.isLoggedIn = isLoggedIn
-  next()
+  res.locals.personalID = isLoggedIn ? user.userId : null;
+
+  next();
 }
 
 export function protectedRoute(req, res, next) {
   const user = req.session?.user;
   if (!user) {
-    return res.status(401).redirect('/login');
+    return res.status(401).redirect('/users/login');
   }
 
   req.user = user;

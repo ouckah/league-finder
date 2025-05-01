@@ -1,12 +1,12 @@
 import {Router} from 'express';
 const router = Router();
 import { createPost, getAllPosts } from '../data/posts.js';
-import { protectedRoute } from '../utils/middleware.js';
+import { protectedRoute} from '../utils/middleware.js';
 import helpers from '../utils/helpers.js';
 
 const createPostHandler = async (req, res) => {
-  const { title, content, image, tags } = req.body
-  const userId = req.user.userId
+  const { title, content, image, tags } = req.body;
+  const userId = req.user.userId;
 
   // TODO validate inputs
 
@@ -19,7 +19,7 @@ const createPostHandler = async (req, res) => {
   )
 
   if (!response.postCreated) {
-    return res.render('new_post', { error: "Failed to create post." })
+    return res.render('new_post', { error: "Failed to create post." });
   }
 
   return res.redirect('/posts');
@@ -28,9 +28,9 @@ const createPostHandler = async (req, res) => {
 router
   .route('/')
   .get(async (req, res) => {
-    const posts = await getAllPosts()
+    const posts = await getAllPosts();
     
-    res.render('posts', { posts })
+    res.render('posts', { posts });
   })
 
 router

@@ -104,7 +104,6 @@ router
     // if user is logged in, then give ability to edit profile? Add everything for logged in user
     // but maybe we should make other peoples profile viewable too? so we should add a userid to the url
     // just use a finduser data function and render new page
-    let userId = req.user.userId;
 
     try {
       req.params.id = helpers.checkId(req.params.id.toString(),"id");
@@ -116,7 +115,7 @@ router
     try {
       const user = await getUser(req.params.id); 
 
-      res.render('profile',{title: user.username + "'s Profile", personalID: userId, isLoggedIn: req.isLoggedIn, profilePicture: user.profilePicture, username: user.username, biography: user.biography, riotId: user.riotId,region:user.region,preferredRoles:user.preferredRoles,rank:user.Rank, reputation: user.reputation, friends: user.friends}); // render the profile page with the user data
+      res.render('profile',{title: user.username + "'s Profile",  profilePicture: user.profilePicture, username: user.username, biography: user.biography, riotId: user.riotId,region:user.region,preferredRoles:user.preferredRoles,rank:user.Rank, reputation: user.reputation, friends: user.friends}); // render the profile page with the user data
     } catch (e) {
       console.log(e);
       return res.status(400).json({ error: e.message }); 
