@@ -1,0 +1,21 @@
+<h1 id="title" name="title">{{team.title}}</h1>
+
+<h3 id="desiredRankHeader" name="desiredRankHeader">Desired Rank</h3>
+<ul>
+  {{#each team.desiredRank}}
+    <li>{{this}}</li>
+  {{/each}}
+</ul>
+
+<h3 id="desiredRole" name="desiredRole">Desired Role</h3>
+<ul>
+  {{#each team.desiredRole}}
+    <li>{{this}}</li>
+  {{/each}}
+</ul>
+
+<h3 id="region" name="region">Region</h3>
+<p>{{team.region}}</p>
+
+</br>
+<p>{{team.description}}</p>
