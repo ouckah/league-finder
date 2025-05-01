@@ -2,7 +2,7 @@ import {Router} from 'express';
 const router = Router();
 import helpers from '../utils/helpers.js';
 import validation from '../public/util/validation.js';
-import data from '../data/users.js';
+import { createUser, editUser, loginUser, deleteUser, getUser } from '../data/users.js';
 
 
 router
@@ -34,7 +34,7 @@ router
 
     // user registration
     try {
-      const user = await data.createUser(firstName, lastName, email, username, password);
+      const user = await createUser(firstName, lastName, email, username, password);
       res.redirect('/users/login'); // redirect to login page after successful registration
     } catch (e) {
       return res.status(500).json({ error: e.message }); // add render page with the error message
@@ -80,7 +80,7 @@ router
 
     // user login
     try {
-      const user = await data.loginUser(username, password);
+      const user = await loginUser(username, password);
 
       // store id
       req.session.user = {
@@ -119,7 +119,7 @@ router
     }
 
     try {
-      const user = await data.getUser(req.params.id); 
+      const user = await getUser(req.params.id); 
 
       res.render('profile',{title: user.username + "'s Profile",personalID: userId,isLoggedIn: isLog, profilePicture: user.profilePicture, username: user.username, biography: user.biography,riotId: user.riotId,region:user.region,preferredRoles:user.preferredRoles,rank:user.Rank, reputation: user.reputation, friends: user.friends}); // render the profile page with the user data
     } catch (e) {
