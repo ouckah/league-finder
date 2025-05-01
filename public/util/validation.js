@@ -49,6 +49,16 @@ const exportedMethods = {
     email = validateEmail(email);
     username = validateUsername(username);
     validatePassword(password, confirmPassword);
+  },
+  validateTeam (
+      title, desiredRank, desiredRole, region, description
+  ) {
+      helpers.checkString(title);
+      helpers.checkStringArray(desiredRank, 'desiredRank');
+      helpers.checkStringArray(desiredRole, 'desiredRole');
+      helpers.checkString(region);
+      helpers.checkString(description);
+      helpers.checkStringWithLength(title, 2, 20, /^[a-zA-Z0-9]+$/);
   }
 }
 
