@@ -101,6 +101,7 @@ const getMatchData = async (puuid, matchId, region) => {
         return {
             mode: response.data.info.gameMode,
             result: matchData[i].win ? "Win" : "Loss",
+            champion: matchData[i].championName,
             kills: matchData[i].kills,
             deaths: matchData[i].deaths,
             assists: matchData[i].assists
@@ -120,4 +121,31 @@ const getRecentMatches = async (puuid, count, region) => {
     return results;
 }
 
-export { getPuuid, getRank, getMatchIds, getMatchData, getRecentMatches };
+const getMostPlayedChampions = async (puuid, region) => {
+    let regionUrl = region;
+    if (region == "NA") {
+        regionUrl = "na1";
+    }
+    const headers = { "X-Riot-Token": API_KEY };
+    const topChampsUrl = `https://${regionUrl}.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-puuid/${puuid}/top?count=3`;
+    const topChamps = await axios.get(topChampsUrl, { headers });
+    let champIds = topChamps.data.map(champion => champion.championId);
+    let champNames = [];
+    for (const champId of champIds) {
+        const champName = await getChampName(champId);
+        champNames.push(champName);
+    }
+    return champNames;
+}
+
+const getChampName = async (champId) => {
+    const champNames = await axios.get('https://ddragon.leagueoflegends.com/cdn/15.9.1/data/en_US/champion.json');
+    for (const champ in champNames.data.data) {
+        if (champNames.data.data[champ].key === champId.toString()) {
+            return champNames.data.data[champ].name;
+        }
+    }
+    throw "Error: Champion not found.";
+}
+
+export { getPuuid, getRank, getMatchIds, getMatchData, getRecentMatches, getMostPlayedChampions, getChampName };
