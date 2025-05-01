@@ -4,14 +4,14 @@ let loginForm = document.getElementById('signin-form');
 let registerForm = document.getElementById('signup-form');
 let teamForm = document.getElementById('newteams-form');
 let postForm = document.getElementById('newpost-form');
-
+/*
 if(loginForm){
     loginForm.addEventListener('submit', (event) => {
         event.preventDefault();
-        let username = document.getElementById('username').value;
-        let password = document.getElementById('password').value;
 
         try{
+            let username = document.getElementById('username').value;
+            let password = document.getElementById('password').value;
             // username
             username = validation.validateUsername(username, "username");
 
@@ -21,6 +21,7 @@ if(loginForm){
             
             // clear error message?
           }catch (e){
+            console.log(e);
             // print error message 
             return;
           }
@@ -28,7 +29,7 @@ if(loginForm){
         loginForm.submit();
     });
 }
-
+/*
 if(registerForm){
     registerForm.addEventListener('submit', (event) => {
         event.preventDefault();
@@ -113,3 +114,4 @@ if(postForm){
         postForm.submit();
     });
 }
+*/

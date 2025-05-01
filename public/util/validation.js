@@ -23,7 +23,7 @@ const exportedMethods = {
     };
   
     const validatePassword = (password, confirmPassword,varname) => {
-      checkString(password,varname);
+      checkString(password);
       if (confirmPassword !== undefined && confirmPassword !== null) {
         checkString(confirmPassword);
         if (password !== confirmPassword) {
@@ -66,6 +66,7 @@ const exportedMethods = {
       checkString(description);
   }
 }
+
 
 function checkString(strVal, varName) {
     if (!strVal) throw `Error: You must supply a ${varName}!`;
