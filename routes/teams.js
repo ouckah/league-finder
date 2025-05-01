@@ -11,17 +11,11 @@ router.route('/new')
 
 router.route('/')
     .post(async (req, res) => {
+	console.log(req.body)
 	const title = req.body.title;
 
 	let desiredRank = req.body.desiredRank;
-	if(typeof desiredRank === 'string') {
-	    desiredRank = [desiredRank];
-	}
-
 	let desiredRole = req.body.desiredRole;
-	if(typeof desiredRole === 'string') {
-	    desiredRole = [desiredRole];
-	}
 
 	const region = req.body.region;
 	const description = req.body.description;

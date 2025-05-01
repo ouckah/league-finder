@@ -50,4 +50,6 @@ footer {
 .newteam{
   display:block;
   margin:0 auto 1.5rem;
+  font-size: 2rem;
+  padding: 0.5rem 1rem;
 }

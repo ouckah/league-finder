@@ -1,48 +1,103 @@
 <form id="newteams-form" name="newteam-form" action="/teams" method="POST">
     <label for="title">Title:</label>
     <input type="text" id="title" name="title">
-    </br>
+    <br>
 
-    <label for="desiredRank">Desired Rank:</label>
-    <select name="desiredRank" id="desiredRank" multiple>
-	<option value="iron">Iron</option>
-	<option value="silver">Silver</option>
-	<option value="gold">Gold</option>
-	<option value="platinum">Platinum</option>
-	<option value="emerald">Emerald</option>
-	<option value="diamond">Diamond</option>
-	<option value="master">Master</option>
-	<option value="grandmaster">Grandmaster</option>
-	<option value="challenger">Challenger</option>
-    </select>
-    </br>
+    <fieldset id="desiredRoles">
+        <legend>Desired Roles</legend>
 
-    <label for="desiredRole">Desired Role:</label>
-    <select name="desiredRole" id="desiredRole" multiple>
-	<option value="top">Top</option>
-	<option value="jungle">Jungle</option>
-	<option value="mid">Mid</option>
-	<option value="support">Support</option>
-	<option value="adc">ADC</option>
-    </select>
-    </br>
+        <label for="role-top">
+            <input type="checkbox" id="role-top" name="desiredRole[]" value="top">
+            Top
+        </label>
 
-    <label for="region">Region</label>
-    <select name="region" id="region" multiple>
-	<option value="na">NA</option>
-	<option value="eu">EU</option>
-	<option value="kr">KR</option>
-	<option value="sea">SEA</option>
-	<option value="cn">CN</option>
-	<option value="au">AU</option>
+        <label for="role-jungle">
+            <input type="checkbox" id="role-jungle" name="desiredRole[]" value="jungle">
+            Jungle
+        </label>
+
+        <label for="role-mid">
+            <input type="checkbox" id="role-mid" name="desiredRole[]" value="mid">
+            Mid
+        </label>
+
+        <label for="role-support">
+            <input type="checkbox" id="role-support" name="desiredRole[]" value="support">
+            Support
+        </label>
+
+        <label for="role-adc">
+            <input type="checkbox" id="role-adc" name="desiredRole[]" value="adc">
+            ADC
+        </label>
+    </fieldset>
+
+    <fieldset id="desiredRanks">
+        <legend>Desired Ranks</legend>
+
+        <label for="rank-iron">
+            <input type="checkbox" id="rank-iron" name="desiredRank[]" value="iron">
+            Iron
+        </label>
+
+        <label for="rank-silver">
+            <input type="checkbox" id="rank-silver" name="desiredRank[]" value="silver">
+            Silver
+        </label>
+
+        <label for="rank-gold">
+            <input type="checkbox" id="rank-gold" name="desiredRank[]" value="gold">
+            Gold
+        </label>
+
+        <label for="rank-platinum">
+            <input type="checkbox" id="rank-platinum" name="desiredRank[]" value="platinum">
+            Platinum
+        </label>
+
+        <label for="rank-emerald">
+            <input type="checkbox" id="rank-emerald" name="desiredRank[]" value="emerald">
+            Emerald
+        </label>
+
+        <label for="rank-diamond">
+            <input type="checkbox" id="rank-diamond" name="desiredRank[]" value="diamond">
+            Diamond
+        </label>
+
+        <label for="rank-master">
+            <input type="checkbox" id="rank-master" name="desiredRank[]" value="master">
+            Master
+        </label>
+
+        <label for="rank-grandmaster">
+            <input type="checkbox" id="rank-grandmaster" name="desiredRank[]" value="grandmaster">
+            Grandmaster
+        </label>
+
+        <label for="rank-challenger">
+            <input type="checkbox" id="rank-challenger" name="desiredRank[]" value="challenger">
+            Challenger
+        </label>
+    </fieldset>
+
+    <label for="region">Region:</label>
+    <select name="region" id="region">
+        <option value="na">NA</option>
+        <option value="eu">EU</option>
+        <option value="kr">KR</option>
+        <option value="sea">SEA</option>
+        <option value="cn">CN</option>
+        <option value="au">AU</option>
     </select>
-    </br>
+    <br>
 
     <label for="description">Description:</label>
     <textarea id="description" name="description" rows="4" cols="50"></textarea>
-    </br>
+    <br>
 
     <button type="submit" id="submitButton" name="submitButton">Sign Up</button>
 </form>
 
-<a href ="/">Home Page</a>
+<a href="/">Home Page</a>
+
