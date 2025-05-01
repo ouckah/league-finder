@@ -67,7 +67,6 @@ router.route('/:id')
 	    res.status(404).render('error', {error: 'Team not found'});
 	    return;
 	}
-	console.log(team);
 
 	res.render('teams/team', {team:team});
     })
