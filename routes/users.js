@@ -3,6 +3,7 @@ const router = Router();
 import helpers from '../utils/helpers.js';
 import validation from '../public/util/validation.js';
 import { createUser, editUser, loginUser, deleteUser, getUser } from '../data/users.js';
+import { protectedRoute } from '../utils/middleware.js';
 
 
 router
@@ -98,22 +99,16 @@ router
 // profile based on user id... /:id, update this route and handlebars later
 router
   .route('/profile/:id')
+  .all(protectedRoute)
   .get(async (req, res) => {
     // if user is logged in, then give ability to edit profile? Add everything for logged in user
     // but maybe we should make other peoples profile viewable too? so we should add a userid to the url
     // just use a finduser data function and render new page
-
-    let isLog = false;
-    let userId = "";
-
-    if (req.session && req.session.user) {
-      isLog = true;
-      userId = req.session.user.userId; // get the user id from the session, not sure if we need it to validated
-    }
+    let userId = req.user.userId;
 
     try {
       req.params.id = helpers.checkId(req.params.id.toString(),"id");
-    } catch(e) {
+    } catch (e) {
       console.log(e);
       return res.status(400).json({ error: e.message });
     }
@@ -121,7 +116,7 @@ router
     try {
       const user = await getUser(req.params.id); 
 
-      res.render('profile',{title: user.username + "'s Profile",personalID: userId,isLoggedIn: isLog, profilePicture: user.profilePicture, username: user.username, biography: user.biography,riotId: user.riotId,region:user.region,preferredRoles:user.preferredRoles,rank:user.Rank, reputation: user.reputation, friends: user.friends}); // render the profile page with the user data
+      res.render('profile',{title: user.username + "'s Profile", personalID: userId, isLoggedIn: req.isLoggedIn, profilePicture: user.profilePicture, username: user.username, biography: user.biography, riotId: user.riotId,region:user.region,preferredRoles:user.preferredRoles,rank:user.Rank, reputation: user.reputation, friends: user.friends}); // render the profile page with the user data
     } catch (e) {
       console.log(e);
       return res.status(400).json({ error: e.message }); 
