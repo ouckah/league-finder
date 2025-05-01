@@ -61,17 +61,16 @@ League Finder is a web application designed to help players of *League of Legend
 
 1. Clone the repository:
    ```sh
-   git clone <GITHUB_REPO_URL>
+   git clone https://github.com/ouckah/league-finder
    cd league-finder
    ```
 2. Install dependencies:
    ```sh
    npm install
    ```
-3. Create a `.env` file in the root directory and add the following:
+3. Create a `.env` file in the root directory and add the following (template found in `.example.env`):
    ```env
-   MONGO_URI=your_mongodb_connection_string
-   JWT_SECRET=your_jwt_secret
+   MONGO_SERVER_URL=your_mongodb_connection_string
    RIOT_API_KEY=your_riot_api_key
    ```
 4. Start the development server:
@@ -119,5 +118,5 @@ This project is licensed under the MIT License. See [LICENSE](LICENSE) for detai
 
 ### **GitHub Repository:**
 
-🔗 [Insert GitHub Repo Link Here]
+🔗 [League Finder](https://github.com/ouckah/league-finder)
 
