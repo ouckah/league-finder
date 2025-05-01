@@ -1,5 +1,4 @@
 import {Router} from 'express';
-import { ObjectId } from 'mongodb';
 const router = Router();
 import helpers from '../utils/helpers.js';
 import validation from '../public/util/validation.js';
@@ -12,19 +11,31 @@ router.route('/new')
 
 router.route('/')
     .post(async (req, res) => {
+	const title = req.body.title;
+
+	let desiredRank = req.body.desiredRank;
+	if(typeof desiredRank === 'string') {
+	    desiredRank = [desiredRank];
+	}
+
+	let desiredRole = req.body.desiredRole;
+	if(typeof desiredRole === 'string') {
+	    desiredRole = [desiredRole];
+	}
+
+	const region = req.body.region;
+	const description = req.body.description;
+
 	validation.validateTeam(
-	    req.body.title,
-	    req.body.desiredRank,
-	    req.body.desiredRole,
-	    req.body.region,
-	    req.body.description
+	    title,
+	    desiredRank,
+	    desiredRole,
+	    region,
+	    description
 	);
 
-	const title = req.body.title.trim();
-	const desiredRank = req.body.desiredRank.map(rank => rank.trim());
-	const desiredRole = req.body.desiredRole.map(role => role.trim());
-	const region = req.body.region.trim();
-	const description = req.body.description.trim();
+	desiredRank = desiredRank.map(rank => rank.trim());
+	desiredRole = desiredRole.map(role => role.trim());
 
 	const result = await teamData.createTeam(
 	    title,
