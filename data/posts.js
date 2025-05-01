@@ -42,6 +42,7 @@ const createPost = async (
 
     const post = {
         userId: userId,
+        username: user.username,
         image: image || '',
         title: title,
         content: content,
@@ -69,6 +70,12 @@ const getPost = async (
 
     return post;
 }
+
+const getAllPosts = async () => {
+    const postsCollection = await posts();
+    const allPosts = await postsCollection.find({}).toArray();
+    return allPosts;
+};
 
 const getUserPosts = async (
     userId
@@ -150,4 +157,4 @@ const deletePost = async (
     return { postDeleted: true };
 }
 
-export { createPost, getPost, getUserPosts, editPost, deletePost };
+export { createPost, getPost, getAllPosts, getUserPosts, editPost, deletePost };
