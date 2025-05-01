@@ -1,0 +1,18 @@
+<h1>Teams</h1>
+<button onclick="location.href = '/teams/new';" id="newteam">New Team!</button>
+
+{{#each teams}}
+    <h3>{{this.title}}</h3>
+    <p>{{this.region}}</p>
+    {{#each this.desiredRanks}}
+	<p>{{this}}</p>
+    {{/each}}
+
+    {{#each this.desiredRoles}}
+	<p>{{this}}</p>
+    {{/each}}
+
+    <p>{{this.description}}</p>
+
+    <a href="/teams/{{this._id}}">View Team</a>
+{{/each}}

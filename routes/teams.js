@@ -48,6 +48,10 @@ router.route('/')
 
 	res.redirect(`/teams/${id}`);
     })
+    .get(async (req, res) => {
+	const allTeams = await teamData.getAllTeams();
+	return res.render('teams/teams', {teams: allTeams});
+    })
 
 router.route('/:id')
     .get(async (req, res) => {
