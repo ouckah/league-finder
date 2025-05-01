@@ -11,17 +11,11 @@ router.route('/new')
 
 router.route('/')
     .post(async (req, res) => {
+	console.log(req.body)
 	const title = req.body.title;
 
 	let desiredRank = req.body.desiredRank;
-	if(typeof desiredRank === 'string') {
-	    desiredRank = [desiredRank];
-	}
-
 	let desiredRole = req.body.desiredRole;
-	if(typeof desiredRole === 'string') {
-	    desiredRole = [desiredRole];
-	}
 
 	const region = req.body.region;
 	const description = req.body.description;
@@ -48,6 +42,10 @@ router.route('/')
 
 	res.redirect(`/teams/${id}`);
     })
+    .get(async (req, res) => {
+	const allTeams = await teamData.getAllTeams();
+	return res.render('teams/teams', {teams: allTeams});
+    })
 
 router.route('/:id')
     .get(async (req, res) => {
@@ -63,7 +61,6 @@ router.route('/:id')
 	    res.status(404).render('error', {error: 'Team not found'});
 	    return;
 	}
-	console.log(team);
 
 	res.render('teams/team', {team:team});
     })

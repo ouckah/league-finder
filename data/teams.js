@@ -37,4 +37,15 @@ const getTeam = async (id) => {
     return team;
 }
 
-export { createTeam, getTeam };
+const getAllTeams = async () => {
+    const teamsCollection = await teams();
+    let allTeams = await teamsCollection.find({}).toArray();
+    allTeams = allTeams.map(team => {
+	team._id = team._id.toString();
+	return team;
+    });
+
+    return allTeams;
+}
+
+export { createTeam, getTeam, getAllTeams};
