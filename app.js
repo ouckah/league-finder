@@ -25,7 +25,7 @@ app.set('view engine', 'handlebars');
 
 app.use(session({
      name: 'AuthenticationState',
-     secret: 'some secret string!',
+     secret: 'Noo, oh, oh.. oh... La Polizia',
      resave: false,
      saveUninitialized: false
 }))
