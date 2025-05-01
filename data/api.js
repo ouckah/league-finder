@@ -6,6 +6,13 @@ dotenv.config();
 // Key needs to be renewed daily
 const API_KEY = process.env.RIOT_API_KEY;
 
+/**
+ * 
+ * @param {string} summonerName - Name of the summoner
+ * @param {string} tagline - Tagline of the summoner (after the #)
+ * @param {string} region - Region of the summoner (NA, EUW, EUNE, etc.)
+ * @returns {string} - Encrypted PUUID of the player. Used for other Riot API calls..
+ */
 const getPuuid = async (summonerName, tagline, region) => {
     // Currently only have NA region, need to add other region codes
     let regionUrl = region
@@ -31,6 +38,11 @@ const getPuuid = async (summonerName, tagline, region) => {
     }
 }
 
+/**
+ * @param {string} puuid - Encrypted PUUID of the player. Use getPuuid() to get this.
+ * @param {string} region - Region of the player (NA, EUW, EUNE, etc.)
+ * @returns {Object} - Contains tier, rank, and LP of the player for ranked solo/duo. If masters+, rank will be an empty string.
+ */
 const getRank = async (puuid, region) => {
     let regionUrl = region
     if (region == "NA") {
@@ -43,15 +55,28 @@ const getRank = async (puuid, region) => {
         if (!response.data) {
             throw "Error: No rank data found.";
         };
+        let tier = "";
+        let rank = "";
+        let lp = 0;
         for (const entry of response.data) {
             if (entry.queueType == "RANKED_SOLO_5x5") {
-                return {
-                    tier: entry.tier,
-                    rank: entry.rank,
+                tier = entry.tier;
+                if (tier === "MASTER" || tier === "GRANDMASTER" || tier === "CHALLENGER") {
+                    rank = "";
+                } else {
+                    rank = entry.rank;
                 }
+                lp = entry.leaguePoints;
             }
         }
-        throw "Error: No ranked solo/duo data found.";
+        if (tier === "") {
+            throw "Error: No ranked solo/duo data found.";
+        }
+        return {
+            tier: tier,
+            rank: rank,
+            lp: lp,
+        }
     } catch (error) {
         if (error.response) {
             if (error.response.status === 403) {
@@ -66,6 +91,45 @@ const getRank = async (puuid, region) => {
     }
 }
 
+/**
+ * @param {string} puuid - Encrypted PUUID of the player. Use getPuuid() to get this.
+ * @param {string} region - Region of the player (NA, EUW, EUNE, etc.)
+ * @returns {Object} - Contains wins, losses, and win rate of the player for ranked solo/duo.
+ */
+const getWinLoss = async (puuid, region) => {
+    let regionUrl = region
+    if (region == "NA") {
+        regionUrl = "na1"
+    }
+    const headers = { "X-Riot-Token": API_KEY };
+    const playerInfoUrl = `https://${regionUrl}.api.riotgames.com/lol/league/v4/entries/by-puuid/${puuid}`;
+    try {
+        const response = await axios.get(playerInfoUrl, { headers });
+
+        for (const entry of response.data) {
+            if (entry.queueType == "RANKED_SOLO_5x5") {
+                const wins = entry.wins;
+                const losses = entry.losses;
+                const wr = (wins / (wins + losses)) * 100;
+                return {
+                    wins: wins,
+                    losses: losses,
+                    wr: wr,
+                };
+            }
+        }
+        throw "Error: No ranked solo/duo data found.";
+    } catch (error) {
+        throw "Error: Failed to fetch win loss.";
+    }
+}
+
+/**
+ * @param {string} puuid - Encrypted PUUID of the player. Use getPuuid() to get this.
+ * @param {number} count - Number of matches to fetch.
+ * @param {string} region - Region of the player (NA, EUW, EUNE, etc.)
+ * @returns {Array} - Array of match IDs.
+ */
 const getMatchIds = async (puuid, count, region) => {
     let regionUrl = region;
     if (region == "NA") {
@@ -81,6 +145,12 @@ const getMatchIds = async (puuid, count, region) => {
     }
 }
 
+/**
+ * @param {string} puuid - Encrypted PUUID of the player. Use getPuuid() to get this.
+ * @param {string} matchId - ID of the match. Use getMatchIds() to get this.
+ * @param {string} region - Region of the player (NA, EUW, EUNE, etc.)
+ * @returns {Object} - Contains game mode(CLASSIC, ARAM, etc.), result(Win or Loss), champion, kills, deaths, and assists of the player for a specific match.
+ */
 const getMatchData = async (puuid, matchId, region) => {
     let regionUrl = region;
     if (region == "NA") {
@@ -111,6 +181,12 @@ const getMatchData = async (puuid, matchId, region) => {
     }
 }
 
+/**
+ * @param {string} puuid - Encrypted PUUID of the player. Use getPuuid() to get this.
+ * @param {number} count - Number of matches to fetch.
+ * @param {string} region - Region of the player (NA, EUW, EUNE, etc.)
+ * @returns {Array} - Array of match data, uses getMatchData() to get the data for each match.
+ */
 const getRecentMatches = async (puuid, count, region) => {
     const matchIds = await getMatchIds(puuid, count, region);
     let results = [];
@@ -121,6 +197,11 @@ const getRecentMatches = async (puuid, count, region) => {
     return results;
 }
 
+/**
+ * @param {string} puuid - Encrypted PUUID of the player. Use getPuuid() to get this.
+ * @param {string} region - Region of the player (NA, EUW, EUNE, etc.)
+ * @returns {Array} - Array of the top 3 champions the player has played based on mastery points.
+ */
 const getMostPlayedChampions = async (puuid, region) => {
     let regionUrl = region;
     if (region == "NA") {
@@ -128,16 +209,24 @@ const getMostPlayedChampions = async (puuid, region) => {
     }
     const headers = { "X-Riot-Token": API_KEY };
     const topChampsUrl = `https://${regionUrl}.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-puuid/${puuid}/top?count=3`;
-    const topChamps = await axios.get(topChampsUrl, { headers });
-    let champIds = topChamps.data.map(champion => champion.championId);
-    let champNames = [];
-    for (const champId of champIds) {
-        const champName = await getChampName(champId);
-        champNames.push(champName);
+    try {
+        const topChamps = await axios.get(topChampsUrl, { headers });
+        let champIds = topChamps.data.map(champion => champion.championId);
+        let champNames = [];
+        for (const champId of champIds) {
+            const champName = await getChampName(champId);
+            champNames.push(champName);
+        }
+        return champNames;
+    } catch (error) {
+        throw "Error: Failed to fetch most played champions.";
     }
-    return champNames;
 }
 
+/**
+ * @param {number} champId - ID of the champion.
+ * @returns {string} - Name of the champion.
+ */
 const getChampName = async (champId) => {
     const champNames = await axios.get('https://ddragon.leagueoflegends.com/cdn/15.9.1/data/en_US/champion.json');
     for (const champ in champNames.data.data) {
@@ -148,4 +237,4 @@ const getChampName = async (champId) => {
     throw "Error: Champion not found.";
 }
 
-export { getPuuid, getRank, getMatchIds, getMatchData, getRecentMatches, getMostPlayedChampions, getChampName };
+export { getPuuid, getRank, getWinLoss, getMatchIds, getMatchData, getRecentMatches, getMostPlayedChampions, getChampName };
