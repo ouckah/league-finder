@@ -18,11 +18,11 @@ function logMiddleware(req, res, next) {
 
 function authMiddleware(req, res, next) {
   const user = req.session?.user || null;
-  const loggedIn = !!user
+  const isLoggedIn = !!user
 
-  req.loggedIn = loggedIn
+  req.isLoggedIn = isLoggedIn
 
-  res.locals.loggedIn = loggedIn
+  res.locals.isLoggedIn = isLoggedIn
   next()
 }
 
