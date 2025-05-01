@@ -1,0 +1,48 @@
+<form id="newteams-form" name="newteam-form" action="/teams" method="POST">
+    <label for="title">Title:</label>
+    <input type="text" id="title" name="title">
+    </br>
+
+    <label for="desiredRank">Desired Rank:</label>
+    <select name="desiredRank" id="desiredRank" multiple>
+	<option value="iron">Iron</option>
+	<option value="silver">Silver</option>
+	<option value="gold">Gold</option>
+	<option value="platinum">Platinum</option>
+	<option value="emerald">Emerald</option>
+	<option value="diamond">Diamond</option>
+	<option value="master">Master</option>
+	<option value="grandmaster">Grandmaster</option>
+	<option value="challenger">Challenger</option>
+    </select>
+    </br>
+
+    <label for="desiredRole">Desired Role:</label>
+    <select name="desiredRole" id="desiredRole" multiple>
+	<option value="top">Top</option>
+	<option value="jungle">Jungle</option>
+	<option value="mid">Mid</option>
+	<option value="support">Support</option>
+	<option value="adc">ADC</option>
+    </select>
+    </br>
+
+    <label for="region">Region</label>
+    <select name="region" id="region" multiple>
+	<option value="na">NA</option>
+	<option value="eu">EU</option>
+	<option value="kr">KR</option>
+	<option value="sea">SEA</option>
+	<option value="cn">CN</option>
+	<option value="au">AU</option>
+    </select>
+    </br>
+
+    <label for="description">Description:</label>
+    <textarea id="description" name="description" rows="4" cols="50"></textarea>
+    </br>
+
+    <button type="submit" id="submitButton" name="submitButton">Sign Up</button>
+</form>
+
+<a href ="/">Home Page</a>
