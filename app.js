@@ -25,7 +25,7 @@ app.set('view engine', 'handlebars');
 
 app.use(session({
      name: 'AuthenticationState',
-     secret: 'some secret string!',
+     secret: 'Noo, oh, oh.. oh... La Polizia',
      resave: false,
      saveUninitialized: false
 }))
@@ -35,7 +35,7 @@ setupMiddleware(app);
 configRoutes(app);
 
 const PORT = 3000
-const HOST = 'localhost'
+const HOST = '0.0.0.0'
 
 app.listen(PORT, HOST, () => {
   console.log(`Server is running on http://${HOST}:${PORT}`);
