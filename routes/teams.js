@@ -44,7 +44,8 @@ router.route('/')
     })
     .get(async (req, res) => {
 	const allTeams = await teamData.getAllTeams();
-	return res.render('teams/teams', {teams: allTeams});
+	const loggedIn = req.session.user != undefined;
+	return res.render('teams/teams', {teams: allTeams, loggedIn: loggedIn});
     })
 
 router.route('/:id')
