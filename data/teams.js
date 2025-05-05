@@ -23,7 +23,7 @@ const createTeam = async (title, desiredRank, desiredRole, region, description) 
     const teamsCollection = await teams();
     const newTeam = await teamsCollection.insertOne(team);
 
-    return newTeam;
+    return newTeam.insertedId.toString();
 }
 
 const getTeam = async (id) => {

@@ -49,7 +49,7 @@ const createUser = async (
     const insertInfo = await usersCollection.insertOne(newUser);
     if (!insertInfo) throw 'Could not add user';
 
-    return newUser;
+    return insertInfo.insertedId.toString();
 }
 
 const loginUser = async (username, password) => {

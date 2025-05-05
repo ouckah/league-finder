@@ -54,7 +54,7 @@ const createPost = async (
     const insertInformation = await postsCollection.insertOne(post);
     if (!insertInformation) throw 'Could not add post';
 
-    return { postCreated: true };
+    return insertInformation.insertedId.toString();
 }
 
 const getPost = async (
