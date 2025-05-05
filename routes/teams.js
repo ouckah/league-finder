@@ -1,7 +1,7 @@
 import {Router} from 'express';
 const router = Router();
 import helpers from '../utils/helpers.js';
-import validation from '../public/util/validation.js';
+import * as validation from '../utils/validation.js';
 import * as teamData from '../data/teams.js';
 
 router.route('/new')

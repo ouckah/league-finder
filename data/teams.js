@@ -1,7 +1,7 @@
 import {teams} from '../config/mongoCollections.js';
 import {MongoNetworkTimeoutError, ObjectId} from 'mongodb';
 import helpers from '../utils/helpers.js';
-import validation from '../public/util/validation.js'
+import * as validation from '../utils/validation.js';
 
 const createTeam = async (title, desiredRank, desiredRole, region, description) => {
     validation.validateTeam(title, desiredRank, desiredRole, region, description);

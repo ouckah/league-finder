@@ -1,4 +1,4 @@
-import validation from '../util/validation.js';
+import * as validation from '../util/validation.js';
 
 let loginForm = document.getElementById('signin-form');
 let registerForm = document.getElementById('signup-form');

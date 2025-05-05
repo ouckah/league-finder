@@ -1,7 +1,7 @@
 import {Router} from 'express';
 const router = Router();
 import helpers from '../utils/helpers.js';
-import validation from '../public/util/validation.js';
+import * as validation from '../utils/validation.js';
 import { createUser, editUser, loginUser, deleteUser, getUser } from '../data/users.js';
 import { protectedRoute } from '../utils/middleware.js';
 
