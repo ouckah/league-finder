@@ -11,8 +11,8 @@ router.route('/new')
 
 router.route('/')
     .post(async (req, res) => {
-	console.log(req.body)
 	const title = req.body.title;
+	const owner = req.session.user.userId;
 
 	let desiredRank = req.body.desiredRank;
 	let desiredRole = req.body.desiredRole;
@@ -36,7 +36,8 @@ router.route('/')
 	    desiredRank,
 	    desiredRole,
 	    region,
-	    description
+	    description,
+	    owner
 	);
 
 	res.redirect(`/teams/${id}`);

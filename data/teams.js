@@ -3,7 +3,7 @@ import {MongoNetworkTimeoutError, ObjectId} from 'mongodb';
 import helpers from '../utils/helpers.js';
 import * as validation from '../utils/validation.js';
 
-const createTeam = async (title, desiredRank, desiredRole, region, description) => {
+const createTeam = async (title, desiredRank, desiredRole, region, description, owner) => {
     validation.validateTeam(title, desiredRank, desiredRole, region, description);
 
     title = title.trim();
@@ -17,7 +17,9 @@ const createTeam = async (title, desiredRank, desiredRole, region, description) 
 	desiredRank: desiredRank,
 	desiredRole: desiredRole,
 	region: region,
-	description: description
+	description: description,
+	owner: owner,
+	members: [owner],
     };
 
     const teamsCollection = await teams();
