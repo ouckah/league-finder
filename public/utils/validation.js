@@ -72,6 +72,13 @@ const validatePassword = (password, confirmPassword,varname) => {
     }
 };
 
+const validateLogin = (username, password) => {
+  username = validateUsername(username,"username");
+  validatePassword(password, password,"password");
+
+  return username, password;
+}
+
 const validateRegistration = (
     firstName, lastName, email, username, password, confirmPassword
 ) => {
@@ -98,4 +105,4 @@ const validateTeam = (
     checkString(description, 'description');
 }
 
-export { validateRegistration, validateTeam }
+export { validateRegistration, validateTeam ,validateLogin}

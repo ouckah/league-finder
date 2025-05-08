@@ -38,6 +38,7 @@ router
       const user = await createUser(firstName, lastName, email, username, password);
       res.redirect('/users/login'); // redirect to login page after successful registration
     } catch (e) {
+      console.log(e);
       return res.status(500).json({ error: e.message }); // add render page with the error message
     }
   });
@@ -56,25 +57,7 @@ router
     let {username,password} = req.body;
 
     try {
-      // 2-20 characters again maybe
-      username = helpers.checkString(username);
-      helpers.checkStringWithLength(username, 2, 20, /^[a-zA-Z0-9]+$/);
-
-      // no spaces, atleast 1 capital, numbers, special characters
-      helpers.checkString(password);
-
-      if (password.length < 8) {
-        throw new Error('Password must be at least 8 characters long');
-      }
-      if (!/[A-Z]/.test(password)) {
-        throw new Error('Password must contain at least one uppercase letter');
-      }
-      if (!/[0-9]/.test(password)) {
-        throw new Error('Password must contain at least one number');
-      }
-      if (!/[^a-zA-Z0-9 ]/.test(password)) {
-        throw new Error('Password must contain at least one special character');
-      }
+      username, password = validation.validateLogin(username, password); // validate user login
     } catch(e) {
       return res.status(400).json({ error: e.message }); // create render page with the error message
     }
@@ -128,7 +111,7 @@ router
 
 router.route('/logout').get(async (req, res) => {
   req.session.destroy();
-  res.render('logout', { title: "Logged Out" });
+  res.render('logout', { title: "Logged Out", isLoggedIn: false }); 
 });
 
 

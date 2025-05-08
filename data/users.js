@@ -18,7 +18,8 @@ const createUser = async (
         lastName,
         email,
         username,
-        password
+        password,
+        password // confirmPassword is same for this. weird system but works for now
     )
 
     // check database if this username exists... then throw

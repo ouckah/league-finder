@@ -66,5 +66,12 @@ const validateTeam = (
     checkString(description, 'description');
 }
 
-export { validateRegistration, validateTeam }
+const validateLogin = (username, password) => {
+  username = validateUsername(username,"username");
+  validatePassword(password, password,"password");
+
+  return username, password;
+}
+
+export { validateRegistration, validateTeam,validateLogin }
 
