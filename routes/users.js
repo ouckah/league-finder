@@ -83,9 +83,7 @@ router
 router
   .route('/profile/:id')
   .get(async (req, res) => {
-    // if user is logged in, then give ability to edit profile? Add everything for logged in user
-    // but maybe we should make other peoples profile viewable too? so we should add a userid to the url
-    // just use a finduser data function and render new page
+    // maybe make a search user profile searchbar... 
 
     try {
       req.params.id = helpers.checkId(req.params.id.toString(),"id");
@@ -106,19 +104,13 @@ router
     } catch (e) {
       return res.status(400).json({ error: e.message }); 
     }
-
-
-    // profile page
-
   });
 
   router
   .route('/profile/:id/edit')
   .all(protectedRoute) 
   .get(async (req, res) => {
-    // if user is logged in, then give ability to edit profile? Add everything for logged in user
-    // but maybe we should make other peoples profile viewable too? so we should add a userid to the url
-    // just use a finduser data function and render new page
+    // editing profile... 
 
     try {
       req.params.id = helpers.checkId(req.params.id.toString(),"id");
@@ -129,7 +121,7 @@ router
     try {
       const user = await getUser(req.params.id); 
 
-      res.render('users/profile',{title: user.username + "'s Profile",  profilePicture: user.profilePicture, username: user.username, biography: user.biography, riotId: user.riotId,region:user.region,preferredRoles:user.preferredRoles,rank:user.Rank, reputation: user.reputation, friends: user.friends}); // render the profile page with the user data
+      res.render('users/editprofile',{title: user.username + "Edit Your Profile"}); // render the profile page with the user data
     } catch (e) {
       return res.status(400).json({ error: e.message }); 
     }
@@ -146,6 +138,41 @@ router.route('/logout').get(async (req, res) => {
   req.session.destroy();
   res.render('users/logout', { title: "Logged Out", isLoggedIn: false }); 
 });
+
+// not sure if i want it written like this or not... 
+// are you sure you want to delete your profile? type stuff 
+router
+  .route('/profile/:id/delete')
+  .all(protectedRoute)
+  .get(async (req, res) => {
+    try {
+      req.params.id = helpers.checkId(req.params.id.toString(), "id");
+    } catch (e) {
+      return res.status(400).json({ error: e.message });
+    }
+
+    try {
+      const user = await getUser(req.params.id);
+      res.render('users/deleteprofile', { title: "Delete Profile", username: user.username });
+    } catch (e) {
+      return res.status(400).json({ error: e.message });
+    }
+  })
+  .delete(async (req, res) => {
+    try {
+      req.params.id = helpers.checkId(req.params.id.toString(), "id");
+    } catch (e) {
+      return res.status(400).json({ error: e.message });
+    }
+
+    try {
+      await deleteUser(req.params.id);
+      req.session.destroy(); // destroy session after user deletion
+      res.redirect('/'); // redirect to home page after successful deletion
+    } catch (e) {
+      return res.status(500).json({ error: e.message });
+    }
+  });
 
 
 export default router;

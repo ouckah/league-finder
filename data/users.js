@@ -117,24 +117,17 @@ const editUser = async (
 }
 
 const deleteUser = async (userId) => {
-    // Check if user exists
-    try {
-        getUser(userId);
-    } catch (e) {
-        throw e;
-    }
+    // Check id and delete user from database
+    userId = helpers.checkId(userId, 'userId');
 
     const usersCollection = await users();
-    // Delete user from database
     const deletionInfo = await usersCollection.deleteOne({ _id: new ObjectId(userId) });
     if (deletionInfo.deletedCount === 0) throw 'Could not delete user';
     return { deletionCompleted: true };
 }
 
 const getUser = async (userId) => {
-    if (!userId) throw 'You must provide a userId';
-    if (typeof userId !== 'string') throw 'userId must be a string';
-    if (!ObjectId.isValid(userId)) throw 'userId is not a valid ObjectId';
+    userId = helpers.checkId(userId, 'userId');
 
     const userCollection = await users();
     const user = await userCollection.findOne({ _id: new ObjectId(userId) });
@@ -142,6 +135,7 @@ const getUser = async (userId) => {
     return user;
 }
 
+// might not need this, but maybe when searching for users by username
 const getUserByUsername = async (username) => {
     if (!username) throw 'You must provide a username';
 	if (typeof username !== 'string') throw 'username must be a string';
