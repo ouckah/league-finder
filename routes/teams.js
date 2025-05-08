@@ -1,10 +1,12 @@
 import {Router} from 'express';
 const router = Router();
 import helpers from '../utils/helpers.js';
+import { protectedRoute} from '../utils/middleware.js';
 import * as validation from '../utils/validation.js';
 import * as teamData from '../data/teams.js';
 
 router.route('/new')
+	.all(protectedRoute)
     .get((req, res) => {
 	res.render('teams/newteam');
     })
