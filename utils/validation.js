@@ -1,4 +1,5 @@
-import { checkString, checkStringArray, checkStringWithLength } from './helpers.js';
+import helpers from './helpers.js';
+const { checkString, checkStringArray, checkStringWithLength } = helpers;
 
 const validateName = (name,varname) => {
     name = checkString(name, varname);
