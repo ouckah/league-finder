@@ -1,0 +1,30 @@
+<div class="post">
+    <h3>{{post.title}}</h3>
+
+    {{#if post.image}}
+      <img src="{{post.image}}" alt="Post Image" class="post-picture">
+    {{/if}}
+
+    <p class="post-author">Posted by: {{post.username}}</p>
+    <p class="post-content">{{post.content}}</p>
+
+    {{#if post.tags.length}}
+      <p class="post-tags">Tags:
+        {{#each post.tags}}
+          <span class="tag">{{this}}</span>
+        {{/each}}
+      </p>
+    {{/if}}
+
+    <p class="post-date">{{post.createdAt}}</p>
+</div>
+
+<div class = "comments">
+    <h4>Comments</h4>
+    {{#each comments}}
+        <div class="comment">
+            <p class="comment-date">{{this.createdAt}}</p>
+            <p><strong>{{this.username}}</strong>: {{this.content}}</p>
+        </div>
+    {{/each}}
+</div>
