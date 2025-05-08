@@ -10,7 +10,7 @@ router
   .route('/register')
   .get(async (req, res) => {
     // registeration page
-    res.render('register', {title: "Register"});
+    res.render('users/register', {title: "Register"});
   })
   .post(async (req, res) => {
     // validate user input
@@ -47,7 +47,7 @@ router
   .route('/login')
   .get(async (req, res) => {
     // login page
-    res.render('login', {title: "Login"}); // render the login page
+    res.render('users/login', {title: "Login"}); // render the login page
   })
   .post(async (req, res) => {
     if(!req.body || Object.keys(req.body).length === 0){
@@ -93,10 +93,43 @@ router
       return res.status(400).json({ error: e.message });
     }
 
+    let isOwner = false;
+    // check if user is logged in
+    if (req.session.user && (req.session.user.userId === req.params.id)) {
+      isOwner = true; // if user is logged in and the id matches, then they are the owner of the profile
+    } 
+
     try {
       const user = await getUser(req.params.id); 
 
-      res.render('profile',{title: user.username + "'s Profile",  profilePicture: user.profilePicture, username: user.username, biography: user.biography, riotId: user.riotId,region:user.region,preferredRoles:user.preferredRoles,rank:user.Rank, reputation: user.reputation, friends: user.friends}); // render the profile page with the user data
+      res.render('users/profile',{title: user.username + "'s Profile",  isOwner: isOwner,profilePicture: user.profilePicture, username: user.username, biography: user.biography, riotId: user.riotId,region:user.region,preferredRoles:user.preferredRoles,rank:user.Rank, reputation: user.reputation, friends: user.friends}); // render the profile page with the user data
+    } catch (e) {
+      return res.status(400).json({ error: e.message }); 
+    }
+
+
+    // profile page
+
+  });
+
+  router
+  .route('/profile/:id/edit')
+  .all(protectedRoute) 
+  .get(async (req, res) => {
+    // if user is logged in, then give ability to edit profile? Add everything for logged in user
+    // but maybe we should make other peoples profile viewable too? so we should add a userid to the url
+    // just use a finduser data function and render new page
+
+    try {
+      req.params.id = helpers.checkId(req.params.id.toString(),"id");
+    } catch (e) {
+      return res.status(400).json({ error: e.message });
+    }
+
+    try {
+      const user = await getUser(req.params.id); 
+
+      res.render('users/profile',{title: user.username + "'s Profile",  profilePicture: user.profilePicture, username: user.username, biography: user.biography, riotId: user.riotId,region:user.region,preferredRoles:user.preferredRoles,rank:user.Rank, reputation: user.reputation, friends: user.friends}); // render the profile page with the user data
     } catch (e) {
       return res.status(400).json({ error: e.message }); 
     }
@@ -111,7 +144,7 @@ router
 
 router.route('/logout').get(async (req, res) => {
   req.session.destroy();
-  res.render('logout', { title: "Logged Out", isLoggedIn: false }); 
+  res.render('users/logout', { title: "Logged Out", isLoggedIn: false }); 
 });
 
 
