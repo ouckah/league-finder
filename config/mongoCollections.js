@@ -21,6 +21,6 @@ NOTE: YOU WILL NEED TO CHANGE THE CODE BELOW AND UNCOMMENT IT TO HAVE THE COLLEC
 export const users = getCollectionFn('users');
 export const posts = getCollectionFn('posts');
 export const comments = getCollectionFn('comments');
-export const friendRequests = getCollectionFn('friendRequests');
+export const friends = getCollectionFn('friends');
 export const teamRequests = getCollectionFn('teamRequests');
 export const teams = getCollectionFn('teams');
