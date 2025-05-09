@@ -3,6 +3,7 @@ import { MongoNetworkTimeoutError, ObjectId } from 'mongodb';
 import helpers from '../utils/helpers.js';
 import * as validation from '../utils/validation.js';
 import bcrypt from 'bcrypt';
+import * as riotAPI from './api.js';
 
 // not sure if we want to try to fill in all fields or let useres fill fields on profile page
 const createUser = async (
@@ -138,20 +139,48 @@ const getUser = async (userId) => {
 // might not need this, but maybe when searching for users by username
 const getUserByUsername = async (username) => {
     if (!username) throw 'You must provide a username';
-	if (typeof username !== 'string') throw 'username must be a string';
-	if (username.length < 2 || username.length > 20) throw 'username must be between 2 and 20 characters long';
-	if (!/^[a-zA-Z0-9]+$/.test(username)) throw 'username can only contain letters and numbers';
+    if (typeof username !== 'string') throw 'username must be a string';
+    if (username.length < 2 || username.length > 20) throw 'username must be between 2 and 20 characters long';
+    if (!/^[a-zA-Z0-9]+$/.test(username)) throw 'username can only contain letters and numbers';
 
-	const userCollection = await users();
-	const user = await userCollection.findOne({ username: username });
-	if (!user) throw 'User not found';
-	return user;
+    const userCollection = await users();
+    const user = await userCollection.findOne({ username: username });
+    if (!user) throw 'User not found';
+    return user;
 }
+
+// sets ranked data to the user given their riotId
+const getRankData = async (userId) => {
+    userId = helpers.checkId(userId, 'userId');
+    try {
+        const user = await getUser(userId);
+        const puuid = await riotAPI.getPuuid(user.riotId);
+        const rank = await riotAPI.getRank(puuid, user.region);
+        let updateUser = {};
+        if (rank.rank === '') {
+            updateUser = {
+                rank: `Currently ${rank.tier} - ${rank.lp}`
+            };
+        } else {
+            updateUser = {
+                rank: `Currently ${rank.tier} ${rank.rank} - ${rank.lp}`
+            };
+        }
+        await userCollection.updateOne(
+            { _id: ObjectId(userId) },
+            { $set: updateUser }
+        );
+        return { rankUpdated: true };
+    } catch (e) {
+        throw e;
+    }
+};
 
 export {
     createUser,
     editUser,
     loginUser,
     deleteUser,
-    getUser
+    getUser,
+    getRankData
 }
