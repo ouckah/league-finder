@@ -65,7 +65,7 @@ const getPost = async (
     if (!ObjectId.isValid(postId)) throw 'The id is not a valid ObjectId';
 
     const postsCollection = await posts();
-    const post = await postsCollection.findOne({ _id: ObjectId(postId) });
+    const post = await postsCollection.findOne({ _id: new ObjectId(postId) });
     if (!post) throw 'No post with that id';
 
     return post;

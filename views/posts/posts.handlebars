@@ -11,10 +11,12 @@
 
 {{#each posts}}
   <div class="post">
-    <h3>{{this.title}}</h3>
+    <h3><a href="/posts/{{this._id}}">{{this.title}}</a></h3>
 
     {{#if this.image}}
-      <img src="{{this.image}}" alt="Post Image" class="post-picture">
+      <a href="/posts/{{this._id}}">
+        <img src="{{this.image}}" alt="Post Image" class="post-picture">
+      </a>
     {{/if}}
 
     <p class="post-author">Posted by: {{this.username}}</p>

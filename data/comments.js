@@ -13,10 +13,10 @@ const createComment = async (
     
     const userCollection = await users();
     const postCollection = await posts();
-    const user = await userCollection.findOne({_id: ObjectId(userId)});
+    const user = await userCollection.findOne({_id: new ObjectId(userId)});
     if (!user) throw 'User not found';
 
-    const post = await postCollection.findOne({_id: ObjectId(postId)});
+    const post = await postCollection.findOne({_id: new ObjectId(postId)});
     if (!post) throw 'Post not found';
 
     const commentCollection = await comments();
@@ -31,7 +31,7 @@ const createComment = async (
     
     const insertInfo = await commentCollection.insertOne(newComment);
     if (insertInfo.insertedId) {
-        return await getComment(insertInfo.insertedId.toString());
+        return true; // return the inserted comment or comment id idk
     }
     throw 'Failed to create comment';
 }   
@@ -44,7 +44,7 @@ const likeComment = async (
     if (!ObjectId.isValid(commentId)) throw 'The commentId is not a valid ObjectId';
 
     const commentCollection = await comments();
-    const comment = await commentCollection.findOne({_id: ObjectId(commentId)});
+    const comment = await commentCollection.findOne({_id: new ObjectId(commentId)});
     if (!comment) throw 'Comment not found';
 
     const updatedComment = {
@@ -68,7 +68,7 @@ const replyToComment = async (
     if (!ObjectId.isValid(commentId)) throw 'The commentId is not a valid ObjectId';
 
     const commentCollection = await comments();
-    const comment = await commentCollection.findOne({_id: ObjectId(commentId)});
+    const comment = await commentCollection.findOne({_id: new ObjectId(commentId)});
     if (!comment) throw 'Comment not found';
 
     if (!content) throw 'You must provide a content';
@@ -94,10 +94,10 @@ const deleteComment = async (
     if (typeof commentId !== 'string') throw 'The commentId must be a string';
     if (!ObjectId.isValid(commentId)) throw 'The commentId is not a valid ObjectId';
     const commentCollection = await comments();
-    const comment = await commentCollection.findOne({_id: ObjectId(commentId)});
+    const comment = await commentCollection.findOne({_id: new  ObjectId(commentId)});
     if (!comment) throw 'Comment not found';
 
-    const deletionInfo = await commentCollection.deleteOne({_id: ObjectId(commentId)});
+    const deletionInfo = await commentCollection.deleteOne({_id: new ObjectId(commentId)});
     if (deletionInfo.deletedCount === 0) throw 'Failed to delete comment';
     return { commentDeleted: true };
 }
@@ -110,9 +110,9 @@ const getPostComments = async (
     if (!ObjectId.isValid(postId)) throw 'The postId is not a valid ObjectId';
 
     const commentCollection = await comments();
-    const comments = await commentCollection.find({postId: ObjectId(postId)}).toArray();
-    if (!comments) throw 'No comments found';
-    return comments;
+    let allComments = await commentCollection.find({postId: postId}).toArray();
+    if (!allComments) throw 'No comments found';
+    return allComments;
 }
 
 export { createComment, likeComment, replyToComment, deleteComment, getPostComments };
