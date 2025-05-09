@@ -20,6 +20,7 @@ const createTeam = async (title, desiredRank, desiredRole, region, description, 
 	description: description,
 	owner: owner,
 	members: [owner],
+	requests: [],
     };
 
     const teamsCollection = await teams();
@@ -29,12 +30,13 @@ const createTeam = async (title, desiredRank, desiredRole, region, description, 
 }
 
 const getTeam = async (id) => {
-    helpers.checkId(id);
-    id = id.trim();
+    id = helpers.checkId(id);
 
     const teamsCollection = await teams();
     const team = await teamsCollection.findOne({ _id: new ObjectId(id) });
-    if (!team) return null
+    if (!team){
+	throw 'Team not found';
+    }
 
     return team;
 }
@@ -50,4 +52,81 @@ const getAllTeams = async () => {
     return allTeams;
 }
 
-export { createTeam, getTeam, getAllTeams};
+const removeUserFromTeam = async (teamId, userId) => {
+    userId = helpers.checkId(teamId);
+
+    let team = await getTeam(teamId);
+
+    if (!team) {
+	throw 'Team not found';
+    }
+
+    if (userId === team.owner) {
+	throw 'Owner cannot be removed from team';
+    }
+
+    const teamsCollection = await teams();
+
+    team.members = team.members.filter(member => member !== userId);
+
+    await teamsCollection.updateOne(
+	{ _id: new ObjectId(teamId) },
+	{ $set: team }
+    );
+  
+    return teamId;
+}
+
+const requestToJoinTeam = async (teamId, userId) => {
+    userId = helpers.checkId(userId);
+
+    let team = await getTeam(teamId);
+
+    if (!team) {
+	throw 'Team not found';
+    }
+
+    const teamsCollection = await teams();
+
+    if (team.requests.includes(userId)) {
+	throw 'User already requested to join this team';
+    }
+
+    team.requests.push(userId);
+
+    await teamsCollection.updateOne(
+	{ _id: new ObjectId(teamId) },
+	{ $set: team }
+    );
+
+    return teamId;
+}
+
+const acceptTeamJoinRequest = async (teamId, userId) => {
+    userId = helpers.checkId(userId);
+
+    let team = await getTeam(teamId);
+
+    if (!team) {
+	throw 'Team not found';
+    }
+
+    const teamsCollection = await teams();
+
+    if (team.members.includes(userId)) {
+	throw 'User already in team';
+    }
+
+    team.request = team.request.filter(request => request !== userId);
+    team.members.push(userId);
+
+    await teamsCollection.updateOne(
+	{ _id: new ObjectId(teamId) },
+	{ $set: team }
+    );
+
+    return teamId;
+}
+
+export { createTeam, getTeam, getAllTeams, removeUserFromTeam, requestToJoinTeam, acceptTeamJoinRequest};
+
