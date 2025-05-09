@@ -31,7 +31,7 @@ const createComment = async (
     
     const insertInfo = await commentCollection.insertOne(newComment);
     if (insertInfo.insertedId) {
-        return await getComment(insertInfo.insertedId.toString());
+        return true; // return the inserted comment or comment id idk
     }
     throw 'Failed to create comment';
 }   
@@ -110,9 +110,9 @@ const getPostComments = async (
     if (!ObjectId.isValid(postId)) throw 'The postId is not a valid ObjectId';
 
     const commentCollection = await comments();
-    const comments = await commentCollection.find({postId: new ObjectId(postId)}).toArray();
-    if (!comments) throw 'No comments found';
-    return comments;
+    let allComments = await commentCollection.find({postId: postId}).toArray();
+    if (!allComments) throw 'No comments found';
+    return allComments;
 }
 
 export { createComment, likeComment, replyToComment, deleteComment, getPostComments };

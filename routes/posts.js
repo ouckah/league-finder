@@ -1,6 +1,7 @@
 import {Router} from 'express';
 const router = Router();
 import { createPost, getAllPosts, getPost } from '../data/posts.js';
+import { getPostComments } from '../data/comments.js';
 import { protectedRoute} from '../utils/middleware.js';
 import helpers from '../utils/helpers.js';
 
@@ -50,15 +51,16 @@ router
       return res.status(400).json({ error: e.message });
     }
     const postId = req.params.id;
-    let post = null;
+    let post;
+    let comments;
     try {
       post = await getPost(postId);
-      // comments = await getComments(postId);
+      comments = await getPostComments(postId);
     } catch (e) {
       return res.status(400).json({ error: e.message });
     }
 
-    res.render('posts/view_post', { post /*,comments */});
+    res.render('posts/view_post', { post,comments});
   })
 
 export default router;

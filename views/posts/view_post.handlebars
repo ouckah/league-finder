@@ -19,6 +19,14 @@
     <p class="post-date">{{post.createdAt}}</p>
 </div>
 
+<form action="/comments/create" method="POST">
+  <input type="hidden" name="postId" value="{{post._id}}">
+
+  <textarea name="content" placeholder="Write a comment..."></textarea>
+  
+  <button type="submit">Submit</button>
+</form>
+
 <div class = "comments">
     <h4>Comments</h4>
     {{#each comments}}
