@@ -18,7 +18,9 @@
 <p>{{team.region}}</p>
 
 <h3 id="requests" name="requests">Request</h3>
-<p>{{team.requests}}</p>
+{{#each team.requests}}
+  <a href="/teams/{{../team._id}}/accept/{{this}}">Accept {{this}}</a>
+{{/each}}
 
 <h3 id="members" name="members">Members</h3>
 <p>{{team.members}}</p>
@@ -31,5 +33,5 @@
 {{/if}}
 
 {{#if leavable}}
-<a href="/teams/{{team._id}}/leave">request to leave</a>
+<a href="/teams/{{team._id}}/leave">leave team</a>
 {{/if}}

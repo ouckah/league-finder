@@ -53,7 +53,7 @@ const getAllTeams = async () => {
 }
 
 const removeUserFromTeam = async (teamId, userId) => {
-    userId = helpers.checkId(teamId);
+    userId = helpers.checkId(userId);
 
     let team = await getTeam(teamId);
 
@@ -67,12 +67,15 @@ const removeUserFromTeam = async (teamId, userId) => {
 
     const teamsCollection = await teams();
 
-    team.members = team.members.filter(member => member !== userId);
+    team.members = team.members.filter(member => member != userId);
 
     await teamsCollection.updateOne(
 	{ _id: new ObjectId(teamId) },
 	{ $set: team }
     );
+
+    console.log(userId);
+    console.log(team);
   
     return teamId;
 }
@@ -117,7 +120,7 @@ const acceptTeamJoinRequest = async (teamId, userId) => {
 	throw 'User already in team';
     }
 
-    team.request = team.request.filter(request => request !== userId);
+    team.requests = team.requests.filter(request => request != userId);
     team.members.push(userId);
 
     await teamsCollection.updateOne(
