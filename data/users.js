@@ -159,11 +159,11 @@ const getRankData = async (userId) => {
         let updateUser = {};
         if (rank.rank === '') {
             updateUser = {
-                rank: `Currently ${rank.tier} - ${rank.lp}`
+                rank: `Rank: ${rank.tier} - ${rank.lp}`
             };
         } else {
             updateUser = {
-                rank: `Currently ${rank.tier} ${rank.rank} - ${rank.lp}`
+                rank: `Rank: ${rank.tier} ${rank.rank} - ${rank.lp}`
             };
         }
         await userCollection.updateOne(
