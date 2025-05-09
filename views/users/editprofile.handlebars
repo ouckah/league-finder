@@ -1,1 +1,78 @@
-<p>Not sure what we want lowkey need Jimmy to lock in and integrate this api</p>
+<p>Not sure what we want lowkey need Jimmy to lock in and integrate this api</p>{{!-- Edit Profile Form --}}
+<div class="edit-profile-container">
+    <h3>Edit Profile</h3>
+    <form id="edit-profile-form" action="/users/editprofile" method="POST" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" value="{{user.username}}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" value="{{user.email}}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="biography">Biography:</label>
+            <textarea id="biography" name="biography" rows="4">{{user.biography}}</textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="riotId">Riot ID:</label>
+            <input type="text" id="riotId" name="riotId" value="{{user.riotId}}" placeholder="Username#Tagline">
+        </div>
+
+        <div class="form-group">
+            <label for="region">Region:</label>
+            <select id="region" name="region">
+                <option value="NA">North America</option>
+                <option value="EUW">Europe West</option>
+                <option value="EUNE">Europe Nordic & East</option>
+                <option value="KR">Korea</option>
+                <option value="JP">Japan</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Preferred Roles:</label>
+            <div class="role-checkboxes">
+                <div class="role-option">
+                    <input type="checkbox" id="role-top" name="preferredRoles" value="Top">
+                    <label for="role-top">Top</label>
+                </div>
+                <div class="role-option">
+                    <input type="checkbox" id="role-jungle" name="preferredRoles" value="Jungle">
+                    <label for="role-jungle">Jungle</label>
+                </div>
+                <div class="role-option">
+                    <input type="checkbox" id="role-mid" name="preferredRoles" value="Mid">
+                    <label for="role-mid">Mid</label>
+                </div>
+                <div class="role-option">
+                    <input type="checkbox" id="role-adc" name="preferredRoles" value="Bot">
+                    <label for="role-adc">Bot</label>
+                </div>
+                <div class="role-option">
+                    <input type="checkbox" id="role-support" name="preferredRoles" value="Support">
+                    <label for="role-support">Support</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="profilePicture">Profile Picture:</label>
+            <input type="text" id="profilePicture" name="profilePicture" placeholder="<link to image>">
+            {{#if user.profilePicture}}
+            <div class="current-picture">
+                <p>Current Profile Picture:</p>
+                <img src="{{user.profilePicture}}" alt="Current profile picture" class="profile-preview">
+            </div>
+            {{/if}}
+        </div>
+
+        <div class="form-buttons">
+            <button type="submit" class="submit-button">Save Changes</button>
+            <a href="/users/profile/{{personalID}}" class="cancel-button">Cancel</a>
+        </div>
+    </form>
+</div>
