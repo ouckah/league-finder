@@ -161,6 +161,18 @@ router
   .delete(async (req, res) => {
     try {
       req.params.id = helpers.checkId(req.params.id.toString(), "id");
+      req.body.confirm = helpers.checkString(req.body.confirm, "username"); 
+      helpers.checkStringWithLength(req.body.confirm, 2, 20, /^[a-zA-Z0-9]+$/);
+    } catch (e) {
+      return res.status(400).json({ error: e.message });
+    }
+
+    try {
+      const user = await getUser(req.params.id); // get user data
+      if (req.body.confirm !== user.username) { // check if the username matches the one in the database
+        console.log(req.body.confirm, user.username);
+        throw 'Username does not match'; // add render page with the error message
+      }
     } catch (e) {
       return res.status(400).json({ error: e.message });
     }
@@ -168,7 +180,7 @@ router
     try {
       await deleteUser(req.params.id);
       req.session.destroy(); // destroy session after user deletion
-      res.redirect('/'); // redirect to home page after successful deletion
+      return res.status(200).json({ message: 'User deleted successfully' }); // send success message
     } catch (e) {
       return res.status(500).json({ error: e.message });
     }

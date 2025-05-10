@@ -4,6 +4,7 @@ let loginForm = document.getElementById('signin-form');
 let registerForm = document.getElementById('signup-form');
 let teamForm = document.getElementById('newteams-form');
 let postForm = document.getElementById('newpost-form');
+let deleteAccountForm = document.getElementById('deleteAccountForm');
 
 if(loginForm){
     loginForm.addEventListener('submit', (event) => {
@@ -98,3 +99,34 @@ if(postForm){
     });
 }
 */
+
+// make sure to input validation and error handle later
+
+if(deleteAccountForm){
+  deleteAccountForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      let confirm = document.getElementById('confirm').value;
+
+      if (!confirm) {
+        return; // handle empty confirmation 
+      }
+
+      try {
+        const response = await fetch(deleteAccountForm.action, {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ confirm })
+        });
+
+        if (response.ok) {
+            window.location.href = '/';  // Redirect after successful deletion
+        } else {
+            const data = await response.json();
+            return; // handle error message
+        }
+    } catch (e) {
+        return; // handle error message
+    }
+  });
+}
+
