@@ -28,13 +28,11 @@ const getPuuid = async (summonerName, tagline, region) => {
         if (error.response) {
             if (error.response.status === 403) {
                 throw "Error: Expired Riot API Key.";
-            } else if (error.response.status === 404) {
-                throw `Error: Link ${puuidUrl} is wrong.`;
             } else {
-                throw `Error: ${error.response.message}.`;
+                throw "Error: RiotId does not exist.";
             }
         }
-        throw "Error: Failed to fetch puuid.";
+        throw "Error: RiotId does not exist.";
     }
 }
 

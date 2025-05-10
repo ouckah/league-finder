@@ -2,6 +2,7 @@ import {Router} from 'express';
 const router = Router();
 import helpers from '../utils/helpers.js';
 import * as validation from '../utils/validation.js';
+import { getPuuid } from '../data/api.js';
 import { createUser, editUser, loginUser, deleteUser, getUser } from '../data/users.js';
 import { protectedRoute } from '../utils/middleware.js';
 
@@ -137,6 +138,11 @@ router
     }
     let { username, email, biography, riotId, region, preferredRoles, profilePicture } = req.body;
     try {
+      if (riotId.length > 1) {
+        helpers. checkStringWithLength(riotId, 3, 22, /^.{1,16}#.{1,5}$/);
+        const riotName = riotId.split('#');
+        const puuid = await getPuuid(riotName[0], riotName[1], region);
+      }
       const updateUser = await editUser(req.session.user.userId, username, email, biography, riotId, region, preferredRoles, profilePicture);
       res.redirect('/');
     } catch (e) {
