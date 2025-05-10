@@ -40,10 +40,10 @@ const exportedMethods = {
 
     checkStringWithLength(str, minLength, maxLength, chars) {
 	if (str.length < minLength || str.length > maxLength) {
-	    throw new Error('String must be between ' + minLength + ' and ' + maxLength + ' characters long.');
+	    throw 'String must be between ' + minLength + ' and ' + maxLength + ' characters long.';
 	}
 	if (!chars.test(str)) {
-	    throw new Error('String contains illegal characters.');
+	    throw 'String does not match the expected format.';
 	}
     }
 
