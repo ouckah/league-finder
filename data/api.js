@@ -31,7 +31,7 @@ const getPuuid = async (summonerName, tagline, region) => {
             } else if (error.response.status === 404) {
                 throw `Error: Link ${puuidUrl} is wrong.`;
             } else {
-                throw `Error: Riot API returned error code ${error.response.status}.`;
+                throw `Error: ${error.response.message}.`;
             }
         }
         throw "Error: Failed to fetch puuid.";
