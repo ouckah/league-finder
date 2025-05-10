@@ -52,7 +52,7 @@ const deleteFriendHandler = async (req, res) => {
   try {
     const owner = req.session.user.userId
     await friendsData.unfriend(owner, friendId)
-    return res.status(200)
+    return res.status(200).json({ success: true })
   } catch (e) {
     return res.status(500).json({ error: e.message })
   }
@@ -106,7 +106,7 @@ const deleteFriendRequestHandler = async (req, res) => {
   try {
     const owner = req.session.user.userId
     await friendsData.deleteFriendRequest(owner, friendId)
-    return res.status(200)
+    return res.status(200).json({ success: true })
   } catch (e) {
     return res.status(500).json({ error: e.message })
   }
