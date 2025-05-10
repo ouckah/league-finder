@@ -30,7 +30,7 @@ router
         confirmPassword
       )
     } catch (e) {
-      return res.status(400).json({ error: e.message }); // create render page with the error message
+      return res.status(400).json({ error: e }); // create render page with the error message
     }
 
     // user registration
@@ -39,7 +39,7 @@ router
       res.redirect('/users/login'); // redirect to login page after successful registration
     } catch (e) {
       console.log(e);
-      return res.status(500).json({ error: e.message }); // add render page with the error message
+      return res.status(500).json({ error: e }); // add render page with the error message
     }
   });
 
@@ -59,7 +59,7 @@ router
     try {
       username, password = validation.validateLogin(username, password); // validate user login
     } catch(e) {
-      return res.status(400).json({ error: e.message }); // create render page with the error message
+      return res.status(400).json({ error: e }); // create render page with the error message
     }
 
     // user login
@@ -74,7 +74,7 @@ router
 
       res.redirect('/'); // redirect to homepage after successful login 
     } catch (e) {
-      return res.status(400).json({ error: e.message }); 
+      return res.status(400).json({ error: e }); 
     }
 
 });
@@ -88,7 +88,7 @@ router
     try {
       req.params.id = helpers.checkId(req.params.id.toString(),"id");
     } catch (e) {
-      return res.status(400).json({ error: e.message });
+      return res.status(400).json({ error: e });
     }
 
     let isOwner = false;
@@ -102,7 +102,7 @@ router
 
       res.render('users/profile',{title: user.username + "'s Profile",  isOwner: isOwner,profilePicture: user.profilePicture, username: user.username, biography: user.biography, riotId: user.riotId,region:user.region,preferredRoles:user.preferredRoles,rank:user.Rank, reputation: user.reputation, friends: user.friends}); // render the profile page with the user data
     } catch (e) {
-      return res.status(400).json({ error: e.message }); 
+      return res.status(400).json({ error: e }); 
     }
   });
 
@@ -115,7 +115,7 @@ router
     try {
       req.params.id = helpers.checkId(req.params.id.toString(),"id");
     } catch (e) {
-      return res.status(400).json({ error: e.message });
+      return res.status(400).json({ error: e });
     }
 
     try {
@@ -123,7 +123,7 @@ router
 
       res.render('users/editprofile',{title: user.username + "Edit Your Profile"}); // render the profile page with the user data
     } catch (e) {
-      return res.status(400).json({ error: e.message }); 
+      return res.status(400).json({ error: e }); 
     }
 
 
@@ -132,6 +132,17 @@ router
   })
   .post(async (req, res) => {
     // profile editing
+    if (!req.body) {
+      return res.status(400).json({ error: 'Fields are not filled out.' });
+    }
+    let { username, email, biography, riotId, region, preferredRoles, profilePicture } = req.body;
+    try {
+      const updateUser = await editUser(req.session.user.userId, username, email, biography, riotId, region, preferredRoles, profilePicture);
+      res.redirect('/');
+    } catch (e) {
+      console.log(e);
+      return res.status(500).json({ error: e });
+    }
   });
 
 router.route('/logout').get(async (req, res) => {
@@ -148,14 +159,15 @@ router
     try {
       req.params.id = helpers.checkId(req.params.id.toString(), "id");
     } catch (e) {
-      return res.status(400).json({ error: e.message });
+      return res.status(400).json({ error: e });
     }
 
     try {
       const user = await getUser(req.params.id);
       res.render('users/deleteprofile', { title: "Delete Profile", username: user.username });
     } catch (e) {
-      return res.status(400).json({ error: e.message });
+      return res.status(400).json({ error: e
+       });
     }
   })
   .delete(async (req, res) => {
@@ -164,7 +176,7 @@ router
       req.body.confirm = helpers.checkString(req.body.confirm, "username"); 
       helpers.checkStringWithLength(req.body.confirm, 2, 20, /^[a-zA-Z0-9]+$/);
     } catch (e) {
-      return res.status(400).json({ error: e.message });
+      return res.status(400).json({ error: e });
     }
 
     try {
@@ -174,7 +186,7 @@ router
         throw 'Username does not match'; // add render page with the error message
       }
     } catch (e) {
-      return res.status(400).json({ error: e.message });
+      return res.status(400).json({ error: e });
     }
 
     try {
@@ -182,7 +194,8 @@ router
       req.session.destroy(); // destroy session after user deletion
       return res.status(200).json({ message: 'User deleted successfully' }); // send success message
     } catch (e) {
-      return res.status(500).json({ error: e.message });
+      return res.status(500).json({ error: e
+       });
     }
   });
 
