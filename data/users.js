@@ -135,6 +135,9 @@ const editUser = async (
             { _id: new ObjectId(userId) },
             { $set: updateUser }
         );
+        if (riotId.length > 0) {
+            const changeRank = await getRankData(userId);
+        }
         return { userUpdated: true };
     } catch (e) {
         throw e;
@@ -178,19 +181,21 @@ const getRankData = async (userId) => {
     userId = helpers.checkId(userId, 'userId');
     try {
         const user = await getUser(userId);
-        const puuid = await riotAPI.getPuuid(user.riotId);
+        let riotName = user.riotId.split('#');
+        const puuid = await riotAPI.getPuuid(riotName[0], riotName[1], user.region);
         const rank = await riotAPI.getRank(puuid, user.region);
         let updateUser = {};
         if (rank.rank === '') {
             updateUser = {
-                rank: `Rank: ${rank.tier} - ${rank.lp}`
+                rank: `${rank.tier} - ${rank.lp}`
             };
         } else {
             updateUser = {
-                rank: `Rank: ${rank.tier} ${rank.rank} - ${rank.lp}`
+                rank: `${rank.tier} ${rank.rank} - ${rank.lp}`
             };
         }
-        await userCollection.updateOne(
+        const userCollection = await users();
+        const updateInfo = await userCollection.updateOne(
             { _id: new ObjectId(userId) },
             { $set: updateUser }
         );
