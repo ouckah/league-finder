@@ -1,7 +1,7 @@
 <p>Not sure what we want lowkey need Jimmy to lock in and integrate this api</p>{{!-- Edit Profile Form --}}
 <div class="edit-profile-container">
     <h3>Edit Profile</h3>
-    <form id="edit-profile-form" action="/users/editprofile" method="POST" enctype="multipart/form-data">
+    <form id="edit-profile-form" action="/users/profile/{{personalID}}/edit" method="POST">
         <div class="form-group">
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" value="{{user.username}}" required>
@@ -37,23 +37,23 @@
             <label>Preferred Roles:</label>
             <div class="role-checkboxes">
                 <div class="role-option">
-                    <input type="checkbox" id="role-top" name="preferredRoles" value="Top">
+                    <input type="checkbox" id="role-top" name="preferredRoles[]" value="Top">
                     <label for="role-top">Top</label>
                 </div>
                 <div class="role-option">
-                    <input type="checkbox" id="role-jungle" name="preferredRoles" value="Jungle">
+                    <input type="checkbox" id="role-jungle" name="preferredRoles[]" value="Jungle">
                     <label for="role-jungle">Jungle</label>
                 </div>
                 <div class="role-option">
-                    <input type="checkbox" id="role-mid" name="preferredRoles" value="Mid">
+                    <input type="checkbox" id="role-mid" name="preferredRoles[]" value="Mid">
                     <label for="role-mid">Mid</label>
                 </div>
                 <div class="role-option">
-                    <input type="checkbox" id="role-adc" name="preferredRoles" value="Bot">
+                    <input type="checkbox" id="role-adc" name="preferredRoles[]" value="Bot">
                     <label for="role-adc">Bot</label>
                 </div>
                 <div class="role-option">
-                    <input type="checkbox" id="role-support" name="preferredRoles" value="Support">
+                    <input type="checkbox" id="role-support" name="preferredRoles[]" value="Support">
                     <label for="role-support">Support</label>
                 </div>
             </div>
