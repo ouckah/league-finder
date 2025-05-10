@@ -83,7 +83,7 @@ const getUserPosts = async (
     const user = await getUser(userId);
 
     const postsCollection = await posts();
-    const posts = await postsCollection.find({ userId: ObjectId(userId) }).toArray();
+    const posts = await postsCollection.find({ userId: new (userId) }).toArray();
     if (!posts) throw 'User has no posts';
 
     return posts;
@@ -132,7 +132,7 @@ const editPost = async (
             createdAt: post.createdAt
         };
         await postCollection.updateOne(
-            { _id: ObjectId(postId) },
+            { _id: new ObjectId(postId) },
             { $set: updatedPost }
         );
         return { postUpdated: true };
@@ -149,7 +149,7 @@ const deletePost = async (
     if (!ObjectId.isValid(postId)) throw 'The id is not a valid ObjectId';
 
     const postsCollection = await posts();
-    const deletionInfo = await postsCollection.deleteOne({ _id: ObjectId(postId) });
+    const deletionInfo = await postsCollection.deleteOne({ _id: new ObjectId(postId) });
     if (deletionInfo.deletedCount === 0) {
         throw `Could not delete post with id of ${postId}`;
     }
