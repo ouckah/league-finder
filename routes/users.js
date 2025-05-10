@@ -101,7 +101,7 @@ router
     try {
       const user = await getUser(req.params.id); 
 
-      res.render('users/profile',{title: user.username + "'s Profile",  isOwner: isOwner,profilePicture: user.profilePicture, username: user.username, biography: user.biography, riotId: user.riotId,region:user.region,preferredRoles:user.preferredRoles,rank:user.Rank, reputation: user.reputation, friends: user.friends}); // render the profile page with the user data
+      res.render('users/profile',{title: user.username + "'s Profile",  isOwner: isOwner,profilePicture: user.profilePicture, username: user.username, biography: user.biography, riotId: user.riotId,region:user.region,preferredRoles:user.preferredRoles,rank:user.rank, reputation: user.reputation, friends: user.friends}); // render the profile page with the user data
     } catch (e) {
       return res.status(400).json({ error: e }); 
     }
@@ -138,8 +138,9 @@ router
     }
     let { username, email, biography, riotId, region, preferredRoles, profilePicture } = req.body;
     try {
+      // Checks if provided riotId is real.
       if (riotId.length > 0) {
-        helpers. checkStringWithLength(riotId, 3, 22, /^.{1,16}#.{1,5}$/);
+        helpers.checkStringWithLength(riotId, 3, 22, /^.{1,16}#.{1,5}$/);
         const riotName = riotId.split('#');
         const puuid = await getPuuid(riotName[0], riotName[1], region);
       }
