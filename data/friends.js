@@ -11,7 +11,7 @@ const friend = async (frienderId, friendeeId) => {
   helpers.checkId(friendeeId)
 
   const friendsCollection = await friends()
-  await friendsCollection.updateMany(
+  const result = await friendsCollection.updateMany(
     {
       $or: [
         { userId: ObjectId(frienderId), friendId: ObjectId(friendeeId) },
@@ -20,6 +20,10 @@ const friend = async (frienderId, friendeeId) => {
     },
     { $set: { status: "accepted" } }
   );
+
+  if (result.modifiedCount === 0) {
+    throw new Error("No pending friend request found to accept.");
+  }
 }
 
 const unfriend = async (frienderId, friendeeId) => {
@@ -27,12 +31,16 @@ const unfriend = async (frienderId, friendeeId) => {
   helpers.checkId(friendeeId)
 
   const friendsCollection = await friends()
-  await friendsCollection.deleteMany({
+  const result = await friendsCollection.deleteMany({
     $or: [
       { userId: ObjectId(frienderId), friendId: ObjectId(friendeeId), status: "accepted" },
       { userId: ObjectId(friendeeId), friendId: ObjectId(frienderId), status: "accepted" }
     ]
   });
+
+  if (result.deletedCount === 0) {
+    throw new Error("No accepted friendship found to remove.");
+  }
 }
 
 const getFriends = async (userId) => {
