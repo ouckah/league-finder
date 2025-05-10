@@ -104,17 +104,41 @@ const loginUser = async (username, password) => {
 
 // maybe we can break this into multiple functions, one for each field?
 const editUser = async (
-    email,
+    userId,
     username,
-    password,
-    profilePicture,
-    firstName,
-    lastName,
+    email,
     biography,
     riotId,
     region,
-    preferredRoles
+    preferredRoles,
+    profilePicture
 ) => {
+    if (preferredRoles && preferredRoles.length > 0) {
+        preferredRoles = preferredRoles.map(role => role.trim());
+    } else {
+        preferredRoles = [''];
+    }
+    validation.validateEdit(username, email, biography, riotId, region, preferredRoles, profilePicture);
+    try {
+        const user = await getUser(userId);
+        const userCollection = await users();
+        const updateUser = {
+            username: username,
+            email: email,
+            biography: biography,
+            riotId: riotId,
+            region: region,
+            preferredRoles: preferredRoles,
+            profilePicture: profilePicture
+        };
+        const updateInfo = await userCollection.updateOne(
+            { _id: new ObjectId(userId) },
+            { $set: updateUser }
+        );
+        return { userUpdated: true };
+    } catch (e) {
+        throw e;
+    }
 }
 
 const deleteUser = async (userId) => {
@@ -167,7 +191,7 @@ const getRankData = async (userId) => {
             };
         }
         await userCollection.updateOne(
-            { _id: ObjectId(userId) },
+            { _id: new ObjectId(userId) },
             { $set: updateUser }
         );
         return { rankUpdated: true };
