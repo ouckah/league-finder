@@ -138,7 +138,7 @@ router
     }
     let { username, email, biography, riotId, region, preferredRoles, profilePicture } = req.body;
     try {
-      if (riotId.length > 1) {
+      if (riotId.length > 0) {
         helpers. checkStringWithLength(riotId, 3, 22, /^.{1,16}#.{1,5}$/);
         const riotName = riotId.split('#');
         const puuid = await getPuuid(riotName[0], riotName[1], region);
