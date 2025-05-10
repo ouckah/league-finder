@@ -135,8 +135,17 @@ const editUser = async (
             { _id: new ObjectId(userId) },
             { $set: updateUser }
         );
+        let updateRank;
         if (riotId.length > 0) {
             const changeRank = await getRankData(userId);
+        } else {
+            updateRank = {
+                rank: 'No rank data found.'
+            }
+            const update2 = await userCollection.updateOne(
+                { _id: new ObjectId(userId) },
+                { $set: updateRank }
+            )
         }
         return { userUpdated: true };
     } catch (e) {
@@ -185,14 +194,18 @@ const getRankData = async (userId) => {
         const puuid = await riotAPI.getPuuid(riotName[0], riotName[1], user.region);
         const rank = await riotAPI.getRank(puuid, user.region);
         let updateUser = {};
-        if (rank.rank === '') {
+        if (rank.rank === '' && rank.tier.length > 0) {
             updateUser = {
                 rank: `${rank.tier} - ${rank.lp}`
             };
-        } else {
+        } else if (rank.rank.length > 0 ){
             updateUser = {
                 rank: `${rank.tier} ${rank.rank} - ${rank.lp}`
             };
+        } else {
+            updateUser = {
+                rank: 'No rank data found.'
+            }
         }
         const userCollection = await users();
         const updateInfo = await userCollection.updateOne(

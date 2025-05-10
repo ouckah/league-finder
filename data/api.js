@@ -67,9 +67,6 @@ const getRank = async (puuid, region) => {
                 lp = entry.leaguePoints;
             }
         }
-        if (tier === "") {
-            throw "Error: No ranked solo/duo data found.";
-        }
         return {
             tier: tier,
             rank: rank,
