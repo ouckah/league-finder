@@ -14,8 +14,8 @@ const friend = async (frienderId, friendeeId) => {
   const result = await friendsCollection.updateMany(
     {
       $or: [
-        { userId: ObjectId(frienderId), friendId: ObjectId(friendeeId) },
-        { userId: ObjectId(friendeeId), friendId: ObjectId(frienderId) }
+        { userId: frienderId, friendId: friendeeId },
+        { userId: friendeeId, friendId: frienderId }
       ]
     },
     { $set: { status: "accepted" } }
@@ -33,8 +33,8 @@ const unfriend = async (frienderId, friendeeId) => {
   const friendsCollection = await friends()
   const result = await friendsCollection.deleteMany({
     $or: [
-      { userId: ObjectId(frienderId), friendId: ObjectId(friendeeId), status: "accepted" },
-      { userId: ObjectId(friendeeId), friendId: ObjectId(frienderId), status: "accepted" }
+      { userId: frienderId, friendId: friendeeId, status: "accepted" },
+      { userId: friendeeId, friendId: frienderId, status: "accepted" }
     ]
   });
 
@@ -48,10 +48,32 @@ const getFriends = async (userId) => {
 
   const friendsCollection = await friends()
   const friendList = await friendsCollection.find({
-    userId: ObjectId(userId)
+    userId: new ObjectId(userId)
   })
 
   return Array.toArray(friendList)
+}
+
+const getFriendStatus = async (frienderId, friendeeId) => {
+  helpers.checkId(frienderId)
+  helpers.checkId(friendeeId)
+
+  const friendsCollection = await friends()
+
+  const relationship = await friendsCollection.findOne({
+    $or: [
+      { userId: frienderId, friendId: friendeeId },
+      { userId: friendeeId, friendId: frienderId }
+    ]
+  })
+
+  console.log(relationship)
+
+  if (!relationship) {
+    return "none"
+  }
+
+  return relationship.status
 }
 
 /*
@@ -77,7 +99,7 @@ const getFriendRequests = async (userId) => {
   const friendsCollection = await friends()
 
   const friendRequestList = await friendsCollection.findMany({
-    userId: ObjectId(userId),
+    userId: new ObjectId(userId),
     status: "pending",
   })
 
@@ -92,8 +114,8 @@ const deleteFriendRequest = async (frienderId, friendeeId) => {
 
   await friendsCollection.deleteMany({
     $or: [
-      { userId: ObjectId(frienderId), friendId: ObjectId(friendeeId), status: "pending" },
-      { userId: ObjectId(friendeeId), friendId: ObjectId(frienderId), status: "pending" }
+      { userId: frienderId, friendId: friendeeId, status: "pending" },
+      { userId: friendeeId, friendId: frienderId, status: "pending" }
     ]
   });
 }
@@ -102,7 +124,8 @@ export {
   friend,
   unfriend,
   getFriends,
+  getFriendStatus,
   createFriendRequest,
   deleteFriendRequest,
-  getFriendRequests
+  getFriendRequests,
 }

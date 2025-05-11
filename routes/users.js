@@ -98,9 +98,9 @@ router
     } 
 
     try {
-      const user = await getUser(req.params.id); 
+      const user = await getUser(req.params.id);
 
-      res.render('users/profile',{title: user.username + "'s Profile",  isOwner: isOwner,profilePicture: user.profilePicture, username: user.username, biography: user.biography, riotId: user.riotId,region:user.region,preferredRoles:user.preferredRoles,rank:user.Rank, reputation: user.reputation, friends: user.friends}); // render the profile page with the user data
+      res.render('users/profile',{title: user.username + "'s Profile", id: user._id, isOwner: isOwner,profilePicture: user.profilePicture, username: user.username, biography: user.biography, riotId: user.riotId,region:user.region,preferredRoles:user.preferredRoles,rank:user.Rank, reputation: user.reputation, friends: user.friends}); // render the profile page with the user data
     } catch (e) {
       return res.status(400).json({ error: e.message }); 
     }

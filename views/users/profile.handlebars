@@ -3,6 +3,9 @@
     <a href="{{personalID}}/edit">Edit Profile</a>
 {{/if}}
 
+{{#unless isOwner}}
+    <button id="send-friend-request" data-friend-id="{{id}}">Send Friend Request</button>
+{{/unless}}
 
 {{#if profilePicture}}
     <img src="{{profilePicture}}" alt="Profile Picture" class="profile-picture">
