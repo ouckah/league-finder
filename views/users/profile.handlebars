@@ -1,41 +1,70 @@
-{{#if isOwner}}
-<!-- Implement edit, maybe a button instead not sure? -->
-<a href="{{personalID}}/edit">Edit Profile</a>
-{{/if}}
-
-
-{{#if profilePicture}}
-<img src="{{profilePicture}}" alt="Profile Picture" class="profile-picture">
-{{else}}
-<p>No profile picture provided.</p>
-{{/if}}
-
-<h1>{{username}}</h1>
-<p>Biography: {{#if biography}}{{biography}}{{else}}No bio yet.{{/if}}</p>
-<p>Riot ID: {{riotId}}</p>
-<p>Region:{{region}}</p>
-<p>Preferred Roles:
-    {{#each preferredRoles}}
-    <span>{{this}}</span>
-    {{/each}}
-</p>
-
-<div>
-    <p>Rank: {{rank}}</p>
-    <p>Winrate: {{wr}}</p>
-</div>
-<!-- Maybe don't directly show reputation... -->
-<p>Reputation: {{reputation}}</p>
-<!-- Maybe list friends -->
-<p>Friends: {{#if friends.length}}{{friends.length}} friends{{else}}No friends added.{{/if}}</p>
-<!-- Possible other data from riot api -->
-
-<div>
-    <h2>Match History</h2>
-    {{#each matches}}
-    <div>Mode: {{mode}}</div>
-    <div>Result: {{result}}</div>
-    <div>Champion: {{champion}}</div>
-    <div>KDA: {{kills}}/{{deaths}}/{{assists}}</div>
-    {{/each}}
+<div class="profile-container">
+  <div class="profile-header">
+    {{#if isOwner}}
+    <a href="{{personalID}}/edit" class="edit-profile">Edit Profile</a>
+    {{/if}}
+    
+    <div class="profile-picture-container">
+      {{#if profilePicture}}
+      <img src="{{profilePicture}}" alt="Profile Picture" class="profile-picture">
+      {{else}}
+      <p class="no-picture">No profile picture provided.</p>
+      {{/if}}
+    </div>
+    
+    <h1>{{username}}</h1>
+  </div>
+  
+  <div class="player-info">
+    <div class="player-details">
+      <p><strong>Biography:</strong> {{#if biography}}{{biography}}{{else}}No bio yet.{{/if}}</p>
+      <p><strong>Riot ID:</strong> {{riotId}}</p>
+      <p><strong>Region:</strong> {{region}}</p>
+      <div class="roles-container">
+        <span class="roles-label">Preferred Roles:</span>
+        <div class="preferred-roles">
+          {{#each preferredRoles}}
+          <span class="role">{{this}}</span>
+          {{/each}}
+        </div>
+      </div>
+    </div>
+    
+    <div class="stats-container">
+      <div class="stat-box">
+        <div class="stat-label">Rank</div>
+        <div class="stat-value">{{rank}} LP</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Winrate</div>
+        <div class="stat-value">{{wr}}</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Reputation</div>
+        <div class="stat-value">{{reputation}}</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Friends</div>
+        <div class="stat-value">{{#if friends.length}}{{friends.length}}{{else}}0{{/if}}</div>
+      </div>
+    </div>
+    
+    <div class="match-history">
+      <h2>Match History</h2>
+      {{#each matches}}
+      <div class="match {{#if result}}match-{{result}}{{/if}}">
+        <div class="match-info">
+          <div class="match-mode">{{mode}}</div>
+          <div class="match-champion">{{champion}}</div>
+          <div class="match-result {{#if result}}result-{{result}}{{/if}}">
+            {{result}}
+          </div>
+        </div>
+        <div class="match-stats">
+          <div class="match-kda">{{kills}}/{{deaths}}/{{assists}}</div>
+        </div>
+      </div>
+      {{/each}}
+    </div>
+  </div>
 </div>
