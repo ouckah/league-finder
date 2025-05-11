@@ -17,13 +17,22 @@
 <h3 id="region" name="region">Region</h3>
 <p>{{team.region}}</p>
 
-<h3 id="requests" name="requests">Request</h3>
-{{#each team.requests}}
-  <a href="/teams/{{../team._id}}/accept/{{this}}">Accept {{this}}</a>
-{{/each}}
+{{#if isowner}}
+    <h3 id="requests" name="requests">Request</h3>
+    {{#each team.requests}}
+      <a href="/teams/{{../team._id}}/accept/{{this}}">Accept {{this}}</a>
+    {{/each}}
+{{/if}}
+
+<h3 id="team-owner" name="team-owner">Owner</h3>
+<p>{{owner}}</p>
 
 <h3 id="members" name="members">Members</h3>
-<p>{{team.members}}</p>
+<ul id="team-members" class="team-members"}}
+{{#each members}}
+    <li>{{this}}</li>
+{{/each}}
+</ul>
 
 </br>
 <p>{{team.description}}</p>

@@ -4,6 +4,7 @@ import helpers from '../utils/helpers.js';
 import { protectedRoute} from '../utils/middleware.js';
 import * as validation from '../utils/validation.js';
 import * as teamData from '../data/teams.js';
+import * as userData from '../data/users.js';
 
 router.route('/new')
     .all(protectedRoute)
@@ -67,14 +68,32 @@ router.route('/:id')
 
 	let joinable = false;
 	let leavable = false;
+	let isowner = false;
 	if (req.session.user) {
 	    const user = req.session.user.userId;
 	    joinable = !team.requests.includes(user) && !team.members.includes(user);
 	    leavable = team.owner !== user && team.members.includes(user);
+	    isowner = team.owner === user;
 	}
+	const owner = (await userData.getUser(team.owner)).username;
 
+	const memberIds = team.members;
+	let members = [];
+	for (let i = 0; i < memberIds.length; i++) {
+	    const member = await userData.getUser(memberIds[i]);
+	    members.push(member);
+	}
+	members = members.map(member => member.username);
+	
+	let requests = [];
+	const requestIds = team.requests;
+	for (let i = 0; i < requestIds.length; i++) {
+	    const request = await userData.getUser(team.requests[i]);
+	    requests.push(request);
+	}
+	requests = requests.map(request => request.username);
 
-	res.render('teams/team', {team:team, joinable:joinable, leavable:leavable});
+	res.render('teams/team', {team:team, joinable:joinable, leavable:leavable, members:members, isowner:isowner, owner:owner});
     })
 
 router.route('/:id/leave')
