@@ -1,29 +1,41 @@
 {{#if isOwner}}
-    <!-- Implement edit, maybe a button instead not sure? -->
-    <a href="{{personalID}}/edit">Edit Profile</a>
+<!-- Implement edit, maybe a button instead not sure? -->
+<a href="{{personalID}}/edit">Edit Profile</a>
 {{/if}}
 
 
 {{#if profilePicture}}
-    <img src="{{profilePicture}}" alt="Profile Picture" class="profile-picture">
+<img src="{{profilePicture}}" alt="Profile Picture" class="profile-picture">
 {{else}}
-    <p>No profile picture provided.</p>
+<p>No profile picture provided.</p>
 {{/if}}
 
 <h1>{{username}}</h1>
 <p>Biography: {{#if biography}}{{biography}}{{else}}No bio yet.{{/if}}</p>
 <p>Riot ID: {{riotId}}</p>
 <p>Region:{{region}}</p>
-<p>Preferred Roles: 
+<p>Preferred Roles:
     {{#each preferredRoles}}
     <span>{{this}}</span>
     {{/each}}
 </p>
 
-<p>Rank: {{rank}}</p>
-
+<div>
+    <p>Rank: {{rank}}</p>
+    <p>Winrate: {{wr}}</p>
+</div>
 <!-- Maybe don't directly show reputation... -->
 <p>Reputation: {{reputation}}</p>
 <!-- Maybe list friends -->
 <p>Friends: {{#if friends.length}}{{friends.length}} friends{{else}}No friends added.{{/if}}</p>
 <!-- Possible other data from riot api -->
+
+<div>
+    <h2>Match History</h2>
+    {{#each matches}}
+    <div>Mode: {{mode}}</div>
+    <div>Result: {{result}}</div>
+    <div>Champion: {{champion}}</div>
+    <div>KDA: {{kills}}/{{deaths}}/{{assists}}</div>
+    {{/each}}
+</div>

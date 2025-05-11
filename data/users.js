@@ -218,11 +218,39 @@ const getRankData = async (userId) => {
     }
 };
 
+const getWR = async (userId) => {
+    userId = helpers.checkId(userId, 'userId');
+    try {
+        const user = await getUser(userId);
+        let riotName = user.riotId.split('#');
+        const puuid = await riotAPI.getPuuid(riotName[0], riotName[1], user.region);
+        const wr = await riotAPI.getWinLoss(puuid, user.region);
+        return `${wr.wr}% (${wr.wins} W/${wr.losses} L)`;
+    } catch (e) {
+        throw e;
+    }
+}
+
+const getMatches = async (userId) => {
+    userId = helpers.checkId(userId, 'userId');
+    try {
+        const user = await getUser(userId);
+        let riotName = user.riotId.split('#');
+        const puuid = await riotAPI.getPuuid(riotName[0], riotName[1], user.region);
+        const matches = await riotAPI.getRecentMatches(puuid, 5, user.region);
+        return matches;
+    } catch (e) {
+        throw e;
+    }
+}
+
 export {
     createUser,
     editUser,
     loginUser,
     deleteUser,
     getUser,
-    getRankData
+    getRankData,
+    getWR,
+    getMatches
 }

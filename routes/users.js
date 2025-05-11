@@ -2,8 +2,8 @@ import {Router} from 'express';
 const router = Router();
 import helpers from '../utils/helpers.js';
 import * as validation from '../utils/validation.js';
-import { getPuuid } from '../data/api.js';
-import { createUser, editUser, loginUser, deleteUser, getUser } from '../data/users.js';
+import { getPuuid, getWinLoss } from '../data/api.js';
+import { createUser, editUser, loginUser, deleteUser, getUser, getWR, getMatches } from '../data/users.js';
 import { protectedRoute } from '../utils/middleware.js';
 
 
@@ -100,8 +100,9 @@ router
 
     try {
       const user = await getUser(req.params.id); 
-
-      res.render('users/profile',{title: user.username + "'s Profile",  isOwner: isOwner,profilePicture: user.profilePicture, username: user.username, biography: user.biography, riotId: user.riotId,region:user.region,preferredRoles:user.preferredRoles,rank:user.rank, reputation: user.reputation, friends: user.friends}); // render the profile page with the user data
+      const wr = await getWR(req.params.id)
+      const matches = await getMatches(req.params.id)
+      res.render('users/profile',{title: user.username + "'s Profile",  isOwner: isOwner,profilePicture: user.profilePicture, username: user.username, biography: user.biography, riotId: user.riotId,region:user.region,preferredRoles:user.preferredRoles, rank:user.rank, wr:wr, reputation: user.reputation, friends: user.friends, matches: matches}); // render the profile page with the user data
     } catch (e) {
       return res.status(400).json({ error: e }); 
     }

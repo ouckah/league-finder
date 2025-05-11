@@ -105,7 +105,7 @@ const getWinLoss = async (puuid, region) => {
             if (entry.queueType == "RANKED_SOLO_5x5") {
                 const wins = entry.wins;
                 const losses = entry.losses;
-                const wr = (wins / (wins + losses)) * 100;
+                const wr = ((wins / (wins + losses)) * 100).toFixed(2);
                 return {
                     wins: wins,
                     losses: losses,
