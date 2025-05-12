@@ -2,6 +2,7 @@ import { posts } from '../config/mongoCollections.js';
 import { getUser } from './users.js';
 import { MongoNetworkTimeoutError, ObjectId } from 'mongodb';
 import helpers from '../utils/helpers.js';
+import { deletePostComments } from './comments.js';
 
 const createPost = async (
     userId,
@@ -77,18 +78,6 @@ const getAllPosts = async () => {
     return allPosts;
 };
 
-const getUserPosts = async (
-    userId
-) => {
-    const user = await getUser(userId);
-
-    const postsCollection = await posts();
-    const posts = await postsCollection.find({ userId: new (userId) }).toArray();
-    if (!posts) throw 'User has no posts';
-
-    return posts;
-}
-
 const editPost = async (
     postId,
     image,
@@ -157,4 +146,40 @@ const deletePost = async (
     return { postDeleted: true };
 }
 
-export { createPost, getPost, getAllPosts, getUserPosts, editPost, deletePost };
+const getUserPosts = async (
+    userId
+) => {
+    const user = await getUser(userId);
+
+    const postsCollection = await posts();
+    const posts = await postsCollection.find({ userId: new (userId) }).toArray();
+    if (!posts) throw 'User has no posts';
+
+    return posts;
+}
+
+const deleteUserPosts = async (
+    userId
+) => {
+    if (!userId) throw 'You must provide a userId';
+    if (typeof userId !== 'string') throw 'The userId must be a string';
+    if (!ObjectId.isValid(userId)) throw 'The userId is not a valid ObjectId';
+
+    const postsCollection = await posts();
+    const userPosts = await postsCollection.find({ userId: userId }).toArray();
+    
+    // Delete comments for each post
+    for (const post of userPosts) {
+        await deletePostComments(post._id.toString());
+    }
+
+    // Then delete all the posts
+    const deletionInfo = await postsCollection.deleteMany({ userId: userId });
+    return { 
+        postsDeleted: true, 
+        deletedCount: deletionInfo.deletedCount,
+        commentsDeleted: userPosts.length > 0
+    };
+}
+
+export { createPost, getPost, getAllPosts, getUserPosts, editPost, deletePost, deleteUserPosts };

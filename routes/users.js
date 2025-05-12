@@ -5,6 +5,8 @@ import * as validation from '../utils/validation.js';
 import { getPuuid, getWinLoss } from '../data/api.js';
 import { createUser, editUser, loginUser, deleteUser, getUser, getWR, getMatches,getUserByUsername} from '../data/users.js';
 import { protectedRoute } from '../utils/middleware.js';
+import { deleteUserComments } from '../data/comments.js';
+import { deleteUserPosts } from '../data/posts.js';
 
 
 router
@@ -217,7 +219,9 @@ router
     }
 
     try {
-      await deleteUser(req.params.id);
+      const commentsDeleted = await deleteUserComments(req.params.id);
+      const postsDeleted = await deleteUserPosts(req.params.id);
+      const userDeleted = await deleteUser(req.params.id);
       req.session.destroy(); // destroy session after user deletion
       return res.status(200).json({ message: 'User deleted successfully' }); // send success message
     } catch (e) {

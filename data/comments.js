@@ -99,6 +99,18 @@ const deletePostComments = async (
     return { commentDeleted: true , deletedCount: deletionInfo.deletedCount };
 }
 
-export { createComment, likeComment, deleteComment, getPostComments, deletePostComments };
+const deleteUserComments = async (
+    userId
+) => {
+    if (!userId) throw 'You must provide a userId';
+    if (typeof userId !== 'string') throw 'The userId must be a string';
+    if (!ObjectId.isValid(userId)) throw 'The userId is not a valid ObjectId';
+
+    const commentCollection = await comments(); 
+    const deletionInfo = await commentCollection.deleteMany({userId: userId});
+    return { commentDeleted: true , deletedCount: deletionInfo.deletedCount };
+}
+
+export { createComment, likeComment, deleteComment, getPostComments, deletePostComments, deleteUserComments };
 
 
