@@ -37,7 +37,7 @@ if (thumbsUpButton || thumbsDownButton) {
   };
 
   const handleUpvoteClick = async (userId) => {
-    if (currentVote === 'upvote') return; // Prevent re-upvoting
+    if (currentVote === 'upvote') return;
 
     try {
       const response = await fetch(`/reputation/upvote/${userId}`, {
@@ -56,7 +56,6 @@ if (thumbsUpButton || thumbsDownButton) {
       if (reputationElement) {
         const currentValue = parseInt(reputationElement.textContent, 10);
         if (!isNaN(currentValue)) {
-          // Adjust based on previous vote
           if (currentVote === 'downvote') {
             reputationElement.textContent = currentValue + 2;
           } else {
@@ -74,7 +73,7 @@ if (thumbsUpButton || thumbsDownButton) {
   };
 
   const handleDownvoteClick = async (userId) => {
-    if (currentVote === 'downvote') return; // Prevent re-downvoting
+    if (currentVote === 'downvote') return;
 
     try {
       const response = await fetch(`/reputation/downvote/${userId}`, {
