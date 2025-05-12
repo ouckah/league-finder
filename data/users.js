@@ -120,9 +120,9 @@ const editUser = async (
     }
     validation.validateEdit(username, email, biography, riotId, region, preferredRoles, profilePicture);
     try {
+        const userCollection = await users();
         const user = await getUser(userId);
         if (user.username !== username.toLowerCase()) {
-            const userCollection = await users();
             const existingUser = await userCollection.findOne({ username: username.toLowerCase() });
             if (existingUser) throw 'User with that username already exists';
         }
