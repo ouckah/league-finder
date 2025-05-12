@@ -100,8 +100,12 @@ router
 
     try {
       const user = await getUser(req.params.id);
-      const wr = await getWR(req.params.id)
-      const matches = await getMatches(req.params.id)
+      let wr = 'N/A';
+      let matches;
+      if (user.riotId.length > 0) {
+        wr = await getWR(req.params.id)
+        matches = await getMatches(req.params.id)
+      }
       res.render('users/profile', { title: user.username + "'s Profile", isOwner: isOwner, profilePicture: user.profilePicture, username: user.username, biography: user.biography, riotId: user.riotId, region: user.region, preferredRoles: user.preferredRoles, rank: user.rank, wr: wr, reputation: user.reputation, friends: user.friends, matches: matches }); // render the profile page with the user data
     } catch (e) {
       return res.status(400).json({ error: e });
