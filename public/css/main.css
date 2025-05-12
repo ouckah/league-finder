@@ -4,25 +4,59 @@
   box-sizing: border-box;
 }
 
+/* Main template css */
+body {
+  font-family: sans-serif;
+  line-height: 1.6;
+  color: #333;
+  background-color: #f5f5f5;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+  background: rgb(48, 123, 208);
+  color: white;
+  padding: 0.5rem 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
 nav {
-  background-color: rgb(59, 136, 204);
+  max-width: auto;
+  margin: 0 auto;
+  padding: 0 1.5rem;
 }
 
 nav ul {
-  list-style: none;
   display: flex;
-  gap: 20px;
+  list-style: none;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
-nav ul li a {
+nav a {
+  display: block;
   color: white;
   text-decoration: none;
+  padding: 1rem 1.2rem;
+  font-weight: 500;
+  font-size: 1rem;
+  border-radius: 4px;
 }
 
-nav ul li a:hover {
-  color: #ffcc00;
+nav a:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
 }
 
+nav a.active {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #4ae;
+}
 
 footer {
   background-color: #222;
@@ -30,11 +64,12 @@ footer {
   text-align: center;
 }
 
+.introduction,
 .team,
 .signin-form {
   border: 1px solid #ccc;
   border-radius: 8px;
-  margin: 0 auto 1.5rem;
+  margin: 1rem auto 1.5rem;
   width: 50%;
   padding: 1rem;
   margin-bottom: 1.5rem;
@@ -181,6 +216,75 @@ button {
 }
 
 /* Profile css */
+.player-search {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(200, 170, 110, 0.2);
+}
+
+.search-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.search-form label {
+  font-weight: 500;
+  color: #2c5364;
+  margin-bottom: 0.3rem;
+  font-size: 1rem;
+}
+
+.search-form input[type="text"] {
+  padding: 0.9rem 1.2rem;
+  border: 2px solid rgba(44, 83, 100, 0.2);
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background-color: #fff;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.search-form input[type="text"]:focus {
+  border-color: #0ac8b9;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(10, 200, 185, 0.2);
+}
+
+.search-form input[type="text"]::placeholder {
+  color: #aaa;
+  font-style: italic;
+}
+
+.search-form button {
+  display: inline-block;
+  padding: 0.9rem 1.5rem;
+  background: rgb(48, 123, 208);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(10, 150, 200, 0.2);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.search-form button:hover {
+  background: rgb(92, 155, 226);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 10px rgba(10, 150, 200, 0.3);
+}
+
+.search-form button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 5px rgba(10, 150, 200, 0.2);
+}
 .profile-container {
   max-width: 800px;
   margin: 2rem auto;
@@ -370,7 +474,8 @@ button {
   font-weight: bold;
 }
 
-#error{
+/* Error css */
+#error {
   color: red;
   font-weight: bold;
   text-align: center;
