@@ -79,7 +79,22 @@ router
     }
 
   });
-
+  
+router
+  .route('/profile')
+  .get(async (req, res) => {
+    let { username } = req.query;
+  
+    try {
+      username = helpers.checkString(username, "username");
+      helpers.checkStringWithLength(username, 2, 20, /^[a-zA-Z]+$/, "username");
+      let user = await getUserByUsername(username);
+      res.redirect(`/users/profile/${user._id.toString()}`); // redirect to the profile page of the user
+    } catch (e) {
+      return res.status(400).render('error', { error: e}); // create render page with the error message
+    }
+  });
+  
 // profile based on user id... /:id, update this route and handlebars later
 router
   .route('/profile/:id')
