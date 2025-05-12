@@ -99,6 +99,6 @@ const deletePostComments = async (
     return { commentDeleted: true , deletedCount: deletionInfo.deletedCount };
 }
 
-export { createComment, likeComment, deleteComment, getPostComments, deletePostComments,deletePostComments };
+export { createComment, likeComment, deleteComment, getPostComments, deletePostComments };
 
 
