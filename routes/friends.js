@@ -20,8 +20,8 @@ const getFriendsHandler = async (req, res) => {
   }
 }
 
-const postFriendHandler = async (req, res) => {
-  const { friendId } = req.body
+const acceptFriendRequestHandler = async (req, res) => {
+  const { friendId } = req.params
 
   try {
     helpers.checkId(req.session.user.userId.toString(), "id")
@@ -35,12 +35,13 @@ const postFriendHandler = async (req, res) => {
     await friendsData.friend(owner, friendId)
     return res.status(200).json({ success: true })
   } catch (e) {
+    console.error(e)
     return res.status(500).json({ error: e.message })
   }
 }
 
-const deleteFriendHandler = async (req, res) => {
-  const { friendId } = req.body
+const unfriendHandler = async (req, res) => {
+  const { friendId } = req.params
 
   try {
     helpers.checkId(req.session.user.userId.toString(), "id")
@@ -74,7 +75,7 @@ const getFriendRequestsHandler = async (req, res) => {
   }
 }
 
-const postFriendRequestHandler = async (req, res) => {
+const sendFriendRequestHandler = async (req, res) => {
   const { friendId } = req.body
 
   try {
@@ -93,8 +94,8 @@ const postFriendRequestHandler = async (req, res) => {
   }
 }
 
-const deleteFriendRequestHandler = async (req, res) => {
-  const { friendId } = req.body
+const rejectFriendRequestHandler = async (req, res) => {
+  const { friendId } = req.params
 
   try {
     helpers.checkId(req.session.user.userId.toString(), "id")
@@ -131,19 +132,53 @@ const getFriendStatusHandler = async (req, res) => {
   }
 }
 
+const renderFriendRequestsPage = async (req, res) => {
+  const owner = req.session.user.userId
+  const requests = await friendsData.getFriendRequests(owner)
+  console.log(requests)
+
+  res.render('requests/requests', { friendRequests: requests })
+}
+
+const renderFriendsPage = async (req, res) => {
+  const owner = req.session.user.userId
+  const friends = await friendsData.getFriends(owner)
+  console.log(friends)
+
+  res.render('friends/friends', { acceptedFriends: friends })
+}
+
+router. 
+  route('/'). 
+  all(protectedRoute). 
+  get(renderFriendsPage)
+
 router.
   route('/manage'). 
   all(protectedRoute). 
-  get(getFriendsHandler). 
-  post(postFriendHandler). 
-  delete(deleteFriendHandler)
+  get(getFriendsHandler)
+
+router. 
+  route('/manage/:friendId'). 
+  all(protectedRoute).
+  delete(unfriendHandler)
 
 router. 
   route('/request'). 
   all(protectedRoute). 
   get(getFriendRequestsHandler). 
-  post(postFriendRequestHandler). 
-  delete(deleteFriendRequestHandler)
+  post(sendFriendRequestHandler)
+
+router. 
+  route('/request/:friendId'). 
+  all(protectedRoute). 
+  patch(acceptFriendRequestHandler).
+  delete(rejectFriendRequestHandler)
+
+router. 
+  route('/requests'). 
+  all(protectedRoute). 
+  get(renderFriendRequestsPage)
 
 router. 
   route('/status/:friendId'). 

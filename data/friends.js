@@ -1,3 +1,4 @@
+import {users} from '../config/mongoCollections.js'
 import {friends} from '../config/mongoCollections.js';
 import {MongoNetworkTimeoutError, ObjectId} from 'mongodb';
 import helpers from '../utils/helpers.js';
@@ -14,8 +15,8 @@ const friend = async (frienderId, friendeeId) => {
   const result = await friendsCollection.updateMany(
     {
       $or: [
-        { userId: frienderId, friendId: friendeeId },
-        { userId: friendeeId, friendId: frienderId }
+        { userId: frienderId, friendId: friendeeId, status: "pending" },
+        { userId: friendeeId, friendId: frienderId, status: "pending" }
       ]
     },
     { $set: { status: "accepted" } }
@@ -46,12 +47,41 @@ const unfriend = async (frienderId, friendeeId) => {
 const getFriends = async (userId) => {
   helpers.checkId(userId)
 
+  const usersCollection = await users()
   const friendsCollection = await friends()
-  const friendList = await friendsCollection.find({
-    userId: new ObjectId(userId)
-  })
 
-  return Array.toArray(friendList)
+  const friendsList = await friendsCollection.find({
+    status: "accepted",
+    $or: [
+      { userId: userId },
+      { friendId: userId }
+    ]
+  }).toArray();
+
+  const populatedFriendsList = await Promise.all(
+    friendsList.map(async (f) => {
+      const otherUserId =
+        f.userId.toString() === userId ? f.friendId : f.userId;
+
+      const otherUser = await usersCollection.findOne({ _id: new ObjectId(otherUserId) });
+
+      return {
+        ...f,
+        friendUser: otherUser
+          ? {
+              _id: otherUser._id,
+              username: otherUser.username,
+              profilePicture: otherUser.profilePicture,
+              riotId: otherUser.riotId,
+              region: otherUser.region,
+              rank: otherUser.rank
+            }
+          : null,
+      };
+    })
+  )
+
+  return populatedFriendsList
 }
 
 const getFriendStatus = async (frienderId, friendeeId) => {
@@ -96,14 +126,25 @@ const createFriendRequest = async (frienderId, friendeeId) => {
 const getFriendRequests = async (userId) => {
   helpers.checkId(userId)
 
+  const usersCollection = await users()
   const friendsCollection = await friends()
 
-  const friendRequestList = await friendsCollection.findMany({
-    userId: new ObjectId(userId),
+  const friendRequestList = await friendsCollection.find({
+    friendId: userId,
     status: "pending",
-  })
+  }).toArray()
 
-  return friendRequestList
+  const populatedRequestsList = await Promise.all(
+    friendRequestList.map(async (req) => {
+      const sender = await usersCollection.findOne({ _id: new ObjectId(req.userId) });
+      return {
+        ...req,
+        fromUser: sender ? { _id: sender._id, username: sender.username } : null,
+      };
+    })
+  );
+
+  return populatedRequestsList
 }
 
 const deleteFriendRequest = async (frienderId, friendeeId) => {
