@@ -39,12 +39,14 @@
 </ul>
 
 {{#if ismember}}
-<form action="/teams/{{team._id}}/chat" method="POST">
-  <textarea name="teamsMessage"></textarea>
+<form action="/teams/{{team._id}}/chat" method="POST" id="teams-chatForm">
+  <textarea name="teamsMessage" id="teamsMessage"></textarea>
   </br>
   <button type="submit">Send</button>
 </form>
 {{/if}}
+
+<p id="error"></p>
 
 {{#if joinable}}
 <a href="/teams/{{team._id}}/join">join</a>
@@ -57,3 +59,5 @@
 {{#if isowner}}
 <a href="/teams/{{team._id}}/admin">admin page</a>
 {{/if}}
+
+<script type="module" src="/public/js/teams/teammessage.js"></script>
