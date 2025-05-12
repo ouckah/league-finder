@@ -3,20 +3,41 @@ import {MongoNetworkTimeoutError, ObjectId} from 'mongodb';
 import helpers from '../utils/helpers.js';
 import * as validation from '../utils/validation.js';
 
-const cascadeUserDeletionToTeams = async (userId) => {
-    let teams = await getAllTeams();
-
-    for (const team of teams){
-	if (team.members.includes(userId)){
-	    team.members = team.members.filter(member => member != userId);
-	    if (team.members.length === 0){
-		await deleteTeam(team._id);
-	    } else {
-		team.owner = team.members[0];
-	    }
-	}
-	team.requests = team.requests.filter(request => request != userId);
+const removeAllInstancesOfUserFromTeam = (team, userId) => {
+    team.members = team.members.filter(member => member != userId);
+    team.requests = team.requests.filter(request => request != userId);
+    if(team.members.length === 0){
+	return null;
     }
+    if(team.owner === userId){
+	team.owner = team.members[0];
+    }
+}
+
+const cascadeUserDeletionToTeams = async (userId) => {
+    let allTeams = await getAllTeams();
+    const teamsCollection = await teams();
+
+    for (const team of allTeams){
+	if(team.members.includes(userId) || team.requests.includes(userId)){
+	    const status = removeAllInstancesOfUserFromTeam(team, userId);
+
+	    if(status === null){
+		await deleteTeam(team._id);
+		return;
+	    }
+
+	    const id = team._id;
+	    delete team._id;
+
+	    await teamsCollection.updateOne(
+		{ _id: new ObjectId(id) },
+		{ $set: team}
+	    );
+	}
+    }
+
+
 }
 
 const createTeam = async (title, desiredRank, desiredRole, region, description, owner) => {
