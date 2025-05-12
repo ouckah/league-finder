@@ -2,6 +2,7 @@
 
 <h3 id="requests">User Requests</h3>
 <form action="/teams/{{team._id}}/accept" method="POST">
+<input type="hidden" name="_method" value="PATCH">
   {{#each requests}}
     <label>
       {{this.username}}
@@ -13,6 +14,7 @@
 
 <h3 id="kick">Kick Users</h3>
 <form action="/teams/{{team._id}}/kick" method="POST">
+<input type="hidden" name="_method" value="PATCH">
   {{#each members}}
     <label>
       {{this.username}}

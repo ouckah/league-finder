@@ -143,7 +143,7 @@ router.route('/:id/leave')
 	res.redirect(`/teams/${teamId}`);
     })
 
-router.route('/:id/join') .get(async (req, res) => {
+router.route('/:id/join').get(async (req, res) => {
     const teamId = req.params.id;
     try {
 	helpers.checkId(teamId);
@@ -180,7 +180,7 @@ router.route('/:id/join') .get(async (req, res) => {
     res.redirect(`/teams/${teamId}`);
 })
 
-router.route('/:id/accept').post(async (req, res) => {
+router.route('/:id/accept').patch(async (req, res) => {
     const teamId = req.params.id;
     if(!req.body.requests) {
 	return res.status(400).render('error', {error: 'userId is required'});
@@ -223,7 +223,7 @@ router.route('/:id/accept').post(async (req, res) => {
     res.redirect(`/teams/${teamId}`);
 })
 
-router.route('/:id/kick').post(async (req, res) => {
+router.route('/:id/kick').patch(async (req, res) => {
     const teamId = req.params.id;
     if(!req.body.members) {
 	return res.status(400).render('error', {error: 'userId is required'});
