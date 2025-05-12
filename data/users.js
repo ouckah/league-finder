@@ -22,10 +22,9 @@ const createUser = async (
         password,
         password // confirmPassword is same for this. weird system but works for now
     )
-
     // check database if this username exists... then throw
     const usersCollection = await users();
-    const existingUser = await usersCollection.findOne({ username: username });
+    const existingUser = await usersCollection.findOne({ username: username.toLowerCase() });
     if (existingUser) throw 'User with that username already exists';
 
     // hash password
@@ -33,7 +32,7 @@ const createUser = async (
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
     let newUser = {
-        username: username,
+        username: username.toLowerCase(),
         email: email,
         password: hashedPassword,
         profilePicture: "", // default profile picture
@@ -77,7 +76,7 @@ const loginUser = async (username, password) => {
 
     // check database if this username exists
     const usersCollection = await users();
-    const existingUser = await usersCollection.findOne({ username: username });
+    const existingUser = await usersCollection.findOne({ username: username.toLowerCase() });
     if (!existingUser) throw 'Either the username or password is invalid';
 
     // check if password is correct
@@ -122,8 +121,10 @@ const editUser = async (
     try {
         const user = await getUser(userId);
         const userCollection = await users();
+        const existingUser = await userCollection.findOne({ username: username.toLowerCase() });
+        if (existingUser) throw 'User with that username already exists';
         const updateUser = {
-            username: username,
+            username: username.toLowerCase(),
             email: email,
             biography: biography,
             riotId: riotId,
@@ -180,7 +181,7 @@ const getUserByUsername = async (username) => {
     if (!/^[a-zA-Z0-9]+$/.test(username)) throw 'username can only contain letters and numbers';
 
     const userCollection = await users();
-    const user = await userCollection.findOne({ username: username });
+    const user = await userCollection.findOne({ username: username.toLowerCase() });
     if (!user) throw 'User not found';
     return user;
 }
