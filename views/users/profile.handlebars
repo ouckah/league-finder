@@ -1,3 +1,15 @@
+<div class = "player-search">
+  <form action="/users/profile" method="GET" class="search-form">
+    <label for="username">Search for a user:</label>
+    <input type="text" name="username" placeholder="Search for a user..." required>
+    <button type="submit">Search</button>
+  </form>
+</div>
+
+{{#unless isOwner}}
+    <button id="send-friend-request" data-friend-id="{{id}}">Send Friend Request</button>
+{{/unless}}
+
 <div class="profile-container">
   <div class="profile-header">
     {{#if isOwner}}

@@ -3,7 +3,7 @@ const router = Router();
 import helpers from '../utils/helpers.js';
 import * as validation from '../utils/validation.js';
 import { getPuuid, getWinLoss } from '../data/api.js';
-import { createUser, editUser, loginUser, deleteUser, getUser, getWR, getMatches } from '../data/users.js';
+import { createUser, editUser, loginUser, deleteUser, getUser, getWR, getMatches,getUserByUsername} from '../data/users.js';
 import { protectedRoute } from '../utils/middleware.js';
 
 
@@ -79,7 +79,22 @@ router
     }
 
   });
-
+  
+router
+  .route('/profile')
+  .get(async (req, res) => {
+    let { username } = req.query;
+  
+    try {
+      username = helpers.checkString(username, "username");
+      helpers.checkStringWithLength(username, 2, 20, /^[a-zA-Z]+$/, "username");
+      let user = await getUserByUsername(username);
+      res.redirect(`/users/profile/${user._id.toString()}`); // redirect to the profile page of the user
+    } catch (e) {
+      return res.status(400).render('error', { error: e}); // create render page with the error message
+    }
+  });
+  
 // profile based on user id... /:id, update this route and handlebars later
 router
   .route('/profile/:id')
@@ -106,7 +121,7 @@ router
         wr = await getWR(req.params.id)
         matches = await getMatches(req.params.id)
       }
-      res.render('users/profile', { title: user.username + "'s Profile", isOwner: isOwner, profilePicture: user.profilePicture, username: user.username, biography: user.biography, riotId: user.riotId, region: user.region, preferredRoles: user.preferredRoles, rank: user.rank, wr: wr, reputation: user.reputation, friends: user.friends, matches: matches }); // render the profile page with the user data
+      res.render('users/profile', { title: user.username + "'s Profile", id: user._id, isOwner: isOwner, profilePicture: user.profilePicture, username: user.username, biography: user.biography, riotId: user.riotId, region: user.region, preferredRoles: user.preferredRoles, rank: user.rank, wr: wr, reputation: user.reputation, friends: user.friends, matches: matches }); // render the profile page with the user data
     } catch (e) {
       return res.status(400).json({ error: e });
     }
