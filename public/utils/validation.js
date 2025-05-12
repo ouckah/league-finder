@@ -121,4 +121,9 @@ const validateEdit = (
   }
 }
 
-export { validateRegistration, validateTeam, validateLogin, validateEdit }
+function throwError(eMessage,errorDiv) {
+  errorDiv.innerHTML = eMessage;
+}
+
+
+export { validateRegistration, validateTeam, validateLogin, validateEdit, throwError };
