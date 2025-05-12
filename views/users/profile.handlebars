@@ -8,6 +8,12 @@
 
 {{#unless isOwner}}
     <button id="send-friend-request" data-friend-id="{{id}}">Send Friend Request</button>
+
+    <div class="reputation-actions">
+      <button id="thumbs-up" data-user-id="{{id}}">👍</button>
+      <button id="thumbs-down" data-user-id="{{id}}">👎</button>
+    </div>
+    <script type="module" src="/public/js/reputation.js"></script>
 {{/unless}}
 
 <div class="profile-container">
