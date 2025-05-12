@@ -19,7 +19,7 @@ router
   .post(async (req, res) => {
     // validate user input
     if (!req.body) {
-      return res.status(400).render('users/register', { title: "Register", errorMessage: 'All fields are required' });
+      return res.status(400).json({error: 'All fields are required' });
     }
 
     let { firstName, lastName, email, username, password, confirmPassword } = req.body;
@@ -34,16 +34,15 @@ router
         confirmPassword
       )
     } catch (e) {
-      return res.status(400).render('users/register', { title: "Register", errorMessage: e }); // create render page with the error message
+      return res.status(400).json({error: e }); // create render page with the error message
     }
 
     // user registration
     try {
       const user = await createUser(firstName, lastName, email, username, password);
-      res.redirect('/users/login'); // redirect to login page after successful registration
+      res.status(200).json({message: 'User created successfully'}); // redirect to login page after successful registration
     } catch (e) {
-      console.log(e);
-      return res.status(500).render('users/register', { title: "Register", errorMessage: e }); // add render page with the error message
+      return res.status(500).json({error: e }); // add render page with the error message
     }
   });
 
@@ -124,7 +123,7 @@ router
         wr = await getWR(req.params.id)
         matches = await getMatches(req.params.id)
       }
-      res.render('users/profile', { title: user.username + "'s Profile", id: user._id, isOwner: isOwner, profilePicture: user.profilePicture, username: user.username, biography: user.biography, riotId: user.riotId, region: user.region, preferredRoles: user.preferredRoles, rank: user.rank, wr: wr, reputation: user.reputation, friends: friends, matches: matches }); // render the profile page with the user data
+      res.render('users/profile', { title: user.username + "'s Profile", id: user._id, isOwner: isOwner, profilePicture: user.profilePicture, username: user.username, biography: user.biography, riotId: user.riotId, region: user.region, preferredRoles: user.preferredRoles, rank: user.rank, wr: wr, reputation: user.reputation, friends: friends, matches: matches }); 
     } catch (e) {
       return res.status(400).json({ error: e });
     }
