@@ -21,6 +21,26 @@ const getPokesHandler = async (req, res) => {
   }
 }
 
+const getPokeStatusHandler = async (req, res) => {
+  const { userId } = req.params
+
+  try {
+    helpers.checkId(req.session.user.userId.toString(), "id")
+    helpers.checkId(userId, "id")
+  } catch (e) {
+    return res.status(400).json({ error: e.message })
+  }
+
+  try {
+    const owner = req.session.user.userId
+    const status = await pokesData.getPokeStatus(owner, userId)
+    return res.status(200).json({ success: true, status })
+  } catch (e) {
+    console.error(e)
+    return res.status(500).json({ error: e.message })
+  }
+}
+
 const acknowledgePokeHandler = async (req, res) => {
   const { userId } = req.params
 
@@ -69,10 +89,11 @@ router
 router
   .route('/:userId')
   .all(protectedRoute)
+  .get(getPokeStatusHandler)
   .post(pokeUserHandler)
 
 router
-  .route('/acknowledge/:pokeId')
+  .route('/acknowledge/:userId')
   .all(protectedRoute)
   .patch(acknowledgePokeHandler)
 

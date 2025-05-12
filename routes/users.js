@@ -2,6 +2,7 @@ import { Router } from 'express';
 const router = Router();
 import helpers from '../utils/helpers.js';
 import * as validation from '../utils/validation.js';
+import * as friendData from '../data/friends.js'
 import { getPuuid, getWinLoss } from '../data/api.js';
 import { createUser, editUser, loginUser, deleteUser, getUser, getWR, getMatches,getUserByUsername} from '../data/users.js';
 import { protectedRoute } from '../utils/middleware.js';
@@ -115,6 +116,13 @@ router
       isOwner = true; // if user is logged in and the id matches, then they are the owner of the profile
     }
 
+    let isFriend = false;
+    // check if user is friends with logged in user
+    if (req.session.user) {
+      const friendStatus = await friendData.getFriendStatus(req.session.user.userId, req.params.id)
+      isFriend = friendStatus == "accepted";
+    }
+
     try {
       const user = await getUser(req.params.id);
       let wr = 'N/A';
@@ -123,7 +131,7 @@ router
         wr = await getWR(req.params.id)
         matches = await getMatches(req.params.id)
       }
-      res.render('users/profile', { title: user.username + "'s Profile", id: user._id, isOwner: isOwner, profilePicture: user.profilePicture, username: user.username, biography: user.biography, riotId: user.riotId, region: user.region, preferredRoles: user.preferredRoles, rank: user.rank, wr: wr, reputation: user.reputation, friends: user.friends, matches: matches }); // render the profile page with the user data
+      res.render('users/profile', { title: user.username + "'s Profile", id: user._id, isOwner: isOwner, isFriend: isFriend, profilePicture: user.profilePicture, username: user.username, biography: user.biography, riotId: user.riotId, region: user.region, preferredRoles: user.preferredRoles, rank: user.rank, wr: wr, reputation: user.reputation, friends: user.friends, matches: matches }); // render the profile page with the user data
     } catch (e) {
       return res.status(400).json({ error: e });
     }

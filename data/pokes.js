@@ -1,4 +1,4 @@
-import {pokes} from '../config/mongoCollections.js';
+import {pokes, users} from '../config/mongoCollections.js';
 import {MongoNetworkTimeoutError, ObjectId} from 'mongodb';
 import helpers from '../utils/helpers.js';
 import * as validation from '../utils/validation.js';
@@ -17,16 +17,53 @@ const pokeUser = async (pokerId, userId) => {
 }
 
 const getPokes = async (userId) => {
-  helpers.checkId(userId)
+  helpers.checkId(userId);
 
-  const pokesCollection = await pokes()
+  const pokesCollection = await pokes();
+  const usersCollection = await users();
 
   const pokesList = await pokesCollection.find({
     userId,
     acknowledged: false,
-  }).toArray()
+  }).toArray();
 
-  return pokesList
+  const populatedPokesList = await Promise.all(
+    pokesList.map(async (poke) => {
+      const sender = await usersCollection.findOne({ _id: new ObjectId(poke.senderId) });
+
+      return {
+        ...poke,
+        senderUser: sender
+          ? {
+              _id: sender._id,
+              username: sender.username,
+              profilePicture: sender.profilePicture,
+              riotId: sender.riotId,
+              region: sender.region,
+              rank: sender.rank,
+            }
+          : null,
+      };
+    })
+  );
+
+  return populatedPokesList;
+};
+
+const getPokeStatus = async (pokerId, userId) => {
+  helpers.checkId(pokerId)
+  helpers.checkId(userId)
+  
+  const pokesCollection = await pokes()
+
+  const poke = await pokesCollection.findOne({
+    pokerId,
+    userId,
+  })
+
+  if (!poke) return null
+
+  return poke.acknowledged
 }
 
 const acknowledgePoke = async (userId, pokedId) => {
@@ -44,5 +81,6 @@ const acknowledgePoke = async (userId, pokedId) => {
 export {
   pokeUser,
   getPokes,
+  getPokeStatus,
   acknowledgePoke,
 }
