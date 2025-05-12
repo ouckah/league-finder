@@ -10,4 +10,3 @@ export const userData = userDataFunctions;
 export const commentData = commentDataFunctions;
 export const friendData = friendDataFunctions;
 export const teamData = teamDataFunctions;
-export const reputationData = reputationDataFunctions;

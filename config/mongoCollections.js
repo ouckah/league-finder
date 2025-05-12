@@ -24,4 +24,3 @@ export const comments = getCollectionFn('comments');
 export const friends = getCollectionFn('friends');
 export const teamRequests = getCollectionFn('teamRequests');
 export const teams = getCollectionFn('teams');
-export const reputation = getCollectionFn('reputation')
