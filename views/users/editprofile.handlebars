@@ -1,3 +1,7 @@
+{{#if errorMessage}}
+    <p id="error">{{errorMessage}}</p>
+{{/if}}
+
 <div class="edit-profile-container">
     <h3>Edit Profile</h3>
     <form id="edit-profile-form" action="/users/profile/{{personalID}}/edit" method="POST">

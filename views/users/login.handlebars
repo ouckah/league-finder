@@ -1,5 +1,9 @@
 <h1>Sign In</h1>
 
+{{#if errorMessage}}
+    <p id="error">{{errorMessage}}</p>
+{{/if}}
+
 
 <form id="signin-form" class="signin-form" method="POST" action="/users/login">
         <label for="username">Username:</label>

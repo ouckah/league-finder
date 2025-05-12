@@ -19,7 +19,7 @@
     <p class="post-date">{{post.createdAt}}</p>
 </div>
 
-<form action="/comments/create" method="POST">
+<form action="/comments/" method="POST">
   <input type="hidden" name="postId" value="{{post._id}}">
 
   <textarea name="content" placeholder="Write a comment..."></textarea>
