@@ -120,9 +120,11 @@ const editUser = async (
     validation.validateEdit(username, email, biography, riotId, region, preferredRoles, profilePicture);
     try {
         const user = await getUser(userId);
-        const userCollection = await users();
-        const existingUser = await userCollection.findOne({ username: username.toLowerCase() });
-        if (existingUser) throw 'User with that username already exists';
+        if (user.username !== username.toLowerCase()) {
+            const userCollection = await users();
+            const existingUser = await userCollection.findOne({ username: username.toLowerCase() });
+            if (existingUser) throw 'User with that username already exists';
+        }
         const updateUser = {
             username: username.toLowerCase(),
             email: email,
@@ -199,7 +201,7 @@ const getRankData = async (userId) => {
             updateUser = {
                 rank: `${rank.tier} - ${rank.lp}`
             };
-        } else if (rank.rank.length > 0 ){
+        } else if (rank.rank.length > 0) {
             updateUser = {
                 rank: `${rank.tier} ${rank.rank} - ${rank.lp}`
             };

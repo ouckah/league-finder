@@ -152,7 +152,7 @@ router
       const updateUser = await editUser(req.session.user.userId, username, email, biography, riotId, region, preferredRoles, profilePicture);
       return res.status(200).json({ message: 'User updated successfully' });
     } catch (e) {
-      return res.status(500).render('users/editprofile', { title: "Edit Profile", errorMessage: e });
+      return res.status(500).json({ error: e });
     }
   });
 

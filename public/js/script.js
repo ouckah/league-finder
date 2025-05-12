@@ -170,7 +170,7 @@ if (editProfileForm) {
         window.location.href = '/';
       } else {
         const data = await response.json();
-        return; // handle error message
+        throwError(data.error);
       }
     } catch (e) {
       throwError(e);
