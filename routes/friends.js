@@ -137,7 +137,7 @@ const renderFriendRequestsPage = async (req, res) => {
   const requests = await friendsData.getFriendRequests(owner)
   console.log(requests)
 
-  res.render('requests/requests', { friendRequests: requests })
+  res.render('friends/requests', { friendRequests: requests })
 }
 
 const renderFriendsPage = async (req, res) => {
