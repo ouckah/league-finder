@@ -10,14 +10,6 @@
   <button id="poke-btn" data-user-id="{{id}}">Poke</button>
 {{/if}}
 
-{{#unless isOwner}}
-    <button id="send-friend-request" data-friend-id="{{id}}">Send Friend Request</button>
-
-    <div class="reputation-actions">
-      <button id="thumbs-up" data-user-id="{{id}}">👍</button>
-      <button id="thumbs-down" data-user-id="{{id}}">👎</button>
-    </div>
-{{/unless}}
 
 <div class="profile-container">
   <div class="profile-header">
