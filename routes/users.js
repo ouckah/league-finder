@@ -3,7 +3,7 @@ const router = Router();
 import helpers from '../utils/helpers.js';
 import * as validation from '../utils/validation.js';
 import { getPuuid, getWinLoss } from '../data/api.js';
-import { createUser, editUser, loginUser, deleteUser, getUser, getWR, getMatches } from '../data/users.js';
+import { createUser, editUser, loginUser, deleteUser, getUser, getWR, getMatches,getUserByUsername} from '../data/users.js';
 import { protectedRoute } from '../utils/middleware.js';
 
 

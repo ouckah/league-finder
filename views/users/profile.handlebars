@@ -1,3 +1,11 @@
+<div class = "player-search">
+  <form action="/users/profile" method="GET" class="search-form">
+    <label for="username">Search for a player:</label>
+    <input type="text" name="username" placeholder="Search for a player..." required>
+    <button type="submit">Search</button>
+  </form>
+</div>
+
 <div class="profile-container">
   <div class="profile-header">
     {{#if isOwner}}

@@ -252,5 +252,6 @@ export {
     getUser,
     getRankData,
     getWR,
-    getMatches
+    getMatches,
+    getUserByUsername
 }
