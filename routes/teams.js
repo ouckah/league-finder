@@ -18,7 +18,13 @@ router.route('/')
 	const owner = req.session.user.userId;
 
 	let desiredRank = req.body.desiredRank;
+	if(!desiredRank) {
+	    desiredRank = [];
+	}
 	let desiredRole = req.body.desiredRole;
+	if(!desiredRole) {
+	    desiredRole = [];
+	}
 
 	const region = req.body.region;
 	const description = req.body.description;

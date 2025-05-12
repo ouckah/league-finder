@@ -58,6 +58,8 @@ if(teamForm){
     teamForm.addEventListener('submit', (event) => {
         event.preventDefault();
         let title = document.getElementById('title').value;
+	let error = document.getElementById('error');
+	error.hidden = true;
 
         // Not sure how we want to handle this. This works for now but it depends on how new team handblebars is done
         let desiredRoles = Array.from(document.querySelectorAll('input[name="desiredRole[]"]:checked'))
@@ -73,7 +75,9 @@ if(teamForm){
         try{
           validation.validateTeam(title, desiredRanks, desiredRoles, region, description);
           } catch (e){
-            throwError(e);
+	    console.log(e);
+	    error.hidden = false;
+	    error.innerHTML = e;
             return;
           }
         teamForm.submit();
