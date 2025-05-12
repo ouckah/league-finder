@@ -57,9 +57,9 @@ if (thumbsUpButton || thumbsDownButton) {
         const currentValue = parseInt(reputationElement.textContent, 10);
         if (!isNaN(currentValue)) {
           if (currentVote === 'downvote') {
-            reputationElement.textContent = currentValue + 2;
+            reputationElement.textContent = currentValue + result.change;
           } else {
-            reputationElement.textContent = currentValue + 1;
+            reputationElement.textContent = currentValue + result.change;
           }
         }
       }
@@ -93,9 +93,9 @@ if (thumbsUpButton || thumbsDownButton) {
         const currentValue = parseInt(reputationElement.textContent, 10);
         if (!isNaN(currentValue)) {
           if (currentVote === 'upvote') {
-            reputationElement.textContent = currentValue - 2;
+            reputationElement.textContent = currentValue + result.change;
           } else {
-            reputationElement.textContent = currentValue - 1;
+            reputationElement.textContent = currentValue + result.change;
           }
         }
       }

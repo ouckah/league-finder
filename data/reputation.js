@@ -20,7 +20,7 @@ const upvote = async (voterId, userId) => {
 
   console.log(result)
 
-  if (result && result.value) {
+  if (result) {
     change += 1
   }
 
@@ -31,7 +31,7 @@ const upvote = async (voterId, userId) => {
   })
 
   await usersCollection.findOneAndUpdate(
-    { _id: userId },
+    { _id: new ObjectId(userId) },
     { $inc: { reputation: change } },
   )
 
@@ -53,7 +53,9 @@ const downvote = async (voterId, userId) => {
     type: "upvote",
   })
 
-  if (result && result.value) {
+  console.log(result)
+
+  if (result) {
     change -= 1
   }
 
@@ -64,7 +66,7 @@ const downvote = async (voterId, userId) => {
   })
 
   await usersCollection.findOneAndUpdate(
-    { _id: userId },
+    { _id: new ObjectId(userId) },
     { $inc: { reputation: change } },
   )
 
