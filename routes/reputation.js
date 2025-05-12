@@ -5,7 +5,7 @@ import { protectedRoute } from '../utils/middleware.js';
 import * as reputationData from '../data/reputation.js';
 
 const upvoteUserHandler = async (req, res) => {
-  const { userId } = req.param 
+  const { userId } = req.params
 
   try {
     helpers.checkId(userId, "id")
@@ -23,7 +23,7 @@ const upvoteUserHandler = async (req, res) => {
 }
 
 const downvoteUserHandler = async (req, res) => {
-  const { userId } = req.param 
+  const { userId } = req.params
 
   try {
     helpers.checkId(userId, "id")
