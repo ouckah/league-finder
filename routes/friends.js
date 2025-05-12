@@ -2,6 +2,7 @@ import {Router} from 'express';
 const router = Router();
 import helpers from '../utils/helpers.js';
 import * as friendsData from '../data/friends.js'
+import * as pokesData from '../data/pokes.js'
 import { protectedRoute } from '../utils/middleware.js';
 
 const getFriendsHandler = async (req, res) => {
@@ -132,11 +133,12 @@ const getFriendStatusHandler = async (req, res) => {
   }
 }
 
-const renderFriendRequestsPage = async (req, res) => {
+const renderNotificationsPage = async (req, res) => {
   const owner = req.session.user.userId
   const requests = await friendsData.getFriendRequests(owner)
+  const pokes = await pokesData.getPokes(owner)
 
-  res.render('friends/requests', { friendRequests: requests })
+  res.render('friends/notifications', { friendRequests: requests, pokes: pokes })
 }
 
 const renderFriendsPage = async (req, res) => {
@@ -174,9 +176,9 @@ router.
   delete(rejectFriendRequestHandler)
 
 router. 
-  route('/requests'). 
+  route('/notifications'). 
   all(protectedRoute). 
-  get(renderFriendRequestsPage)
+  get(renderNotificationsPage)
 
 router. 
   route('/status/:friendId'). 
