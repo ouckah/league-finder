@@ -6,6 +6,7 @@ let teamForm = document.getElementById('newteams-form');
 let postForm = document.getElementById('newpost-form');
 let deleteAccountForm = document.getElementById('deleteAccountForm');
 let errorDiv = document.getElementById('error');
+let editProfileForm = document.getElementById('edit-profile-form');
 
 if (loginForm) {
   loginForm.addEventListener('submit', (event) => {
