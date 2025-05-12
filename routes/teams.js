@@ -75,11 +75,13 @@ router.route('/:id')
 	let joinable = false;
 	let leavable = false;
 	let isowner = false;
+	let ismember = false;
 	if (req.session.user) {
 	    const user = req.session.user.userId;
 	    joinable = !team.requests.includes(user) && !team.members.includes(user);
 	    leavable = team.owner !== user && team.members.includes(user);
 	    isowner = team.owner === user;
+	    ismember = team.members.includes(user);
 	}
 	const owner = (await userData.getUser(team.owner)).username;
 
@@ -99,7 +101,13 @@ router.route('/:id')
 	}
 	requests = requests.map(request => request.username);
 
-	res.render('teams/team', {team:team, joinable:joinable, leavable:leavable, members:members, isowner:isowner, owner:owner});
+	let messages = [];
+	for (const message of team.messages) {
+	    let username = (await userData.getUser(message.userId)).username;
+	    messages.push(`${username} [${message.time}]: ${message.message}`);
+	}
+
+	res.render('teams/team', {team:team, joinable:joinable, leavable:leavable, members:members, isowner:isowner, owner:owner, messages:messages, ismember:ismember});
     })
 
 router.route('/:id/leave')
@@ -314,6 +322,48 @@ router.route('/:id/admin').get(async (req, res) => {
     requests = requests.map(request => ({username: request.username, id: request._id}));
 
     res.render('teams/admin', {team:team, members:members, requests:requests});
+})
+
+router.route('/:id/chat').post(async (req, res) => {
+    const teamId = req.params.id;
+    const message = req.body.teamsMessage;
+
+    if(!message) {
+	return res.status(400).render('error', {error: 'Message is required'});
+    }
+
+    try {
+	helpers.checkId(teamId);
+    } catch (e) {
+	return res.status(400).render('error', {error: e.message});
+    }
+
+    const team = await teamData.getTeam(teamId);
+    if (!team) {
+	res.status(404).render('error', {error: 'Team not found'});
+	return;
+    }
+
+    if (!req.session.user) {
+	res.status(401).render('error', {error: 'You must be logged in to send a message'});
+	return;
+    }
+
+    const userId = req.session.user.userId;
+
+    if (!team.members.includes(userId)) {
+	res.status(403).render('error', {error: 'You are not a member of this team'});
+	return;
+    }
+
+    try {
+	await teamData.addMessage(teamId, userId, message);
+    } catch (e) {
+	res.status(400).render('error', {error: e.message});
+	return;
+    }
+
+    res.redirect(`/teams/${teamId}`);
 })
 
 
