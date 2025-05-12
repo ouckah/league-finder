@@ -1,0 +1,49 @@
+<h1>Friends</h1>
+
+{{#if acceptedFriends.length}}
+  <ul class="friends-list">
+    {{#each acceptedFriends}}
+      <li class="friend-item">
+        <div class="user-info">
+          <img src="{{this.profilePicture}}" alt="pfp" class="pfp" />
+          <span class="username">{{this.friendUser.username}}</span>
+        </div>
+        <div class="actions">
+          <button class="remove-friend-btn" data-friend-id="{{this.friendUser._id}}">Remove</button>
+        </div>
+      </li>
+    {{/each}}
+  </ul>
+{{else}}
+  <p>You have no friends yet.</p>
+{{/if}}
+
+<script type="module">
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.remove-friend-btn').forEach(button => {
+      button.addEventListener('click', async () => {
+        const friendId = button.getAttribute('data-friend-id');
+        try {
+          const response = await fetch(`/friends/manage/${friendId.toString()}`, {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          });
+
+          const result = await response.json();
+
+          if (response.ok) {
+            alert('Friend removed.');
+            button.closest('.friend-item').remove();
+          } else {
+            alert(`Error: ${result.error}`);
+          }
+        } catch (err) {
+          console.error(err);
+          alert('Something went wrong while removing the friend.');
+        }
+      });
+    });
+  });
+</script>

@@ -6,6 +6,10 @@
   </form>
 </div>
 
+{{#unless isOwner}}
+    <button id="send-friend-request" data-friend-id="{{id}}">Send Friend Request</button>
+{{/unless}}
+
 <div class="profile-container">
   <div class="profile-header">
     {{#if isOwner}}

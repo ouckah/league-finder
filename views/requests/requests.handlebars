@@ -1,0 +1,22 @@
+<h1>Incoming Friend Requests</h1>
+
+{{#if friendRequests.length}}
+  <ul class="friend-requests-list">
+    {{#each friendRequests}}
+      <li class="friend-request-item">
+        <div class="user-info">
+          <img src="{{this.fromUser.profilePicture}}" alt="pfp" class="pfp" />
+          <span class="username">{{this.fromUser.username}}</span>
+        </div>
+        <div class="actions">
+          <button class="accept-btn" data-requester-id="{{this.userId}}">Accept</button>
+          <button class="reject-btn" data-requester-id="{{this.userId}}">Reject</button>
+        </div>
+      </li>
+    {{/each}}
+  </ul>
+{{else}}
+  <p>You have no pending friend requests.</p>
+{{/if}}
+
+<script type="module" src="/public/js/friendRequests.js"></script>
