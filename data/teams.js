@@ -3,6 +3,22 @@ import {MongoNetworkTimeoutError, ObjectId} from 'mongodb';
 import helpers from '../utils/helpers.js';
 import * as validation from '../utils/validation.js';
 
+const cascadeUserDeletionToTeams = async (userId) => {
+    let teams = await getAllTeams();
+
+    for (const team of teams){
+	if (team.members.includes(userId)){
+	    team.members = team.members.filter(member => member != userId);
+	    if (team.members.length === 0){
+		await deleteTeam(team._id);
+	    } else {
+		team.owner = team.members[0];
+	    }
+	}
+	team.requests = team.requests.filter(request => request != userId);
+    }
+}
+
 const createTeam = async (title, desiredRank, desiredRole, region, description, owner) => {
     validation.validateTeam(title, desiredRank, desiredRole, region, description);
 
@@ -131,5 +147,19 @@ const acceptTeamJoinRequest = async (teamId, userId) => {
     return teamId;
 }
 
-export { createTeam, getTeam, getAllTeams, removeUserFromTeam, requestToJoinTeam, acceptTeamJoinRequest};
+const deleteTeam = async (teamId) => {
+    teamId = helpers.checkId(teamId);
+
+    const teamsCollection = await teams();
+    const team = await teamsCollection.findOne({ _id: new ObjectId(teamId) });
+    if (!team){
+	throw 'Team not found';
+    }
+
+    await teamsCollection.deleteOne({ _id: new ObjectId(teamId) });
+
+    return teamId;
+}
+
+export { createTeam, getTeam, getAllTeams, removeUserFromTeam, requestToJoinTeam, acceptTeamJoinRequest, deleteTeam, cascadeUserDeletionToTeams};
 
