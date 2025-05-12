@@ -70,7 +70,7 @@ const validatePassword = (password, varname) => {
 
 const validateLogin = (username, password) => {
   username = validateUsername(username, "username");
-  validatePassword(password, password, "password");
+  validatePassword(password, "password");
 
   return username, password;
 }
@@ -83,7 +83,7 @@ const validateRegistration = (
   email = validateEmail(email, "email");
   username = validateUsername(username, "username");
   validatePassword(password, "password");
-  checkString(confirmPassword, "confirmPassword");
+  validatePassword(confirmPassword, "confirmPassword");
 }
 
 const validateTeam = (
@@ -121,9 +121,38 @@ const validateEdit = (
   }
 }
 
-function throwError(eMessage,errorDiv) {
+function throwError(eMessage,errorDiv, successDiv) {
+  successDiv.hidden = true;
+  errorDiv.hidden = false;
   errorDiv.innerHTML = eMessage;
 }
 
+async function handleFormSubmit(form, data, successRedirect) {
+  try {
+    const response = await fetch(form.action, {
+      method: form.method,
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    });
 
-export { validateRegistration, validateTeam, validateLogin, validateEdit, throwError };
+    if (response.ok) {
+      window.location.href = successRedirect;
+    } else {
+      const result = await response.json();
+      throw result.error;
+    }
+  } catch (e) {
+    throw e;
+  }
+}
+
+export { 
+  validateRegistration, 
+  validateTeam, 
+  validateLogin, 
+  validateEdit, 
+  throwError,
+  handleFormSubmit 
+};

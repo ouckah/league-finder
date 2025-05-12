@@ -54,7 +54,7 @@ router
   })
   .post(async (req, res) => {
     if (!req.body || Object.keys(req.body).length === 0) {
-      return res.status(400).render('users/login', { title: "Login", errorMessage: 'All fields are required' }); // add render page with the error message
+      return res.status(400).json({ error: 'All fields are required' });
     }
 
     let { username, password } = req.body;
@@ -62,7 +62,7 @@ router
     try {
       username, password = validation.validateLogin(username, password); // validate user login
     } catch (e) {
-      return res.status(400).render('users/login', { title: "Login", errorMessage: e }); // create render page with the error message
+      return res.status(400).json({ error: e });
     }
 
     // user login
@@ -75,11 +75,10 @@ router
         brainrot: user.myFavoriteBrainrot
       };
 
-      res.redirect('/'); // redirect to homepage after successful login 
+      return res.status(200).json({ message: 'Login successful' });
     } catch (e) {
-      return res.status(400).render('users/login', { title: "Login", errorMessage: e });
+      return res.status(400).json({ error: e });
     }
-
   });
   
 router
