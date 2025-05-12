@@ -6,6 +6,11 @@
   </form>
 </div>
 
+{{#if isFriend}}
+  <button id="poke-btn" data-user-id="{{id}}">Poke</button>
+{{/if}}
+
+
 <div class="profile-container">
   <div class="profile-header">
     {{#if isOwner}}
@@ -86,3 +91,7 @@
     {{/if}}
   </div>
 </div>
+
+<script type="module" src="/public/js/friends/pokes.js"></script>
+<script type="module" src="/public/js/reputation.js"></script>
+<script type="module" src="/public/js/friends/friends.js"></script>

@@ -5,6 +5,7 @@ import commentRoutes from './comments.js';
 import friendRoutes from './friends.js';
 import teamRoutes from './teams.js';
 import reputationRoutes from './reputation.js'
+import pokeRoutes from './pokes.js'
 
 const constructorMethod = (app) => {
     app.use('/', mainRoutes);
@@ -14,6 +15,7 @@ const constructorMethod = (app) => {
     app.use('/friends', friendRoutes);
     app.use('/teams', teamRoutes);
     app.use('/reputation', reputationRoutes)
+    app.use('/poke', pokeRoutes)
     app.use(/(.*)/, (req, res) => {
       res.sendStatus(404);
     });
