@@ -4,6 +4,7 @@ let deleteAccountForm = document.getElementById('deleteAccountForm');
 let errorDiv = document.getElementById('error');
 
 
+// todo, fix this and the route(lowercase username not working)
 if (deleteAccountForm) {
     deleteAccountForm.addEventListener('submit', async (event) => {
       event.preventDefault();
@@ -12,7 +13,7 @@ if (deleteAccountForm) {
       if (!confirm) {
         return; // handle empty confirmation 
       }
-  
+      
       try {
         const response = await fetch(deleteAccountForm.action, {
           method: 'DELETE',

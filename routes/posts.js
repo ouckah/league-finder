@@ -20,7 +20,6 @@ const createPostHandler = async (req, res) => {
   )
 
   if (!response.postCreated) {
-    console.log("Failed to create post.");
     return res.render('posts/new_post', { error: "Failed to create post." });
   }
 

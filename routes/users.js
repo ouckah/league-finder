@@ -8,6 +8,7 @@ import { createUser, editUser, loginUser, deleteUser, getUser, getWR, getMatches
 import { protectedRoute } from '../utils/middleware.js';
 import { deleteUserComments } from '../data/comments.js';
 import { deleteUserPosts } from '../data/posts.js';
+import { getFriends } from '../data/friends.js';
 
 
 router
@@ -19,7 +20,7 @@ router
   .post(async (req, res) => {
     // validate user input
     if (!req.body) {
-      return res.status(400).render('users/register', { title: "Register", errorMessage: 'All fields are required' });
+      return res.status(400).json({error: 'All fields are required' });
     }
 
     let { firstName, lastName, email, username, password, confirmPassword } = req.body;
@@ -34,16 +35,15 @@ router
         confirmPassword
       )
     } catch (e) {
-      return res.status(400).render('users/register', { title: "Register", errorMessage: e }); // create render page with the error message
+      return res.status(400).json({error: e }); // create render page with the error message
     }
 
     // user registration
     try {
       const user = await createUser(firstName, lastName, email, username, password);
-      res.redirect('/users/login'); // redirect to login page after successful registration
+      res.status(200).json({message: 'User created successfully'}); // redirect to login page after successful registration
     } catch (e) {
-      console.log(e);
-      return res.status(500).render('users/register', { title: "Register", errorMessage: e }); // add render page with the error message
+      return res.status(500).json({error: e }); // add render page with the error message
     }
   });
 
@@ -55,7 +55,7 @@ router
   })
   .post(async (req, res) => {
     if (!req.body || Object.keys(req.body).length === 0) {
-      return res.status(400).render('users/login', { title: "Login", errorMessage: 'All fields are required' }); // add render page with the error message
+      return res.status(400).json({ error: 'All fields are required' });
     }
 
     let { username, password } = req.body;
@@ -63,7 +63,7 @@ router
     try {
       username, password = validation.validateLogin(username, password); // validate user login
     } catch (e) {
-      return res.status(400).render('users/login', { title: "Login", errorMessage: e }); // create render page with the error message
+      return res.status(400).json({ error: e });
     }
 
     // user login
@@ -76,11 +76,10 @@ router
         brainrot: user.myFavoriteBrainrot
       };
 
-      res.redirect('/'); // redirect to homepage after successful login 
+      return res.status(200).json({ message: 'Login successful' });
     } catch (e) {
-      return res.status(400).render('users/login', { title: "Login", errorMessage: e });
+      return res.status(400).json({ error: e });
     }
-
   });
   
 router
@@ -125,13 +124,14 @@ router
 
     try {
       const user = await getUser(req.params.id);
+      const friends = await getFriends(req.params.id)
       let wr = 'N/A';
       let matches;
       if (user.riotId.length > 0) {
         wr = await getWR(req.params.id)
         matches = await getMatches(req.params.id)
       }
-      res.render('users/profile', { title: user.username + "'s Profile", id: user._id, isOwner: isOwner, isFriend: isFriend, profilePicture: user.profilePicture, username: user.username, biography: user.biography, riotId: user.riotId, region: user.region, preferredRoles: user.preferredRoles, rank: user.rank, wr: wr, reputation: user.reputation, friends: user.friends, matches: matches }); // render the profile page with the user data
+      res.render('users/profile', { title: user.username + "'s Profile", id: user._id, isOwner: isOwner, isFriend: isFriend, profilePicture: user.profilePicture, username: user.username, biography: user.biography, riotId: user.riotId, region: user.region, preferredRoles: user.preferredRoles, rank: user.rank, wr: wr, reputation: user.reputation, friends: friends, matches: matches }); 
     } catch (e) {
       return res.status(400).json({ error: e });
     }
@@ -219,7 +219,6 @@ router
     try {
       const user = await getUser(req.params.id); // get user data
       if (req.body.confirm !== user.username) { // check if the username matches the one in the database
-        console.log(req.body.confirm, user.username);
         throw 'Username does not match'; // add render page with the error message
       }
     } catch (e) {

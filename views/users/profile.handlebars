@@ -24,6 +24,14 @@
     {{#if isOwner}}
     <a href="{{personalID}}/edit" class="edit-profile">Edit Profile</a>
     {{/if}}
+    {{#unless isOwner}}
+    <button class="friend-request" id="send-friend-request" data-friend-id="{{id}}">Send Friend Request</button>
+     <div class="reputation-actions">
+      <button id="thumbs-up" data-user-id="{{id}}">👍</button>
+      <button id="thumbs-down" data-user-id="{{id}}">👎</button>
+    </div>
+    <script type="module" src="/public/js/reputation.js"></script>
+    {{/unless}}
     
     <div class="profile-picture-container">
       {{#if profilePicture}}
@@ -66,7 +74,7 @@
       </div>
       <div class="stat-box">
         <div class="stat-label">Friends</div>
-        <div class="stat-value">{{#if friends.length}}{{friends.length}}{{else}}0{{/if}}</div>
+        <div class="stat-value">{{#if friends}}{{friends.length}}{{else}}0{{/if}}</div>
       </div>
     </div>
     

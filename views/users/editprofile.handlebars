@@ -3,6 +3,7 @@
 <div class="edit-profile-container">
     <h3>Edit Profile</h3>
     <form id="edit-profile-form" action="/users/profile/{{personalID}}/edit" method="POST">
+        <input type="hidden" name="_method" value="PATCH">
         <div class="form-group">
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" value="{{user.username}}" required>

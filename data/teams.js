@@ -6,6 +6,7 @@ import * as validation from '../utils/validation.js';
 const removeAllInstancesOfUserFromTeam = (team, userId) => {
     team.members = team.members.filter(member => member != userId);
     team.requests = team.requests.filter(request => request != userId);
+    team.messages = team.messages.filter(message => message.userId != userId);
     if(team.members.length === 0){
 	return null;
     }
@@ -58,6 +59,7 @@ const createTeam = async (title, desiredRank, desiredRole, region, description, 
 	owner: owner,
 	members: [owner],
 	requests: [],
+	messages: []
     };
 
     const teamsCollection = await teams();
@@ -110,10 +112,6 @@ const removeUserFromTeam = async (teamId, userId) => {
 	{ _id: new ObjectId(teamId) },
 	{ $set: team }
     );
-
-    console.log(userId);
-    console.log(team);
-  
     return teamId;
 }
 
@@ -182,5 +180,39 @@ const deleteTeam = async (teamId) => {
     return teamId;
 }
 
-export { createTeam, getTeam, getAllTeams, removeUserFromTeam, requestToJoinTeam, acceptTeamJoinRequest, deleteTeam, cascadeUserDeletionToTeams};
+const addMessage = async (teamId, userId, message) => {
+    teamId = helpers.checkId(teamId);
+    message = helpers.checkString(message, 'message');
+    if (!message) {
+	throw 'Message cannot be empty';
+    }
+
+    const teamsCollection = await teams();
+    const team = await teamsCollection.findOne({ _id: new ObjectId(teamId) });
+    if (!team){
+	throw 'Team not found';
+    }
+
+    const messageId = new ObjectId();
+    let date = new Date();
+    date = date.toDateString()
+
+    const messageObj = {
+	messageId: messageId,
+	userId: userId,
+	message: message,
+	time: date 
+    }
+
+    team.messages.push(messageObj);
+
+    await teamsCollection.updateOne(
+	{ _id: new ObjectId(teamId) },
+	{ $set: team }
+    );
+
+    return teamId;
+}
+
+export { createTeam, getTeam, getAllTeams, removeUserFromTeam, requestToJoinTeam, acceptTeamJoinRequest, deleteTeam, cascadeUserDeletionToTeams, addMessage};
 

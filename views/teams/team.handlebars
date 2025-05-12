@@ -1,35 +1,52 @@
-<h1 id="title" name="title">{{team.title}}</h1>
+<h1 id="teams-title" name="teams-title">{{team.title}}</h1>
 
-<h3 id="desiredRankHeader" name="desiredRankHeader">Desired Rank</h3>
+<h3 id="teams-desiredRankHeader" name="teams-desiredRankHeader">Desired Rank</h3>
 <ul>
   {{#each team.desiredRank}}
-    <li>{{this}}</li>
+    <li id="teams-desiredRankItem">{{this}}</li>
   {{/each}}
 </ul>
 
-<h3 id="desiredRole" name="desiredRole">Desired Role</h3>
+<h3 id="teams-desiredRole" name="teams-desiredRole">Desired Role</h3>
 <ul>
   {{#each team.desiredRole}}
-    <li>{{this}}</li>
+    <li id="teams-desiredRoleItem">{{this}}</li>
   {{/each}}
 </ul>
 
-<h3 id="region" name="region">Region</h3>
-<p>{{team.region}}</p>
+<h3 id="teams-region" name="teams-region">Region</h3>
+<p id="teams-regionItem">{{team.region}}</p>
 
 
-<h3 id="team-owner" name="team-owner">Owner</h3>
-<p>{{owner}}</p>
+<h3 id="teams-owner" name="teams-owner">Owner</h3>
+<p id="teams-ownerItem">{{owner}}</p>
 
-<h3 id="members" name="members">Members</h3>
-<ul id="team-members" class="team-members">
+<h3 id="teams-members" name="teams-members">Members</h3>
+<ul id="teams-membersList" class="team-membersList">
 {{#each members}}
-    <li>{{this}}</li>
+    <li id="teams-membersItem">{{this}}</li>
 {{/each}}
 </ul>
 
 </br>
-<p>{{team.description}}</p>
+<p id="teams-description">{{team.description}}</p>
+
+<h3 id="teams-chatHeader" name="teams-chatHeader">Chat</h3>
+<ul id="teams-chatList" class="teams-chatList">
+{{#each messages}}
+    <li id="teams-chatItem">{{this}}</li>
+{{/each}}
+</ul>
+
+{{#if ismember}}
+<form action="/teams/{{team._id}}/chat" method="POST" id="teams-chatForm">
+  <textarea name="teamsMessage" id="teamsMessage"></textarea>
+  </br>
+  <button type="submit">Send</button>
+</form>
+{{/if}}
+
+<p id="error"></p>
 
 {{#if joinable}}
 <a href="/teams/{{team._id}}/join">join</a>
@@ -42,3 +59,5 @@
 {{#if isowner}}
 <a href="/teams/{{team._id}}/admin">admin page</a>
 {{/if}}
+
+<script type="module" src="/public/js/teams/teammessage.js"></script>

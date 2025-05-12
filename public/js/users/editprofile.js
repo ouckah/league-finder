@@ -33,7 +33,6 @@ if (editProfileForm) {
           window.location.href = '/';
         } else {
           const data = await response.json();
-          console.log(data);
           throwError(data.error,errorDiv);
         }
       } catch (e) {

@@ -97,8 +97,6 @@ const getFriendStatus = async (frienderId, friendeeId) => {
     ]
   })
 
-  console.log(relationship)
-
   if (!relationship) {
     return "none"
   }
