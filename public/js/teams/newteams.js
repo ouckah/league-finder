@@ -19,7 +19,6 @@ if (teamForm) {
     let region = document.getElementById('region').value;
     let description = document.getElementById('description').value;
 
-    console.log(desiredRanks, desiredRoles);
     try {
       validation.validateTeam(title, desiredRanks, desiredRoles, region, description);
     } catch (e) {

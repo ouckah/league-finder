@@ -5,8 +5,6 @@ async function checkFriendStatus(friendId) {
     const response = await fetch(`/friends/status/${friendId}`);
     const result = await response.json();
 
-    console.log("Friends?:", result)
-
     if (result.status === 'pending') {
       friendRequestButton.disabled = true;
       friendRequestButton.innerText = 'Request Pending';

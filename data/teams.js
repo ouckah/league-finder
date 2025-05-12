@@ -110,9 +110,6 @@ const removeUserFromTeam = async (teamId, userId) => {
 	{ _id: new ObjectId(teamId) },
 	{ $set: team }
     );
-
-    console.log(userId);
-    console.log(team);
   
     return teamId;
 }

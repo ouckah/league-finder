@@ -135,7 +135,6 @@ const getFriendStatusHandler = async (req, res) => {
 const renderFriendRequestsPage = async (req, res) => {
   const owner = req.session.user.userId
   const requests = await friendsData.getFriendRequests(owner)
-  console.log(requests)
 
   res.render('friends/requests', { friendRequests: requests })
 }
@@ -143,7 +142,6 @@ const renderFriendRequestsPage = async (req, res) => {
 const renderFriendsPage = async (req, res) => {
   const owner = req.session.user.userId
   const friends = await friendsData.getFriends(owner)
-  console.log(friends)
 
   res.render('friends/friends', { acceptedFriends: friends })
 }

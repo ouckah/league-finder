@@ -1,22 +1,20 @@
-<h1>Sign In</h1>
-
 <p id="error" hidden></p>
 <p id="success" hidden></p>
 
 <form id="signin-form" class="signin-form" method="POST" action="/users/login">
+        <h1>Sign In</h1>
+
+
         <label for="username">Username:</label>
         <input type="text" id="username" name="username"/>
-
-	</br>
 
         <label for="password">Password:</label>
         <input type="password" id="password" name="password"/>
 
-	</br>
-
         <button type="submit" id="submit_button" name="submit_button">Sign In</button>
+        <a href="/users/register">Click here to signup!</a>
 </form>
 
-<a href="/users/register">Click here to signup!</a>
+
 
 <script type="module" src="/public/js/users/login.js"></script>
