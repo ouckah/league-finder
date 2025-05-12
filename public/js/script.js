@@ -5,6 +5,7 @@ let registerForm = document.getElementById('signup-form');
 let teamForm = document.getElementById('newteams-form');
 let postForm = document.getElementById('newpost-form');
 let deleteAccountForm = document.getElementById('deleteAccountForm');
+let errorDiv = document.getElementById('error');
 
 if(loginForm){
     loginForm.addEventListener('submit', (event) => {
@@ -17,7 +18,7 @@ if(loginForm){
             
             // clear error message?
           }catch (e){
-            // print error message 
+            throwError(e);
             return;
           }
 
@@ -36,7 +37,6 @@ if(registerForm){
         let confirmPassword  = document.getElementById('confirmPassword').value;
 
         try{
-
           validation.validateRegistration(
             firstName,
             lastName,
@@ -47,6 +47,7 @@ if(registerForm){
             // clear error message?
           } catch (e){
             // print error message
+            throwError(e);
             return;
           }
         registerForm.submit();
@@ -72,6 +73,7 @@ if(teamForm){
         try{
           validation.validateTeam(title, desiredRanks, desiredRoles, region, description);
           } catch (e){
+            throwError(e);
             return;
           }
         teamForm.submit();
@@ -122,11 +124,16 @@ if(deleteAccountForm){
             window.location.href = '/';  // Redirect after successful deletion
         } else {
             const data = await response.json();
+            throwError('Bad Response: ' + data.error); // handle error message
             return; // handle error message
         }
     } catch (e) {
-        return; // handle error message
+      throwError(e);
+      return; // handle error message
     }
   });
 }
 
+function throwError(eMessage){
+  errorDiv.innerHTML = eMessage;
+}

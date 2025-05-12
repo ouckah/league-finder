@@ -3,19 +3,19 @@ const { checkString, checkStringArray, checkStringWithLength } = helpers;
 
 const validateName = (name, varname) => {
     name = checkString(name, varname);
-    checkStringWithLength(name, 2, 20, /^[a-zA-Z]+$/);
+    checkStringWithLength(name, 2, 20, /^[a-zA-Z]+$/, varname);
     return name;
 };
 
 const validateEmail = (email, varname) => {
     email = checkString(email, varname);
-    checkStringWithLength(email, 5, 255, /^[a-zA-Z0-9._-]+@[a-zA-Z0-9]+\.[a-zA-Z]+$/);
+    checkStringWithLength(email, 5, 255, /^[a-zA-Z0-9._-]+@[a-zA-Z0-9]+\.[a-zA-Z]+$/, varname);
     return email;
 };
 
 const validateUsername = (username, varname) => {
     username = checkString(username, varname);
-    checkStringWithLength(username, 2, 20, /^[a-zA-Z0-9]+$/);
+    checkStringWithLength(username, 2, 20, /^[a-zA-Z0-9]+$/, varname);
     return username;
 };
 

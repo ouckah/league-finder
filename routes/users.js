@@ -16,7 +16,7 @@ router
   .post(async (req, res) => {
     // validate user input
     if (!req.body) {
-      return res.status(400).json({ error: 'All fields are required' }); // add render page with the error message
+      return res.status(400).render('users/register',{title: "Register", errorMessage: 'All fields are required' });
     }
 
     let { firstName, lastName, email, username, password, confirmPassword } = req.body;
@@ -31,7 +31,7 @@ router
         confirmPassword
       )
     } catch (e) {
-      return res.status(400).json({ error: e }); // create render page with the error message
+      return res.status(400).render('users/register',{title: "Register", errorMessage: e }); // create render page with the error message
     }
 
     // user registration
@@ -40,7 +40,7 @@ router
       res.redirect('/users/login'); // redirect to login page after successful registration
     } catch (e) {
       console.log(e);
-      return res.status(500).json({ error: e }); // add render page with the error message
+      return res.status(500).render('users/register',{title: "Register", errorMessage: e }); // add render page with the error message
     }
   });
 
@@ -52,7 +52,7 @@ router
   })
   .post(async (req, res) => {
     if(!req.body || Object.keys(req.body).length === 0){
-      return res.status(400).json({ error: 'All fields are required' }); // add render page with the error message
+      return res.status(400).render('users/login',{title: "Login", errorMessage: 'All fields are required'}); // add render page with the error message
     }
 
     let {username,password} = req.body;
@@ -60,7 +60,7 @@ router
     try {
       username, password = validation.validateLogin(username, password); // validate user login
     } catch(e) {
-      return res.status(400).json({ error: e }); // create render page with the error message
+      return res.status(400).render('users/login',{title: "Login", errorMessage: e}); // create render page with the error message
     }
 
     // user login
@@ -75,7 +75,7 @@ router
 
       res.redirect('/'); // redirect to homepage after successful login 
     } catch (e) {
-      return res.status(400).json({ error: e }); 
+      return res.status(400).render('users/login',{title: "Login", errorMessage: e}); 
     }
 
 });
@@ -117,7 +117,7 @@ router
     try {
       req.params.id = helpers.checkId(req.params.id.toString(),"id");
     } catch (e) {
-      return res.status(400).json({ error: e });
+      return res.status(400).render('users/editprofile',{title: "Edit Profile", errorMessage: e}); 
     }
 
     try {
@@ -125,14 +125,14 @@ router
 
       res.render('users/editprofile',{title: user.username + "Edit Your Profile"}); // render the profile page with the user data
     } catch (e) {
-      return res.status(400).json({ error: e }); 
+      return res.status(400).render('users/editprofile',{title: "Edit Profile", errorMessage: e}); 
     }
 
 
     // profile page
 
   })
-  .post(async (req, res) => {
+  .put(async (req, res) => {
     // profile editing
     if (!req.body) {
       return res.status(400).json({ error: 'Fields are not filled out.' });
@@ -148,8 +148,7 @@ router
       const updateUser = await editUser(req.session.user.userId, username, email, biography, riotId, region, preferredRoles, profilePicture);
       res.redirect('/');
     } catch (e) {
-      console.log(e);
-      return res.status(500).json({ error: e });
+      return res.status(500).render('users/editprofile',{title: "Edit Profile", errorMessage: e}); 
     }
   });
 

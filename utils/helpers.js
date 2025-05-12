@@ -38,12 +38,12 @@ const exportedMethods = {
 	return arr;
     },
 
-    checkStringWithLength(str, minLength, maxLength, chars) {
+    checkStringWithLength(str, minLength, maxLength, chars, varName) {
 	if (str.length < minLength || str.length > maxLength) {
-	    throw 'String must be between ' + minLength + ' and ' + maxLength + ' characters long.';
+	    throw `${varName} must be between ${minLength} and ${maxLength} characters long.`;
 	}
 	if (!chars.test(str)) {
-	    throw 'String does not match the expected format.';
+	    throw `${varName} does not match the expected format.`;
 	}
     }
 
