@@ -6,6 +6,7 @@ import * as validation from '../utils/validation.js';
 const removeAllInstancesOfUserFromTeam = (team, userId) => {
     team.members = team.members.filter(member => member != userId);
     team.requests = team.requests.filter(request => request != userId);
+    team.messages = team.messages.filter(message => message.userId != userId);
     if(team.members.length === 0){
 	return null;
     }
@@ -111,7 +112,6 @@ const removeUserFromTeam = async (teamId, userId) => {
 	{ _id: new ObjectId(teamId) },
 	{ $set: team }
     );
-
     return teamId;
 }
 

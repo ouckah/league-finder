@@ -15,6 +15,10 @@ body {
   flex-direction: column;
 }
 
+main {
+  flex: 1;
+}
+
 header {
   background: rgb(48, 123, 208);
   color: white;
@@ -59,7 +63,6 @@ nav a.active {
 }
 
 footer {
-  position: absolute;
   bottom: 0;
   width: 100%;
   background-color: #222;
@@ -500,4 +503,9 @@ button {
   color: red;
   font-weight: bold;
   text-align: center;
+}
+
+.teams-searchSubmit {
+  display: block;
+  margin: 0.5em auto; /* vertically 0.5em, horizontally auto‑centered */
 }

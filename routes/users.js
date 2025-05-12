@@ -211,7 +211,6 @@ router
     try {
       const user = await getUser(req.params.id); // get user data
       if (req.body.confirm !== user.username) { // check if the username matches the one in the database
-        console.log(req.body.confirm, user.username);
         throw 'Username does not match'; // add render page with the error message
       }
     } catch (e) {

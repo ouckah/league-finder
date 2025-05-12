@@ -18,8 +18,6 @@ const upvote = async (voterId, userId) => {
     type: "downvote",
   })
 
-  console.log(result)
-
   if (result) {
     change += 1
   }
@@ -52,8 +50,6 @@ const downvote = async (voterId, userId) => {
     userId,
     type: "upvote",
   })
-
-  console.log(result)
 
   if (result) {
     change -= 1
