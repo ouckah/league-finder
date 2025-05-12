@@ -1,0 +1,24 @@
+<h1 id="team-admin" class="team-admin">Admin Page</h1>
+
+<h3 id="requests">User Requests</h3>
+<form action="/teams/{{team._id}}/accept" method="POST">
+  {{#each requests}}
+    <label>
+      {{this.username}}
+      <input type="radio" name="requests" value="{{this.id}}">
+    </label><br>
+  {{/each}}
+  <button type="submit">Accept Selected</button>
+</form>
+
+<h3 id="kick">Kick Users</h3>
+<form action="/teams/{{team._id}}/kick" method="POST">
+  {{#each members}}
+    <label>
+      {{this.username}}
+      <input type="radio" name="members" value="{{this.id}}">
+    </label><br>
+  {{/each}}
+  <button type="submit">Kick Selected</button>
+</form>
+

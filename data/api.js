@@ -28,13 +28,11 @@ const getPuuid = async (summonerName, tagline, region) => {
         if (error.response) {
             if (error.response.status === 403) {
                 throw "Error: Expired Riot API Key.";
-            } else if (error.response.status === 404) {
-                throw `Error: Link ${puuidUrl} is wrong.`;
             } else {
-                throw `Error: Riot API returned error code ${error.response.status}.`;
+                throw "Error: RiotId does not exist.";
             }
         }
-        throw "Error: Failed to fetch puuid.";
+        throw "Error: RiotId does not exist.";
     }
 }
 
@@ -69,9 +67,6 @@ const getRank = async (puuid, region) => {
                 lp = entry.leaguePoints;
             }
         }
-        if (tier === "") {
-            throw "Error: No ranked solo/duo data found.";
-        }
         return {
             tier: tier,
             rank: rank,
@@ -84,7 +79,7 @@ const getRank = async (puuid, region) => {
             } else if (error.response.status === 404) {
                 throw `Error: Link ${rankUrl} is wrong.`;
             } else {
-                throw `Error: Riot API returned error code ${error.response.status}.`;
+                throw `Error: ${error.response.message}.`;
             }
         }
         throw "Error: Failed to fetch rank.";
@@ -110,7 +105,7 @@ const getWinLoss = async (puuid, region) => {
             if (entry.queueType == "RANKED_SOLO_5x5") {
                 const wins = entry.wins;
                 const losses = entry.losses;
-                const wr = (wins / (wins + losses)) * 100;
+                const wr = ((wins / (wins + losses)) * 100).toFixed(2);
                 return {
                     wins: wins,
                     losses: losses,

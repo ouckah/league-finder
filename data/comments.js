@@ -25,8 +25,8 @@ const createComment = async (
         postId: postId,
         content: content,
         likes: 0,
-        replies: [],
-        createdAt: new Date().toUTCString()
+        createdAt: new Date().toUTCString(),
+        username: user.username
     }
     
     const insertInfo = await commentCollection.insertOne(newComment);

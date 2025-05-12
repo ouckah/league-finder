@@ -1,19 +1,19 @@
-const validateName = (name,varname) => {
-    name = checkString(name, varname);
-    checkStringWithLength(name, 2, 20, /^[a-zA-Z]+$/);
-    return name;
+const validateName = (name, varname) => {
+  name = checkString(name, varname);
+  checkStringWithLength(name, 2, 20, /^[a-zA-Z]+$/, varname);
+  return name;
 };
 
-const validateEmail = (email,varname) => {
-    email = checkString(email,varname);
-    checkStringWithLength(email, 5, 255, /^[a-zA-Z0-9._-]+@[a-zA-Z0-9]+\.[a-zA-Z]+$/);
-    return email;
+const validateEmail = (email, varname) => {
+  email = checkString(email, varname);
+  checkStringWithLength(email, 5, 255, /^[a-zA-Z0-9._-]+@[a-zA-Z0-9]+\.[a-zA-Z]+$/, varname);
+  return email;
 };
 
-const validateUsername = (username,varname) => {
-    username = checkString(username,varname);
-    checkStringWithLength(username, 2, 20, /^[a-zA-Z0-9]+$/);
-    return username;
+const validateUsername = (username, varname) => {
+  username = checkString(username, varname);
+  checkStringWithLength(username, 2, 20, /^[a-zA-Z0-9]+$/, varname);
+  return username;
 };
 
 function checkString(strVal, varName) {
@@ -42,67 +42,83 @@ function checkStringArray(arr, varName) {
   return arr;
 }
 
-function checkStringWithLength(str, minLength, maxLength, chars) {
+function checkStringWithLength(str, minLength, maxLength, chars, varName) {
   if (str.length < minLength || str.length > maxLength) {
-    throw new Error('String must be between ' + minLength + ' and ' + maxLength + ' characters long.');
+    throw `${varName} must be between ${minLength} and ${maxLength} characters long.`;
   }
   if (!chars.test(str)) {
-    throw new Error('String contains illegal characters.');
+    throw `${varName} does not match the expected format.`;
   }
 }
 
-const validatePassword = (password, confirmPassword,varname) => {
-    checkString(password,varname);
-  checkString(confirmPassword,varname);
-  if (password !== confirmPassword) {
-      throw new Error('Passwords do not match');
-  }
+const validatePassword = (password, varname) => {
+  checkString(password, varname);
 
-    if (password.length < 8) {
-  throw new Error('Password must be at least 8 characters long');
-    }
-    if (!/[A-Z]/.test(password)) {
-  throw new Error('Password must contain at least one uppercase letter');
-    }
-    if (!/[0-9]/.test(password)) {
-  throw new Error('Password must contain at least one number');
-    }
-    if (!/[^a-zA-Z0-9 ]/.test(password)) {
-  throw new Error('Password must contain at least one special character');
-    }
+  if (password.length < 8) {
+    throw 'Password must be at least 8 characters long';
+  }
+  if (!/[A-Z]/.test(password)) {
+    throw 'Password must contain at least one uppercase letter';
+  }
+  if (!/[0-9]/.test(password)) {
+    throw 'Password must contain at least one number';
+  }
+  if (!/[^a-zA-Z0-9 ]/.test(password)) {
+    throw 'Password must contain at least one special character';
+  }
 };
 
 const validateLogin = (username, password) => {
-  username = validateUsername(username,"username");
-  validatePassword(password, password,"password");
+  username = validateUsername(username, "username");
+  validatePassword(password, password, "password");
 
   return username, password;
 }
 
 const validateRegistration = (
-    firstName, lastName, email, username, password, confirmPassword
+  firstName, lastName, email, username, password, confirmPassword
 ) => {
-    firstName = validateName(firstName,"firstName");
-    lastName = validateName(lastName,"lastName");
-    email = validateEmail(email,"email");
-    username = validateUsername(username,"username");
-    validatePassword(password, confirmPassword,"password");
+  firstName = validateName(firstName, "firstName");
+  lastName = validateName(lastName, "lastName");
+  email = validateEmail(email, "email");
+  username = validateUsername(username, "username");
+  validatePassword(password, "password");
+  checkString(confirmPassword, "confirmPassword");
 }
 
 const validateTeam = (
-    title, desiredRank, desiredRole, region, description
+  title, desiredRank, desiredRole, region, description
 ) => {
-    if (typeof desiredRank === 'string') {
-  desiredRank = [desiredRank];
-    }
-    if (typeof desiredRole === 'string') {
-  desiredRole = [desiredRole];
-    }
-    checkString(title, 'title');
-    checkStringArray(desiredRank, 'desiredRank');
-    checkStringArray(desiredRole, 'desiredRole');
-    checkString(region, 'region');
-    checkString(description, 'description');
+  if (typeof desiredRank === 'string') {
+    desiredRank = [desiredRank];
+  }
+  if (typeof desiredRole === 'string') {
+    desiredRole = [desiredRole];
+  }
+  checkString(title, 'title');
+  checkStringArray(desiredRank, 'desiredRank');
+  checkStringArray(desiredRole, 'desiredRole');
+  checkString(region, 'region');
+  checkString(description, 'description');
 }
 
-export { validateRegistration, validateTeam ,validateLogin}
+const validateEdit = (
+  username, email, biography, riotId, region, preferredRoles, profilePicture
+) => {
+  username = validateUsername(username, "username");
+  email = validateEmail(email, "email");
+  if (typeof biography !== 'string') {
+    throw 'Biography must be a string.';
+  }
+  if (typeof riotId !== 'string') {
+    throw 'Riot Username must be a string.';
+  }
+  if (typeof region !== 'string') {
+    throw 'Region must be a string.';
+  }
+  if (typeof profilePicture !== 'string') {
+    throw 'Profile picture link must be a string.';
+  }
+}
+
+export { validateRegistration, validateTeam, validateLogin, validateEdit }

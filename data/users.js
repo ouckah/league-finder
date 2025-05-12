@@ -3,6 +3,7 @@ import { MongoNetworkTimeoutError, ObjectId } from 'mongodb';
 import helpers from '../utils/helpers.js';
 import * as validation from '../utils/validation.js';
 import bcrypt from 'bcrypt';
+import * as riotAPI from './api.js';
 
 // not sure if we want to try to fill in all fields or let useres fill fields on profile page
 const createUser = async (
@@ -21,10 +22,9 @@ const createUser = async (
         password,
         password // confirmPassword is same for this. weird system but works for now
     )
-
     // check database if this username exists... then throw
     const usersCollection = await users();
-    const existingUser = await usersCollection.findOne({ username: username });
+    const existingUser = await usersCollection.findOne({ username: username.toLowerCase() });
     if (existingUser) throw 'User with that username already exists';
 
     // hash password
@@ -32,7 +32,7 @@ const createUser = async (
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
     let newUser = {
-        username: username,
+        username: username.toLowerCase(),
         email: email,
         password: hashedPassword,
         profilePicture: "", // default profile picture
@@ -76,7 +76,7 @@ const loginUser = async (username, password) => {
 
     // check database if this username exists
     const usersCollection = await users();
-    const existingUser = await usersCollection.findOne({ username: username });
+    const existingUser = await usersCollection.findOne({ username: username.toLowerCase() });
     if (!existingUser) throw 'Either the username or password is invalid';
 
     // check if password is correct
@@ -103,17 +103,55 @@ const loginUser = async (username, password) => {
 
 // maybe we can break this into multiple functions, one for each field?
 const editUser = async (
-    email,
+    userId,
     username,
-    password,
-    profilePicture,
-    firstName,
-    lastName,
+    email,
     biography,
     riotId,
     region,
-    preferredRoles
+    preferredRoles,
+    profilePicture
 ) => {
+    if (preferredRoles && preferredRoles.length > 0) {
+        preferredRoles = preferredRoles.map(role => role.trim());
+    } else {
+        preferredRoles = [''];
+    }
+    validation.validateEdit(username, email, biography, riotId, region, preferredRoles, profilePicture);
+    try {
+        const user = await getUser(userId);
+        const userCollection = await users();
+        const existingUser = await userCollection.findOne({ username: username.toLowerCase() });
+        if (existingUser) throw 'User with that username already exists';
+        const updateUser = {
+            username: username.toLowerCase(),
+            email: email,
+            biography: biography,
+            riotId: riotId,
+            region: region,
+            preferredRoles: preferredRoles,
+            profilePicture: profilePicture
+        };
+        const updateInfo = await userCollection.updateOne(
+            { _id: new ObjectId(userId) },
+            { $set: updateUser }
+        );
+        let updateRank;
+        if (riotId.length > 0) {
+            const changeRank = await getRankData(userId);
+        } else {
+            updateRank = {
+                rank: 'No rank data found.'
+            }
+            const update2 = await userCollection.updateOne(
+                { _id: new ObjectId(userId) },
+                { $set: updateRank }
+            )
+        }
+        return { userUpdated: true };
+    } catch (e) {
+        throw e;
+    }
 }
 
 const deleteUser = async (userId) => {
@@ -138,14 +176,73 @@ const getUser = async (userId) => {
 // might not need this, but maybe when searching for users by username
 const getUserByUsername = async (username) => {
     if (!username) throw 'You must provide a username';
-	if (typeof username !== 'string') throw 'username must be a string';
-	if (username.length < 2 || username.length > 20) throw 'username must be between 2 and 20 characters long';
-	if (!/^[a-zA-Z0-9]+$/.test(username)) throw 'username can only contain letters and numbers';
+    if (typeof username !== 'string') throw 'username must be a string';
+    if (username.length < 2 || username.length > 20) throw 'username must be between 2 and 20 characters long';
+    if (!/^[a-zA-Z0-9]+$/.test(username)) throw 'username can only contain letters and numbers';
 
-	const userCollection = await users();
-	const user = await userCollection.findOne({ username: username });
-	if (!user) throw 'User not found';
-	return user;
+    const userCollection = await users();
+    const user = await userCollection.findOne({ username: username.toLowerCase() });
+    if (!user) throw 'User not found';
+    return user;
+}
+
+// sets ranked data to the user given their riotId
+const getRankData = async (userId) => {
+    userId = helpers.checkId(userId, 'userId');
+    try {
+        const user = await getUser(userId);
+        let riotName = user.riotId.split('#');
+        const puuid = await riotAPI.getPuuid(riotName[0], riotName[1], user.region);
+        const rank = await riotAPI.getRank(puuid, user.region);
+        let updateUser = {};
+        if (rank.rank === '' && rank.tier.length > 0) {
+            updateUser = {
+                rank: `${rank.tier} - ${rank.lp}`
+            };
+        } else if (rank.rank.length > 0 ){
+            updateUser = {
+                rank: `${rank.tier} ${rank.rank} - ${rank.lp}`
+            };
+        } else {
+            updateUser = {
+                rank: 'No rank data found.'
+            }
+        }
+        const userCollection = await users();
+        const updateInfo = await userCollection.updateOne(
+            { _id: new ObjectId(userId) },
+            { $set: updateUser }
+        );
+        return { rankUpdated: true };
+    } catch (e) {
+        throw e;
+    }
+};
+
+const getWR = async (userId) => {
+    userId = helpers.checkId(userId, 'userId');
+    try {
+        const user = await getUser(userId);
+        let riotName = user.riotId.split('#');
+        const puuid = await riotAPI.getPuuid(riotName[0], riotName[1], user.region);
+        const wr = await riotAPI.getWinLoss(puuid, user.region);
+        return `${wr.wr}% (${wr.wins} W/${wr.losses} L)`;
+    } catch (e) {
+        throw e;
+    }
+}
+
+const getMatches = async (userId) => {
+    userId = helpers.checkId(userId, 'userId');
+    try {
+        const user = await getUser(userId);
+        let riotName = user.riotId.split('#');
+        const puuid = await riotAPI.getPuuid(riotName[0], riotName[1], user.region);
+        const matches = await riotAPI.getRecentMatches(puuid, 5, user.region);
+        return matches;
+    } catch (e) {
+        throw e;
+    }
 }
 
 export {
@@ -153,5 +250,9 @@ export {
     editUser,
     loginUser,
     deleteUser,
-    getUser
+    getUser,
+    getRankData,
+    getWR,
+    getMatches,
+    getUserByUsername
 }

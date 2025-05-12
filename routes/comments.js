@@ -5,7 +5,7 @@ import { protectedRoute} from '../utils/middleware.js';
 import { createComment, likeComment, replyToComment } from '../data/comments.js';
 
 router
-  .route('/create')
+  .route('/')
   .all(protectedRoute)
   .post(async (req, res) => {
     let { postId, content } = req.body;
