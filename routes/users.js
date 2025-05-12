@@ -178,8 +178,6 @@ router.route('/logout').get(async (req, res) => {
   res.render('users/logout', { title: "Logged Out", isLoggedIn: false });
 });
 
-// not sure if i want it written like this or not... 
-// are you sure you want to delete your profile? type stuff 
 router
   .route('/profile/:id/delete')
   .all(protectedRoute)
@@ -187,16 +185,14 @@ router
     try {
       req.params.id = helpers.checkId(req.params.id.toString(), "id");
     } catch (e) {
-      return res.status(400).json({ error: e });
+      return res.status(400).json({ error: e }); // create render page with the error message
     }
 
     try {
       const user = await getUser(req.params.id);
       res.render('users/deleteprofile', { title: "Delete Profile", username: user.username });
     } catch (e) {
-      return res.status(400).json({
-        error: e
-      });
+      return res.status(400).json({error: e}); // create render page with the error message
     }
   })
   .delete(async (req, res) => {
@@ -209,9 +205,9 @@ router
     }
 
     try {
-      const user = await getUser(req.params.id); // get user data
-      if (req.body.confirm !== user.username) { // check if the username matches the one in the database
-        throw 'Username does not match'; // add render page with the error message
+      const user = await getUser(req.params.id);          
+      if (req.body.confirm.toLowerCase() !== user.username.toLowerCase()) { // check if the username matches the one in the database
+        throw 'Username does not match'; 
       }
     } catch (e) {
       return res.status(400).json({ error: e });
@@ -224,9 +220,7 @@ router
       req.session.destroy(); // destroy session after user deletion
       return res.status(200).json({ message: 'User deleted successfully' }); // send success message
     } catch (e) {
-      return res.status(500).json({
-        error: e
-      });
+      return res.status(500).json({error: e});
     }
   });
 
