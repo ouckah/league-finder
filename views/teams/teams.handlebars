@@ -1,7 +1,13 @@
 <h1 id="teams-title" class="teams-title">Teams</h1>
 {{#if loggedIn}}
-    <button onclick="location.href = '/teams/new';" id="newteam" class="newteam">New Team!</button>
+    <button onclick="location.href = '/teams/new'" id="newteam" class="newteam">New Team!</button>
 {{/if}}
+
+<form action="/teams" method="GET">
+  <label for="q">Search:</label>
+  <input type="text" id="teamsSearch" name="teamsSearch" placeholder="Search for a team!">
+  <button type="submit" id="teams-searchSubmit" class="teams-searchSubmit">Search</button>
+</form>
 
 {{#each teams}}
     <div class="team">

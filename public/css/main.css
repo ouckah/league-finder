@@ -504,3 +504,8 @@ button {
   font-weight: bold;
   text-align: center;
 }
+
+.teams-searchSubmit {
+  display: block;
+  margin: 0.5em auto; /* vertically 0.5em, horizontally auto‑centered */
+}

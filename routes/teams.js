@@ -2,6 +2,7 @@ import {Router} from 'express';
 const router = Router();
 import helpers from '../utils/helpers.js';
 import { protectedRoute} from '../utils/middleware.js';
+import Fuse from 'fuse.js';
 import * as validation from '../utils/validation.js';
 import * as teamData from '../data/teams.js';
 import * as userData from '../data/users.js';
@@ -53,8 +54,22 @@ router.route('/')
     })
     .get(async (req, res) => {
 	const allTeams = await teamData.getAllTeams();
+	let returnedTeams = allTeams;
+	const options = {
+	    includeScore: true,
+	    keys: ['title', 'description']
+	}
+
+	if (req.query.teamsSearch){
+	    const searchTerm = req.query.teamsSearch;
+	    const fuse = new Fuse(allTeams, options)
+	    const searchResult = fuse.search(searchTerm);
+	    const filteredResult = searchResult.filter(result => result.score < 0.2);
+	    returnedTeams = filteredResult.map(result => result.item);
+	}
+
 	const loggedIn = req.session.user != undefined;
-	return res.render('teams/teams', {teams: allTeams, loggedIn: loggedIn});
+	return res.render('teams/teams', {teams: returnedTeams, loggedIn: loggedIn});
     })
 
 router.route('/:id')
