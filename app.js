@@ -3,6 +3,7 @@ import exphbs from 'express-handlebars';
 import session from 'express-session';
 import configRoutes from './routes/index.js';
 import setupMiddleware from './utils/middleware.js';
+import handlebarshelpers from './utils/handlebarshelpers.js';
 
 const rewriteUnsupportedBrowserMethods = (req, res, next) => {
     if (req.body && req.body._method) {
@@ -20,7 +21,11 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(rewriteUnsupportedBrowserMethods);
 
-app.engine('handlebars', exphbs.engine({defaultLayout: 'main'}));
+app.engine('handlebars', exphbs.engine({
+  defaultLayout: 'main',
+  helpers: handlebarshelpers
+}));
+
 app.set('view engine', 'handlebars');
 
 app.use(session({

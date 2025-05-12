@@ -2,7 +2,7 @@
 
 <div class="edit-profile-container">
     <h3>Edit Profile</h3>
-    <form id="edit-profile-form" action="/users/profile/{{personalID}}/edit" method="PATCH">
+    <form id="edit-profile-form" action="/users/profile/{{personalID}}/edit" method="POST">
         <div class="form-group">
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" value="{{user.username}}" required>

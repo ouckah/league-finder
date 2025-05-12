@@ -2,7 +2,7 @@ import {Router} from 'express';
 const router = Router();
 import helpers from '../utils/helpers.js';
 import { protectedRoute} from '../utils/middleware.js';
-import { createComment, likeComment, replyToComment } from '../data/comments.js';
+import { createComment, likeComment } from '../data/comments.js';
 
 router
   .route('/')
@@ -24,7 +24,15 @@ router
     //}
 
     return res.redirect(`/posts/${postId}`);
-  })
+  });
+
+/*
+router
+  .route('/')
+  .all(protectedRoute)
+  .post(async (req, res) => {
+  });
+*/
 
 
 

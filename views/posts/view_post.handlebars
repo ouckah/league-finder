@@ -1,5 +1,10 @@
 <div class="post">
+
     <h3>{{post.title}}</h3>
+    {{#if (eq userId post.userId)}}
+        <a href="/posts/{{post._id}}/edit" class="edit-button">Edit Post</a>
+        <a href="/posts/{{this._id}}/delete" class="edit-button">Delete Post</a>
+    {{/if}}
 
     {{#if post.image}}
       <img src="{{post.image}}" alt="Post Image" class="post-picture">

@@ -59,34 +59,6 @@ const likeComment = async (
     return { commentUpdated: true };
 }
 
-const replyToComment = async (
-    commentId,
-    content
-) => {
-    if (!commentId) throw 'You must provide a commentId';
-    if (typeof commentId !== 'string') throw 'The commentId must be a string';
-    if (!ObjectId.isValid(commentId)) throw 'The commentId is not a valid ObjectId';
-
-    const commentCollection = await comments();
-    const comment = await commentCollection.findOne({_id: new ObjectId(commentId)});
-    if (!comment) throw 'Comment not found';
-
-    if (!content) throw 'You must provide a content';
-    if (typeof content !== 'string') throw 'The content must be a string';
-    if (content.trim() === '') throw 'The content cannot be an empty string';
-
-    const updatedComment = {
-        replies: [...comment.replies, content]
-    }
-
-    const updateInfo = await commentCollection.updateOne(
-        {_id: ObjectId(commentId)},
-        {$set: updatedComment}
-    );
-    if (updateInfo.modifiedCount === 0) throw 'Failed to reply to comment';
-    return { replyAdded: true };
-}
-
 const deleteComment = async (
     commentId
 ) => {
@@ -115,6 +87,18 @@ const getPostComments = async (
     return allComments;
 }
 
-export { createComment, likeComment, replyToComment, deleteComment, getPostComments };
+const deletePostComments = async (
+    postId
+) => {
+    if (!postId) throw 'You must provide a postId';
+    if (typeof postId !== 'string') throw 'The postId must be a string';
+    if (!ObjectId.isValid(postId)) throw 'The postId is not a valid ObjectId';
+
+    const commentCollection = await comments(); 
+    const deletionInfo = await commentCollection.deleteMany({postId: postId});
+    return { commentDeleted: true , deletedCount: deletionInfo.deletedCount };
+}
+
+export { createComment, likeComment, deleteComment, getPostComments, deletePostComments,deletePostComments };
 
 
