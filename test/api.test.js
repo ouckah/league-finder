@@ -31,7 +31,7 @@ import helpers from '../utils/helpers.js';
 import { getPuuid, getRank } from '../data/api.js';
 const { checkString, checkStringArray, checkStringWithLength } = helpers;
 
-const riotId = "polymer#poly";
+const riotId = "Sponge#KR2";
 checkStringWithLength(riotId, 3, 22, /^.{1,16}#.{1,5}$/);
 console.log("Valid riotId");
 let riotName = riotId.split('#');
