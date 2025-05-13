@@ -1,21 +1,23 @@
 <h1>Friends</h1>
 
 {{#if acceptedFriends.length}}
-  <ul class="friends-list">
-    {{#each acceptedFriends}}
-      <li class="friend-item">
-        <div class="user-info">
-          <img src="{{this.profilePicture}}" alt="pfp" class="pfp" />
-          <span class="username">{{this.friendUser.username}}</span>
-        </div>
-        <div class="actions">
-          <button class="remove-friend-btn" data-friend-id="{{this.friendUser._id}}">Remove</button>
-        </div>
-      </li>
-    {{/each}}
-  </ul>
+<ul class="friends-list">
+  {{#each acceptedFriends}}
+  <li class="friend-item">
+    <div class="user-info">
+      <a href="/users/profile/{{this.friendUser._id}}">
+        <img src="{{this.friendUser.profilePicture}}" alt="pfp" class="pfp" />
+        <span class="username">{{this.friendUser.username}}</span>
+      </a>
+    </div>
+    <div class="actions">
+      <button class="remove-friend-btn" data-friend-id="{{this.friendUser._id}}">Remove</button>
+    </div>
+  </li>
+  {{/each}}
+</ul>
 {{else}}
-  <p>You have no friends yet.</p>
+<p>You have no friends yet.</p>
 {{/if}}
 
 <script type="module">
