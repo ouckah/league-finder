@@ -1,8 +1,9 @@
-import {users, teams, posts, comments} from '../config/mongoCollections.js';
+import {users, teams, posts, comments, friends} from '../config/mongoCollections.js';
 import {seedUsers} from './users.js';
 import {seedPosts} from './posts.js';
 import { seedTeams } from './teams.js';
 import { seedComments } from './comments.js';
+import { seedFriends } from './friends.js';
 import { closeConnection } from '../config/mongoConnection.js';
 
 console.log("Dropping Posts");
@@ -12,6 +13,10 @@ await postCollection.deleteMany({});
 console.log("Dropping Comments");
 const commentCollection = await comments();
 await commentCollection.deleteMany({});
+
+console.log("Dropping Friends");
+const friendCollection = await friends();
+await friendCollection.deleteMany({});
 
 console.log("Dropping Users");
 const userCollection = await users();
@@ -32,6 +37,10 @@ console.log(postIds);
 console.log("Seeding Comments");
 const commentIds = await seedComments(userIds, postIds);
 console.log(commentIds);
+
+console.log("Seeding Friends");
+const friendIds = await seedFriends(userIds);
+console.log(friendIds);
 
 console.log("Seeding Teams");
 const teamIds = await seedTeams(userIds);

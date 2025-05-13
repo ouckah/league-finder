@@ -12,7 +12,6 @@ router
     try{
       ({postId,content} = validateComment(postId,content));
   
-      // maybe still error check even if using middleware
       const userId = req.session.user.userId;
       const response = await createComment(userId, postId, content);
       return res.status(200).json({message: "Comment created successfully."});
