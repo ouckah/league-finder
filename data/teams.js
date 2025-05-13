@@ -2,6 +2,7 @@ import {teams} from '../config/mongoCollections.js';
 import {MongoNetworkTimeoutError, ObjectId} from 'mongodb';
 import helpers from '../utils/helpers.js';
 import * as validation from '../utils/validation.js';
+import Fuse from 'fuse.js';
 
 const removeAllInstancesOfUserFromTeam = (team, userId) => {
     team.members = team.members.filter(member => member != userId);
@@ -214,5 +215,20 @@ const addMessage = async (teamId, userId, message) => {
     return teamId;
 }
 
-export { createTeam, getTeam, getAllTeams, removeUserFromTeam, requestToJoinTeam, acceptTeamJoinRequest, deleteTeam, cascadeUserDeletionToTeams, addMessage};
+const searchTeams = async (search) => {
+    const options = {
+	includeScore: true,
+	keys: ['title', 'description']
+    }
+
+    const allTeams = await getAllTeams();
+
+    const searchTerm = search;
+    const fuse = new Fuse(allTeams, options)
+    const searchResult = fuse.search(searchTerm);
+    const filteredResult = searchResult.filter(result => result.score < 0.5);
+    return filteredResult.map(result => result.item);
+}
+
+export { createTeam, getTeam, getAllTeams, removeUserFromTeam, requestToJoinTeam, acceptTeamJoinRequest, deleteTeam, cascadeUserDeletionToTeams, addMessage, searchTeams};
 
