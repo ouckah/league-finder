@@ -5,7 +5,7 @@ import * as validation from '../utils/validation.js';
 import * as friendData from '../data/friends.js'
 import { getPuuid, getWinLoss } from '../data/api.js';
 import { createUser, editUser, loginUser, deleteUser, getUser, getWR, getMatches,getUserByUsername} from '../data/users.js';
-import { protectedRoute } from '../utils/middleware.js';
+import { protectedRoute, unAuthRoute } from '../utils/middleware.js';
 import { deleteUserComments } from '../data/comments.js';
 import { deleteUserPosts } from '../data/posts.js';
 import { getFriends } from '../data/friends.js';
@@ -13,6 +13,7 @@ import { getFriends } from '../data/friends.js';
 
 router
   .route('/register')
+  .all(unAuthRoute)
   .get(async (req, res) => {
     // registeration page
     res.render('users/register', { title: "Register" });
@@ -49,6 +50,7 @@ router
 
 router
   .route('/login')
+  .all(unAuthRoute)
   .get(async (req, res) => {
     // login page
     res.render('users/login', { title: "Login" }); // render the login page

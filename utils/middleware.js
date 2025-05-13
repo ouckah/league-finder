@@ -26,6 +26,14 @@ export function protectedRoute(req, res, next) {
   next();
 }
 
+export function unAuthRoute(req, res, next) {
+  const user = req.session?.user;
+  if (user) {
+    return res.status(403).redirect('/');
+  }
+  next();
+}
+
 function logMiddleware(req, res, next) {
   const currentTimestamp = new Date().toUTCString()
   const method = req.method
