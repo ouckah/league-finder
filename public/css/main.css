@@ -81,6 +81,7 @@ select {
 .introduction,
 .team,
 .signin-form,
+#signup-form,
 .newteam-form,
 .newpost-form {
   border: 1px solid #ccc;
@@ -155,6 +156,7 @@ button {
 
 .form-group input[type="text"],
 .form-group input[type="email"],
+.form-group input[type="password"],
 .form-group select,
 .form-group textarea {
   width: 100%;
@@ -166,6 +168,7 @@ button {
 
 .form-group input[type="text"]:focus,
 .form-group input[type="email"]:focus,
+.form-group input[type="password"]:focus,
 .form-group select:focus,
 .form-group textarea:focus {
   border-color: #4a90e2;
@@ -216,7 +219,9 @@ button {
 .cancel-button,
 .delete-button,
 .edit-button,
-.delete-post {
+.delete-post,
+.home-link,
+.signin-link {
   padding: 0.75rem 1.5rem;
   border: none;
   border-radius: 4px;
@@ -227,15 +232,25 @@ button {
   text-align: center;
 }
 
+.signin-link {
+  color: #4a76c7;
+  text-decoration: none;
+  font-size: 14px;
+  margin-bottom: 5px;
+}
 
+.signin-link:hover {
+  text-decoration: underline;
+}
 
-
-.submit-button {
+.submit-button,
+#submit_button {
   color: white;
   flex: 1;
 }
 
-.submit-button:hover {
+.submit-button:hover,
+#submit_button:hover {
   background-color: #357abd;
 }
 
