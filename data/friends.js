@@ -104,6 +104,24 @@ const getFriendStatus = async (frienderId, friendeeId) => {
   return relationship.status
 }
 
+const clearFriends = async (userId) => {
+  helpers.checkId(userId)
+
+  const friendsCollection = await friends()
+  
+  await friendsCollection.deleteMany({
+    $and: [
+      { status: "accepted" },
+      {
+        $or: [
+          { userId: userId },
+          { friendId: userId }
+        ]
+      }
+    ]
+  })
+}
+
 /*
   FRIEND REQUEST CRUD
 */
@@ -159,6 +177,24 @@ const deleteFriendRequest = async (frienderId, friendeeId) => {
   });
 }
 
+const clearFriendRequests = async (userId) => {
+  helpers.checkId(userId)
+
+  const friendsCollection = await friends()
+  
+  await friendsCollection.deleteMany({
+    $and: [
+      { status: "pending" },
+      {
+        $or: [
+          { userId: userId },
+          { friendId: userId }
+        ]
+      }
+    ]
+  })
+}
+
 export {
   friend,
   unfriend,
@@ -167,4 +203,6 @@ export {
   createFriendRequest,
   deleteFriendRequest,
   getFriendRequests,
+  clearFriends,
+  clearFriendRequests,
 }
