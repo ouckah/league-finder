@@ -2,7 +2,7 @@
 
 {{#if isLoggedIn}}
     <!-- maybe a button instead not sure? -->
-    <a href="/posts/new">New Post</a>
+    <a href="/posts/new" class="new-post">New Post</a>
 {{/if}}
 
 {{#if message}}
@@ -15,7 +15,7 @@
 
     {{#if (eq ../userId this.userId)}}
       <a href="/posts/{{this._id}}/edit" class="edit-button">Edit Post</a>
-      <a href="/posts/{{this._id}}/delete" class="delete-button">Delete Post</a>
+      <a href="/posts/{{this._id}}/delete" class="delete-post">Delete Post</a>
     {{/if}}
 
     {{#if this.image}}

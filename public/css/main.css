@@ -72,6 +72,12 @@ footer {
   height: 40px;
 }
 
+textarea,
+select {
+  display: block;
+  margin: 0 auto;
+}
+
 .introduction,
 .team,
 .signin-form {
@@ -191,8 +197,24 @@ button {
   margin-top: 2rem;
 }
 
-.submit-button,
-.cancel-button {
+
+button {
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  text-decoration: none;
+  text-align: center;
+  transition: background-color 0.3s ease;
+}
+
+.cancel-button,
+.delete-button,
+.edit-button,
+.delete-post {
   padding: 0.75rem 1.5rem;
   border: none;
   border-radius: 4px;
@@ -203,14 +225,45 @@ button {
   text-align: center;
 }
 
+
+
+
 .submit-button {
-  background-color: #4a90e2;
   color: white;
   flex: 1;
 }
 
 .submit-button:hover {
   background-color: #357abd;
+}
+
+.delete-confirm {
+  display: block;
+  margin: 0 auto;
+}
+
+.delete-confirm:hover {
+  background-color: #357abd;
+}
+
+.edit-button {
+  display: inline-block;
+  background-color: #4a90e2;
+  color: white;
+}
+
+.edit-button:hover {
+  background-color: #357abd;
+}
+
+.delete-post {
+  display: inline-block;
+  background-color: #e54343;
+  color: black;
+}
+
+.delete-post:hover {
+  background-color: #d22f2f;
 }
 
 .cancel-button {
@@ -293,6 +346,7 @@ button {
   transform: translateY(0);
   box-shadow: 0 2px 5px rgba(10, 150, 200, 0.2);
 }
+
 .profile-container {
   max-width: 800px;
   margin: 2rem auto;
@@ -507,5 +561,105 @@ button {
 
 .teams-searchSubmit {
   display: block;
-  margin: 0.5em auto; /* vertically 0.5em, horizontally auto‑centered */
+  margin: 0.5em auto;
+  /* vertically 0.5em, horizontally auto‑centered */
+}
+
+
+/* Posts css */
+.new-post {
+  display: inline-block;
+  background-color: #4a90e2;
+  color: white;
+  padding: 8px 16px;
+  text-decoration: none;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  font-weight: 600;
+  transition: background-color 0.2s;
+}
+
+.new-post:hover {
+  background-color: #357abd;
+}
+
+/* Message styles */
+#message {
+  background-color: #e3f2fd;
+  border-left: 4px solid #2196f3;
+  padding: 10px 15px;
+  margin-bottom: 20px;
+  border-radius: 0 4px 4px 0;
+}
+
+/* Individual post styling */
+.post {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-bottom: 25px;
+  position: relative;
+}
+
+.post h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.post h3 a {
+  color: #2c3e50;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.post h3 a:hover {
+  color: #4a90e2;
+}
+
+.post-picture {
+  max-width: 100%;
+  border-radius: 6px;
+  margin: 10px 0;
+  display: block;
+}
+
+.post-author {
+  color: #7f8c8d;
+  font-size: 14px;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.post-content {
+  margin-bottom: 15px;
+  line-height: 1.7;
+}
+
+.post-tags {
+  margin-bottom: 5px;
+  font-size: 14px;
+}
+
+.tag {
+  display: inline-block;
+  background-color: #e1f5fe;
+  color: #0288d1;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  margin-right: 5px;
+}
+
+.post-date {
+  color: #95a5a6;
+  font-size: 12px;
+  margin-top: 10px;
+  text-align: right;
+  font-style: italic;
+}
+
+.post-comment {
+  display: block;
+  margin: 10px 0;
 }

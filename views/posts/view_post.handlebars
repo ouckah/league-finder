@@ -3,7 +3,7 @@
     <h3>{{post.title}}</h3>
     {{#if (eq userId post.userId)}}
         <a href="/posts/{{post._id}}/edit" class="edit-button">Edit Post</a>
-        <a href="/posts/{{post._id}}/delete" class="edit-button">Delete Post</a>
+        <a href="/posts/{{post._id}}/delete" class="delete-post">Delete Post</a>
     {{/if}}
 
     {{#if post.image}}
@@ -27,7 +27,7 @@
 <form action="/comments/" method="POST">
   <input type="hidden" name="postId" value="{{post._id}}">
 
-  <textarea name="content" placeholder="Write a comment..."></textarea>
+  <textarea name="content" placeholder="Write a comment..." class="post-comment"></textarea>
   
   <button type="submit">Submit</button>
 </form>
