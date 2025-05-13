@@ -136,7 +136,7 @@ const editUser = async (
             riotId: riotId,
             region: region,
             preferredRoles: preferredRoles,
-            profilePicture: profilePicture
+            profilePicture: profilePicture || "https://cdn.discordapp.com/attachments/1338571359940382811/1371512930855555122/IMG_8009.jpg?ex=6824b9f4&is=68236874&hm=03fb58d812df4263de9349217398b23d303bb049c5c6e00b6739c60989238476&format=webp", // default profile picture
         };
         const updateInfo = await userCollection.updateOne(
             { _id: new ObjectId(userId) },
