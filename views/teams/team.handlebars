@@ -1,63 +1,63 @@
-<h1 id="teams-title" name="teams-title">{{team.title}}</h1>
+<div class="team-container">
+  <h1 id="teams-title" name="teams-title">{{team.title}}</h1>
 
-<h3 id="teams-desiredRankHeader" name="teams-desiredRankHeader">Desired Rank</h3>
-<ul>
-  {{#each team.desiredRank}}
+  <h3 id="teams-desiredRankHeader" name="teams-desiredRankHeader">Desired Rank</h3>
+  <ul>
+    {{#each team.desiredRank}}
     <li id="teams-desiredRankItem">{{this}}</li>
-  {{/each}}
-</ul>
+    {{/each}}
+  </ul>
 
-<h3 id="teams-desiredRole" name="teams-desiredRole">Desired Role</h3>
-<ul>
-  {{#each team.desiredRole}}
+  <h3 id="teams-desiredRole" name="teams-desiredRole">Desired Role</h3>
+  <ul>
+    {{#each team.desiredRole}}
     <li id="teams-desiredRoleItem">{{this}}</li>
-  {{/each}}
-</ul>
+    {{/each}}
+  </ul>
 
-<h3 id="teams-region" name="teams-region">Region</h3>
-<p id="teams-regionItem">{{team.region}}</p>
+  <h3 id="teams-region" name="teams-region">Region</h3>
+  <p id="teams-regionItem">{{team.region}}</p>
 
 
-<h3 id="teams-owner" name="teams-owner">Owner</h3>
-<p id="teams-ownerItem">{{owner}}</p>
+  <h3 id="teams-owner" name="teams-owner">Owner</h3>
+  <p id="teams-ownerItem">{{owner}}</p>
 
-<h3 id="teams-members" name="teams-members">Members</h3>
-<ul id="teams-membersList" class="team-membersList">
-{{#each members}}
+  <h3 id="teams-members" name="teams-members">Members</h3>
+  <ul id="teams-membersList" class="team-membersList">
+    {{#each members}}
     <li id="teams-membersItem">{{this}}</li>
-{{/each}}
-</ul>
+    {{/each}}
+  </ul>
 
-</br>
-<p id="teams-description">{{team.description}}</p>
+  <p id="teams-description">Description: {{team.description}}</p>
 
-<h3 id="teams-chatHeader" name="teams-chatHeader">Chat</h3>
-<ul id="teams-chatList" class="teams-chatList">
-{{#each messages}}
+  <h3 id="teams-chatHeader" name="teams-chatHeader">Chat</h3>
+  <ul id="teams-chatList" class="teams-chatList">
+    {{#each messages}}
     <li id="teams-chatItem">{{this}}</li>
-{{/each}}
-</ul>
+    {{/each}}
+  </ul>
 
-{{#if ismember}}
-<form action="/teams/{{team._id}}/chat" method="POST" id="teams-chatForm">
-  <textarea name="teamsMessage" id="teamsMessage"></textarea>
-  </br>
-  <button type="submit">Send</button>
-</form>
-{{/if}}
+  {{#if ismember}}
+  <form action="/teams/{{team._id}}/chat" method="POST" id="teams-chatForm">
+    <textarea name="teamsMessage" id="teamsMessage"></textarea>
+    <button type="submit">Send</button>
+  </form>
+  {{/if}}
 
-<p id="error"></p>
+  <p id="error"></p>
 
-{{#if joinable}}
-<a href="/teams/{{team._id}}/join">join</a>
-{{/if}}
+  {{#if joinable}}
+  <a href="/teams/{{team._id}}/join">Request to Join</a>
+  {{/if}}
 
-{{#if leavable}}
-<a href="/teams/{{team._id}}/leave">leave team</a>
-{{/if}}
+  {{#if leavable}}
+  <a href="/teams/{{team._id}}/leave">Leave Team</a>
+  {{/if}}
 
-{{#if isowner}}
-<a href="/teams/{{team._id}}/admin">admin page</a>
-{{/if}}
+  {{#if isowner}}
+  <a href="/teams/{{team._id}}/admin">Admin Page</a>
+  {{/if}}
+</div>
 
 <script type="module" src="/public/js/teams/teammessage.js"></script>

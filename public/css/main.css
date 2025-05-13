@@ -135,15 +135,6 @@ button {
   font-size: 16px;
 }
 
-.edit-profile-container {
-  max-width: 800px;
-  margin: 2rem auto;
-  padding: 2rem;
-  background-color: #ffffff;
-  border-radius: 8px;
-  outline: 1.5px solid black;
-}
-
 .edit-profile-container h3 {
   color: #333;
   margin-bottom: 2rem;
@@ -390,7 +381,9 @@ button {
   box-shadow: 0 2px 5px rgba(10, 150, 200, 0.2);
 }
 
-.profile-container {
+.profile-container,
+.edit-profile-container,
+.team-container {
   max-width: 800px;
   margin: 2rem auto;
   padding: 2rem;
@@ -602,6 +595,12 @@ button {
   text-align: center;
 }
 
+.error-message {
+  text-align: center;
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
 #success {
   margin-top: 20px;
   color: rgb(23, 177, 46);
@@ -726,4 +725,66 @@ button {
   align-items: center;
   margin: 0 auto;
   margin-top: 25px;
+}
+
+#teams-title {
+  text-align: center;
+  font-size: 2.2rem;
+  margin-bottom: 30px;
+}
+#teams-description {
+  background-color: #e9f1ff;
+  padding: 15px;
+  margin-top: 20px;
+}
+
+.team-membersList {
+  padding-left: 25px;
+}
+
+
+#teams-chatList {
+  list-style: none;
+  padding-left: 0;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  max-height: 200px;
+  overflow-y: auto;
+  border-radius: 4px;
+}
+
+#teams-chatItem {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+#teams-chatItem:last-child {
+  border-bottom: none;
+}
+
+#teams-chatForm {
+  margin-top: 15px;
+  text-align: center;
+}
+
+#teamsMessage {
+  width: 100%;
+  min-height: 60px;
+  padding: 10px;
+  font-family: inherit;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  resize: vertical;
+  margin-bottom: 10px;
+}
+
+.team-container ul {
+  list-style-type: none;
+  border-bottom: 0.5px solid black;
+}
+
+#teams-ownerItem,
+#teams-regionItem {
+  border-bottom: 0.5px solid black;
 }
