@@ -1,29 +1,33 @@
-<h1 id="teams-title" class="teams-title">Teams</h1>
-{{#if loggedIn}}
-    <button onclick="location.href = '/teams/new'" id="newteam" class="newteam">New Team!</button>
-{{/if}}
+<div class="teams-container">
+	<h2 id="teams-title" class="teams-title">Teams</h1>
+		<div class="teams-actions">
+			{{#if loggedIn}}
+			<button onclick="location.href = '/teams/new'" id="newteam" class="newteam">New Team!</button>
+			{{/if}}
 
-<form action="/teams" method="GET">
-  <label for="teamsSearch">Search:</label>
-  <input type="text" id="teamsSearch" name="teamsSearch" placeholder="Search for a team!">
-  <button type="submit" id="teams-searchSubmit" class="teams-searchSubmit">Search</button>
-</form>
+			<form action="/teams" method="GET" class="search-form">
+				<div class="search-input-group">
+					<input type="text" id="postsSearch" name="postsSearch" placeholder="Search for a post!">
+					<button type="submit" id="posts-searchSubmit" class="posts-searchSubmit">Search</button>
+				</div>
+			</form>
+		</div>
 
-{{#each teams}}
-    <div class="team">
-	<h3>{{this.title}}</h3>
-	<p>{{this.region}}</p>
-	{{#each this.desiredRanks}}
-	    <p>{{this}}</p>
-	{{/each}}
+		{{#each teams}}
+		<div class="team">
+			<h3>{{this.title}}</h3>
+			<p>{{this.region}}</p>
+			{{#each this.desiredRanks}}
+			<p>{{this}}</p>
+			{{/each}}
 
-	{{#each this.desiredRoles}}
-	    <p>{{this}}</p>
-	{{/each}}
+			{{#each this.desiredRoles}}
+			<p>{{this}}</p>
+			{{/each}}
 
-	<p>{{this.description}}</p>
+			<p>{{this.description}}</p>
 
-	<a href="/teams/{{this._id}}">View Team</a>
-    </div>
-{{/each}}
-
+			<a href="/teams/{{this._id}}">View Team</a>
+		</div>
+		{{/each}}
+</div>
