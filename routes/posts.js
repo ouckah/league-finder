@@ -9,7 +9,6 @@ const createPostHandler = async (req, res) => {
   let { title, content, image, tags } = req.body;
   const userId = req.user.userId;
 
-  // TODO validate inputs
   ({image, title, content, tags } = validatePost(image,title, content, tags));
 
   const response = await createPost(
@@ -166,15 +165,16 @@ router
       req.params.id = helpers.checkId(req.params.id.toString(),"id");
       req.body.confirm = helpers.checkString(req.body.confirm.toString(),"confirm");
       if (req.body.confirm !== 'confirm') {
-        return res.status(400).render('error', { error: "Please type 'confirm' to delete the post." });
+        return res.status(400).json({ error: "Please type 'confirm' to delete the post." });
       }
     } catch (e) {
-      return res.status(400).json({ error: e.message });
+      return res.status(400).json({ error: e });
     }
 
     // Check if user owns the post before allowing delete
     try {
       const post = await getPost(req.params.id);
+      // this might not be the correct way to do this
       if (post.userId !== req.session.user.userId) {
         return res.status(403).render('error', { error: "You don't have permission to delete this post." });
       }
@@ -186,9 +186,9 @@ router
       const commentsDeleted = await deletePostComments(req.params.id);
       await deletePost(req.params.id);
 
-      return res.redirect('/posts');
+      return res.status(200).json({message: "Post deleted successfully."});
     } catch (e) {
-      return res.status(400).render('error', { error: "Failed to delete post." });
+      return res.status(400).json({ error: "Failed to delete post." });
     }
   });
 
