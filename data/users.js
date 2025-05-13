@@ -5,6 +5,8 @@ import * as validation from '../utils/validation.js';
 import bcrypt from 'bcrypt';
 import * as riotAPI from './api.js';
 import { cascadeUserDeletionToTeams } from './teams.js';
+import { clearFriendRequests, clearFriends } from './friends.js';
+import { clearPokes } from './pokes.js';
 
 // not sure if we want to try to fill in all fields or let useres fill fields on profile page
 const createUser = async (
@@ -165,6 +167,9 @@ const deleteUser = async (userId) => {
     const deletionInfo = await usersCollection.deleteOne({ _id: new ObjectId(userId) });
     if (deletionInfo.deletedCount === 0) throw 'Could not delete user';
     cascadeUserDeletionToTeams(userId);
+    clearFriendRequests(userId);
+    clearFriends(userId);
+    clearPokes(userId);
     return { deletionCompleted: true };
 }
 
