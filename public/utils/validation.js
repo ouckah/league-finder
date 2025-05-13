@@ -129,8 +129,9 @@ function throwError(eMessage,errorDiv, successDiv) {
 
 async function handleFormSubmit(form, data, successRedirect) {
   try {
+    const method = form.getAttribute('method') ? form.getAttribute('method').toUpperCase() : form.method;
     const response = await fetch(form.action, {
-      method: form.method,
+      method: method,
       headers: {
         'Content-Type': 'application/json'
       },
