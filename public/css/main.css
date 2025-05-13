@@ -578,6 +578,13 @@ button {
   text-align: center;
 }
 
+#success {
+  margin-top: 20px;
+  color: rgb(23, 177, 46);
+  font-weight: bold;
+  text-align: center;
+}
+
 .teams-searchSubmit {
   display: block;
   margin: 0.5em auto;
@@ -683,4 +690,10 @@ button {
   margin: 10px 0;
 }
 
-/* Team creation page css */
+#logout {
+  font-size: 1.7rem;
+  text-align: center;
+  align-items: center;
+  margin: 0 auto;
+  margin-top: 25px;
+}
