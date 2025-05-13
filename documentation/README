@@ -1,1 +1,9 @@
 This folder will contain all documentations that we write for this project.
+
+For this code to work, you must have a valid Riot API key (can be generated from https://developer.riotgames.com for free.)
+The API key expires every 24hrs and must be renewed daily. We will try our best to supply you with the renewed API key in the assignment comments.
+If you have a working riot API key, you can replace the RIOT_API_KEY in the .env file.
+
+Use 'npm i' to install all dependencies and 'npm run seed' to seed the database.
+
+After doing the above step, run the application using 'npm start'. The application can be found at 'localhost:3000'.
