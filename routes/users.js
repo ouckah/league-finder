@@ -95,7 +95,7 @@ router
       let user = await getUserByUsername(username);
       res.redirect(`/users/profile/${user._id.toString()}`); // redirect to the profile page of the user
     } catch (e) {
-      return res.status(400).render('error', { error: e}); // create render page with the error message
+      return res.status(400).render('error', { error: e, title: 'Error'}); // create render page with the error message
     }
   });
   
@@ -172,13 +172,7 @@ router
     }
     let { username, email, biography, riotId, region, preferredRoles, profilePicture } = req.body;
     try {
-      validation.validateEdit(username, email, biography, riotId, region, preferredRoles, profilePicture);
-      // Checks if provided riotId is real.
-      if (riotId.length > 0) {
-        helpers.checkStringWithLength(riotId, 3, 22, /^.{1,16}#.{1,5}$/);
-        const riotName = riotId.split('#');
-        const puuid = await getPuuid(riotName[0], riotName[1], region);
-      }
+      await validation.validateEdit(username, email, biography, riotId, region, preferredRoles, profilePicture);
       const updateUser = await editUser(req.session.user.userId, username, email, biography, riotId, region, preferredRoles, profilePicture);
       return res.status(200).json({ userId: req.session.user.userId });
     } catch (e) {

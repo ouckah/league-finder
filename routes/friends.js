@@ -138,14 +138,14 @@ const renderNotificationsPage = async (req, res) => {
   const requests = await friendsData.getFriendRequests(owner)
   const pokes = await pokesData.getPokes(owner)
 
-  res.render('friends/notifications', { friendRequests: requests, pokes: pokes })
+  res.render('friends/notifications', { friendRequests: requests, pokes: pokes, title: "Notifications" })
 }
 
 const renderFriendsPage = async (req, res) => {
   const owner = req.session.user.userId
   const friends = await friendsData.getFriends(owner)
 
-  res.render('friends/friends', { acceptedFriends: friends })
+  res.render('friends/friends', { acceptedFriends: friends, title: owner.username + "'s Friends" })
 }
 
 router. 

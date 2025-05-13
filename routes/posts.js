@@ -20,7 +20,7 @@ const createPostHandler = async (req, res) => {
   )
 
   if (!response.postCreated) {
-    return res.render('posts/new_post', { error: "Failed to create post." });
+    return res.render('posts/new_post', { error: "Failed to create post.", title: 'Failed Post Create' });
   }
 
   return res.redirect('/posts');
@@ -37,7 +37,8 @@ router
     
     res.render('posts/posts', { 
       posts: returnedPosts,
-      userId: req.session.user?.userId
+      userId: req.session.user?.userId,
+      title: 'Posts'
     });
   })
 
@@ -45,7 +46,7 @@ router
   .route('/new')
   .all(protectedRoute)
   .get(async (req, res) => {
-    res.render('posts/new_post')
+    res.render('posts/new_post', {title: 'New Post'})
   })
   .post(createPostHandler)
 
@@ -70,7 +71,8 @@ router
     res.render('posts/view_post', { 
       post,
       comments,
-      userId: req.session.user?.userId
+      userId: req.session.user?.userId,
+      title: post.title
     });
   });
 
@@ -90,7 +92,7 @@ router
 
       // Check if user owns the post
       if (post.userId !== req.session.user.userId) {
-        return res.status(403).render('error', { error: "You don't have permission to edit this post." });
+        return res.status(403).render('error', { error: "You don't have permission to edit this post.", title: 'Error' });
       }
     } catch (e) {
       return res.status(400).json({ error: e.message });
@@ -113,7 +115,7 @@ router
     try {
       const post = await getPost(req.params.id);
       if (post.userId !== req.session.user.userId) {
-        return res.status(403).render('error', { error: "You don't have permission to edit this post." });
+        return res.status(403).render('error', { error: "You don't have permission to edit this post.", title: 'Error' });
       }
     } catch (e) {
       return res.status(400).json({ error: e.message });
@@ -152,7 +154,7 @@ router
       post = await getPost(postId);
       // Check if user owns the post
       if (post.userId !== req.session.user.userId) {
-        return res.status(403).render('error', { error: "You don't have permission to delete this post." });
+        return res.status(403).render('error', { error: "You don't have permission to delete this post.", title: 'Error' });
       }
     } catch (e) {
       return res.status(400).json({ error: e.message });
@@ -180,7 +182,7 @@ router
       const post = await getPost(req.params.id);
       // this might not be the correct way to do this
       if (post.userId !== req.session.user.userId) {
-        return res.status(403).render('error', { error: "You don't have permission to delete this post." });
+        return res.status(403).render('error', { error: "You don't have permission to delete this post.", title: 'Error' });
       }
     } catch (e) {
       return res.status(400).json({ error: e.message });

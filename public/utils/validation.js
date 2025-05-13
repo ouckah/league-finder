@@ -102,9 +102,7 @@ const validateTeam = (
   checkString(description, 'description');
 }
 
-const validateEdit = (
-  username, email, biography, riotId, region, preferredRoles, profilePicture
-) => {
+async function validateEdit (username, email, biography, riotId, region, preferredRoles, profilePicture) {
   username = validateUsername(username, "username");
   email = validateEmail(email, "email");
   if (typeof biography !== 'string') {
@@ -113,15 +111,23 @@ const validateEdit = (
   if (typeof riotId !== 'string') {
     throw 'Riot Username must be a string.';
   }
+  if (riotId.length > 0) {
+    checkStringWithLength(riotId, 3, 22, /^.{1,16}#.{1,5}$/, 'Riot ID');
+    const riotName = riotId.split('#');
+    const puuid = await riotAPI.getPuuid(riotName[0], riotName[1], region);
+  }
   if (typeof region !== 'string') {
     throw 'Region must be a string.';
+  }
+  if (!Array.isArray(preferredRoles)) {
+    throw 'Preferred Roles must be an array.';
   }
   if (typeof profilePicture !== 'string') {
     throw 'Profile picture link must be a string.';
   }
 }
 
-function throwError(eMessage,errorDiv, successDiv) {
+function throwError(eMessage, errorDiv, successDiv) {
   successDiv.hidden = true;
   errorDiv.hidden = false;
   errorDiv.innerHTML = eMessage;
@@ -149,36 +155,36 @@ async function handleFormSubmit(form, data, successRedirect) {
   }
 }
 
-const validatePost = (image,title, content, tags) => {
+const validatePost = (image, title, content, tags) => {
   if (typeof image === 'string' && image.trim() !== '') {
-      image = checkString(image, "image");
+    image = checkString(image, "image");
   }
   title = checkString(title, "title");
   checkStringWithLength(title, 2, 60, /^.+$/, "title");
   content = checkString(content, "content");
   checkStringWithLength(content, 2, 1000, /^.+$/, "content");
-  
+
   // Handle tags validation
   if (tags) {
-      let tagsArray;
-      if (typeof tags === 'string') {
-          tagsArray = tags.split(',').map(tag => tag.trim()).filter(tag => tag !== '');
-      }
-      
-      for (const tag of tagsArray) {
-          checkStringWithLength(tag, 2, 20, /^[a-zA-Z]+$/, "tag");
-      }
+    let tagsArray;
+    if (typeof tags === 'string') {
+      tagsArray = tags.split(',').map(tag => tag.trim()).filter(tag => tag !== '');
+    }
+
+    for (const tag of tagsArray) {
+      checkStringWithLength(tag, 2, 20, /^[a-zA-Z]+$/, "tag");
+    }
   }
 
-  return {image,title, content, tags};
+  return { image, title, content, tags };
 }
 
-export { 
+export {
   checkString,
-  validateRegistration, 
-  validateTeam, 
-  validateLogin, 
-  validateEdit, 
+  validateRegistration,
+  validateTeam,
+  validateLogin,
+  validateEdit,
   throwError,
   handleFormSubmit,
   validatePost
