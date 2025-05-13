@@ -1,6 +1,5 @@
 import {users, posts,comments} from '../config/mongoCollections.js';
 import {MongoNetworkTimeoutError, ObjectId} from 'mongodb';
-import helpers from '../utils/helpers.js';
 
 const createComment = async (
     userId,
@@ -24,7 +23,6 @@ const createComment = async (
         userId: userId,
         postId: postId,
         content: content,
-        likes: 0,
         createdAt: new Date().toUTCString(),
         username: user.username
     }
@@ -37,29 +35,6 @@ const createComment = async (
         throw 'Failed to create comment';
     }
 }   
-
-const likeComment = async (
-    commentId
-) => {
-    if (!commentId) throw 'You must provide a commentId';
-    if (typeof commentId !== 'string') throw 'The commentId must be a string';
-    if (!ObjectId.isValid(commentId)) throw 'The commentId is not a valid ObjectId';
-
-    const commentCollection = await comments();
-    const comment = await commentCollection.findOne({_id: new ObjectId(commentId)});
-    if (!comment) throw 'Comment not found';
-
-    const updatedComment = {
-        likes: comment.likes + 1
-    }
-
-    const updateInfo = await commentCollection.updateOne(
-        {_id: ObjectId(commentId)},
-        {$set: updatedComment}
-    );
-    if (updateInfo.modifiedCount === 0) throw 'Failed to like comment';
-    return { commentUpdated: true };
-}
 
 const deleteComment = async (
     commentId
@@ -113,6 +88,6 @@ const deleteUserComments = async (
     return { commentDeleted: true , deletedCount: deletionInfo.deletedCount };
 }
 
-export { createComment, likeComment, deleteComment, getPostComments, deletePostComments, deleteUserComments };
+export { createComment, deleteComment, getPostComments, deletePostComments, deleteUserComments };
 
 

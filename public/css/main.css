@@ -4,7 +4,6 @@
   box-sizing: border-box;
 }
 
-/* Main template css */
 body {
   font-family: sans-serif;
   line-height: 1.6;
@@ -133,18 +132,17 @@ input {
 
 .teams-title {
   text-align: center;
-  margin: 0 auto 0.5rem;
+  font-size: 2rem;
 }
 
 
 .newteam {
   display: block;
-  margin: 0 auto 1.5rem;
-  font-size: 2rem;
+  margin: 0 auto;
+  font-size: 1.5rem;
   padding: 0.5rem 1rem;
 }
 
-/* Edit profile css */
 button {
   background-color: #4a90e2;
   color: white;
@@ -153,6 +151,10 @@ button {
   border-radius: 4px;
   cursor: pointer;
   font-size: 16px;
+}
+
+button:hover {
+  background-color: #357abd;
 }
 
 .edit-profile-container h3 {
@@ -246,12 +248,6 @@ button {
   transition: background-color 0.3s;
 }
 
-#poke-btn:hover,
-#thumbs-up:hover,
-#thumbs-down:hover {
-  background-color: #357abd;
-}
-
 .cancel-button,
 .delete-button,
 .edit-button,
@@ -340,7 +336,6 @@ button {
   background-color: #e0e0e0;
 }
 
-/* Profile css */
 .player-search {
   max-width: 600px;
   margin: 2rem auto;
@@ -374,9 +369,9 @@ button {
 }
 
 .search-form input[type="text"]:focus {
-  border-color: #0ac8b9;
+  border-color: #4a90e2;
   outline: none;
-  box-shadow: 0 0 0 3px rgba(10, 200, 185, 0.2);
+  box-shadow: 0 0 0 3px rgba(4, 107, 204, 0.2);
 }
 
 .search-form input[type="text"]::placeholder {
@@ -400,22 +395,13 @@ button {
   letter-spacing: 0.5px;
 }
 
-.search-form button:hover {
-  background: rgb(92, 155, 226);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 10px rgba(10, 150, 200, 0.3);
-}
-
-.search-form button:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 5px rgba(10, 150, 200, 0.2);
-}
-
 .profile-container,
 .edit-profile-container,
 .team-container,
 .notification-container,
-.friends-container {
+.friends-container,
+.posts-container,
+.teams-container {
   max-width: 800px;
   margin: 2rem auto;
   padding: 2rem;
@@ -620,7 +606,6 @@ button {
   background-color: #3780d3;
 }
 
-/* Error css */
 #error {
   color: red;
   font-weight: bold;
@@ -640,15 +625,10 @@ button {
   text-align: center;
 }
 
-.teams-searchSubmit,
-.posts-searchSubmit {
-  display: block;
-  margin: 0.5em auto;
-  /* vertically 0.5em, horizontally auto‑centered */
+.posts-container h2 {
+  text-align: center;
 }
 
-
-/* Posts css */
 .new-post,
 .post-back {
   display: inline-block;
@@ -671,7 +651,6 @@ button {
   background-color: #357abd;
 }
 
-/* Message styles */
 #message {
   background-color: #e3f2fd;
   border-left: 4px solid #2196f3;
@@ -680,7 +659,6 @@ button {
   border-radius: 0 4px 4px 0;
 }
 
-/* Individual post styling */
 .post {
   background-color: #fff;
   border-radius: 8px;
@@ -758,12 +736,6 @@ button {
   align-items: center;
   margin: 0 auto;
   margin-top: 25px;
-}
-
-#teams-title {
-  text-align: center;
-  font-size: 2.2rem;
-  margin-bottom: 30px;
 }
 
 #teams-description {
@@ -863,12 +835,41 @@ button {
   margin-left: 5px;
 }
 
-/* Action buttons */
 .actions {
   display: flex;
   gap: 10px;
 }
 
-.friends-container ul{
+.post-actions,
+.teams-actions {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.friends-container ul {
   list-style-type: none;
+}
+
+.search-input-group {
+  display: flex;
+  width: 100%;
+}
+
+#postsSearch {
+  flex: 1;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px 0 0 4px;
+  font-size: 1rem;
+  outline: none;
+  margin-right: 10px;
+}
+
+.posts-searchSubmit,
+.teams-searchSubmit {
+  flex: 1;
+  height: 100%
 }

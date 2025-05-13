@@ -8,7 +8,6 @@ import { cascadeUserDeletionToTeams } from './teams.js';
 import { clearFriendRequests, clearFriends } from './friends.js';
 import { clearPokes } from './pokes.js';
 
-// not sure if we want to try to fill in all fields or let useres fill fields on profile page
 const createUser = async (
     firstName,
     lastName,
@@ -95,7 +94,6 @@ const loginUser = async (username, password) => {
         throw 'Either the userId or password is invalid';
     }
 
-    // user info to store in session, not sure what we would like.
     let userInfo = {
         // store userId in session for use in other functions, converted to string
         userId: existingUser._id.toString(),
@@ -105,7 +103,6 @@ const loginUser = async (username, password) => {
     return userInfo;
 }
 
-// maybe we can break this into multiple functions, one for each field?
 const editUser = async (
     userId,
     username,
@@ -206,7 +203,6 @@ const getStatus = async (userId) => {
     return user.status
 }
 
-// might not need this, but maybe when searching for users by username
 const getUserByUsername = async (username) => {
     if (!username) throw 'You must provide a username';
     if (typeof username !== 'string') throw 'username must be a string';

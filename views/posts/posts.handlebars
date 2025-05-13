@@ -1,46 +1,49 @@
-<h2>Your Post's Feed</h2>
-
-{{#if isLoggedIn}}
-    <!-- maybe a button instead not sure? -->
+<div class="posts-container">
+  <h2>Your Post's Feed</h2>
+  <div class="post-actions">
+    {{#if isLoggedIn}}
     <a href="/posts/new" class="new-post">New Post</a>
-{{/if}}
+    {{/if}}
 
-<form action="/posts" method="GET">
-  <label for="postsSearch">Search:</label>
-  <input type="text" id="postsSearch" name="postsSearch" placeholder="Search for a post!">
-  <button type="submit" id="posts-searchSubmit" class="posts-searchSubmit">Search</button>
-</form>
+    <form action="/posts" method="GET" class="search-form">
+      <div class="search-input-group">
+        <input type="text" id="postsSearch" name="postsSearch" placeholder="Search for a post!">
+        <button type="submit" id="posts-searchSubmit" class="posts-searchSubmit">Search</button>
+      </div>
+    </form>
+  </div>
 
-{{#if message}}
-    <p id="message">{{message}}</p>
-{{/if}}
+  {{#if message}}
+  <p id="message">{{message}}</p>
+  {{/if}}
 
-{{#each posts}}
+  {{#each posts}}
   <div class="post">
     <h3><a href="/posts/{{this._id}}">{{this.title}}</a></h3>
 
     {{#if (eq ../userId this.userId)}}
-      <a href="/posts/{{this._id}}/edit" class="edit-button">Edit Post</a>
-      <a href="/posts/{{this._id}}/delete" class="delete-post">Delete Post</a>
+    <a href="/posts/{{this._id}}/edit" class="edit-button">Edit Post</a>
+    <a href="/posts/{{this._id}}/delete" class="delete-post">Delete Post</a>
     {{/if}}
 
     {{#if this.image}}
-      <a href="/posts/{{this._id}}">
-        <img src="{{this.image}}" alt="Post Image" class="post-picture">
-      </a>
+    <a href="/posts/{{this._id}}">
+      <img src="{{this.image}}" alt="Post Image" class="post-picture">
+    </a>
     {{/if}}
 
     <p class="post-author">Posted by: {{this.username}}</p>
     <p class="post-content">{{this.content}}</p>
 
     {{#if this.tags.length}}
-      <p class="post-tags">Tags:
-        {{#each this.tags}}
-          <span class="tag">{{this}}</span>
-        {{/each}}
-      </p>
+    <p class="post-tags">Tags:
+      {{#each this.tags}}
+      <span class="tag">{{this}}</span>
+      {{/each}}
+    </p>
     {{/if}}
 
     <p class="post-date">{{this.createdAt}}</p>
   </div>
-{{/each}}
+  {{/each}}
+</div>
