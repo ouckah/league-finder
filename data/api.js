@@ -140,7 +140,11 @@ const getWinLoss = async (puuid, region) => {
 const getMatchIds = async (puuid, count, region) => {
     let regionUrl = region;
     if (region === "NA") {
-        regionUrl = "americas";
+        regionUrl = "americas"
+    } else if (region === "KR") {
+        regionUrl = "asia"
+    } else if (region === "EUW") {
+        regionUrl = "europe"
     }
     const headers = { "X-Riot-Token": API_KEY };
     const matchUrl = `https://${regionUrl}.api.riotgames.com/lol/match/v5/matches/by-puuid/${puuid}/ids?start=0&count=${count}`;
