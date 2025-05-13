@@ -173,6 +173,14 @@ const validatePost = (image,title, content, tags) => {
   return {image,title, content, tags};
 }
 
+const validateComment = (postId, content) => {
+  postId = checkString(postId, "postId");
+  content = checkString(content, "content");
+  checkStringWithLength(content, 2, 1000, /^.+$/, "content");
+
+  return {postId,content};
+}
+
 export { 
   checkString,
   validateRegistration, 
@@ -181,5 +189,6 @@ export {
   validateEdit, 
   throwError,
   handleFormSubmit,
-  validatePost
+  validatePost,
+  validateComment
 };

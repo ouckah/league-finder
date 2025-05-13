@@ -1,6 +1,6 @@
 import {Router} from 'express';
 const router = Router();
-import helpers from '../utils/helpers.js';
+import { validateComment } from '../utils/validation.js';
 import { protectedRoute} from '../utils/middleware.js';
 import { createComment, likeComment } from '../data/comments.js';
 
@@ -9,21 +9,17 @@ router
   .all(protectedRoute)
   .post(async (req, res) => {
     let { postId, content } = req.body;
+    try{
+      ({postId,content} = validateComment(postId,content));
+  
+      // maybe still error check even if using middleware
+      const userId = req.session.user.userId;
+      const response = await createComment(userId, postId, content);
+      return res.status(200).json({message: "Comment created successfully."});
+    } catch (e){
+      return res.status(400).json({error: e});
+    }
 
-    // maybe better input validation
-    postId = helpers.checkId(postId.toString(), "postId");
-    content = helpers.checkString(content, "content");
-
-    // maybe still error check even if using middleware
-    const userId = req.session.user.userId;
-
-    const response = await createComment(userId, postId, content);
-
-    //if (!response.commentCreated) {
-    //  return res.render('/posts/${postId}', { error: "Failed to create comment." });
-    //}
-
-    return res.redirect(`/posts/${postId}`);
   });
 
 /*
