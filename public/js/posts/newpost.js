@@ -1,28 +1,30 @@
-import * as validation from '../../utils/validation.js';
+import { validatePost, throwError, handleFormSubmit } from '../../utils/validation.js';
 
 let postForm = document.getElementById('newpost-form');
 let errorDiv = document.getElementById('error');
+let successDiv = document.getElementById('success');
 
 
-/*
+
 if(postForm){
-    postForm.addEventListener('submit', (event) => {
+    postForm.addEventListener('submit', async (event) => {
         event.preventDefault();
         let title = document.getElementById('title').value;
         let content = document.getElementById('content').value;
         let tags = document.getElementById('tags').value;
-        tags = tags?.split(',').map(tag => tag.trim()).filter(tag => tag !== '');
+        let image = document.getElementById('image').value;
 
         try{
-            title = checkString(title, 'title');
-            content = checkString(content, 'content');
-            // tags validation 
+            validatePost(image, title, content, tags);
+            errorDiv.hidden = true;
+            successDiv.hidden = false;
+            successDiv.innerHTML = 'Attempting to create post...';
+
+            await handleFormSubmit(postForm, { title, content, image, tags },'/posts/');
           } catch (e){
-            // print error message
-            return;
+            throwError(e,errorDiv,successDiv);
           }
-        postForm.submit();
     });
 }
-*/
+
 

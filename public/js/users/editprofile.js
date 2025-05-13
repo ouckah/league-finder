@@ -2,6 +2,7 @@ import { validateEdit, throwError } from '../../utils/validation.js';
 
 let editProfileForm = document.getElementById('edit-profile-form');
 let errorDiv = document.getElementById('error');
+let successDiv = document.getElementById('success');
 
 if (editProfileForm) {
     editProfileForm.addEventListener('submit', async (event) => {
@@ -16,6 +17,9 @@ if (editProfileForm) {
       let profilePicture = document.getElementById('profilePicture').value;
       try {
         validateEdit(username, email, biography, riotId, region, preferredRoles, profilePicture);
+        errorDiv.hidden = true;
+        successDiv.hidden = false;
+        successDiv.innerHTML = 'Attempting to edit profile...';
         const response = await fetch(editProfileForm.action, {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
@@ -34,11 +38,10 @@ if (editProfileForm) {
           window.location.href = `/users/profile/${data.userId}`;
         } else {
           const data = await response.json();
-          throwError(data.error,errorDiv);
+          throwError(data.error,errorDiv,successDiv);
         }
       } catch (e) {
-        throwError(e,errorDiv);
-        return;
+        throwError(e,errorDiv,successDiv);
       }
     });
   }

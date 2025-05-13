@@ -1,5 +1,5 @@
 import helpers from './helpers.js';
-const { checkString, checkStringArray, checkStringWithLength } = helpers;
+const { checkString, checkStringArray, checkStringWithLength} = helpers;
 
 const validateName = (name, varname) => {
     name = checkString(name, varname);
@@ -92,5 +92,28 @@ const validateLogin = (username, password) => {
     return username, password;
 }
 
-export { validateRegistration, validateTeam, validateLogin, validateEdit }
+const validatePost = (image,title, content, tags) => {
+    if (typeof image === 'string' && image.trim() !== '') {
+        image = checkString(image, "image");
+    }
+    title = checkString(title, "title");
+    checkStringWithLength(title, 2, 60, /^.+$/, "title");
+    content = checkString(content, "content");
+    checkStringWithLength(content, 2, 1000, /^.+$/, "content");
+    
+    // Handle tags validation
+    if (tags) {
+        if (typeof tags === 'string') {
+            tags = tags.split(',').map(tag => tag.trim()).filter(tag => tag !== '');
+        }
+        
+        for (const tag of tags) {
+            checkStringWithLength(tag, 2, 20, /^[a-zA-Z]+$/, "tag");
+        }
+    }
+
+    return {image,title, content, tags};
+}
+
+export { validateRegistration, validateTeam, validateLogin, validateEdit, validatePost }
 

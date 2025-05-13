@@ -148,6 +148,30 @@ async function handleFormSubmit(form, data, successRedirect) {
   }
 }
 
+const validatePost = (image,title, content, tags) => {
+  if (typeof image === 'string' && image.trim() !== '') {
+      image = checkString(image, "image");
+  }
+  title = checkString(title, "title");
+  checkStringWithLength(title, 2, 60, /^.+$/, "title");
+  content = checkString(content, "content");
+  checkStringWithLength(content, 2, 1000, /^.+$/, "content");
+  
+  // Handle tags validation
+  if (tags) {
+      let tagsArray;
+      if (typeof tags === 'string') {
+          tagsArray = tags.split(',').map(tag => tag.trim()).filter(tag => tag !== '');
+      }
+      
+      for (const tag of tagsArray) {
+          checkStringWithLength(tag, 2, 20, /^[a-zA-Z]+$/, "tag");
+      }
+  }
+
+  return {image,title, content, tags};
+}
+
 export { 
   checkString,
   validateRegistration, 
@@ -155,5 +179,6 @@ export {
   validateLogin, 
   validateEdit, 
   throwError,
-  handleFormSubmit 
+  handleFormSubmit,
+  validatePost
 };

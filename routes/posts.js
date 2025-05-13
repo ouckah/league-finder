@@ -4,19 +4,20 @@ import { createPost, getAllPosts, getPost,editPost, deletePost } from '../data/p
 import { getPostComments, deletePostComments } from '../data/comments.js';
 import { protectedRoute} from '../utils/middleware.js';
 import helpers from '../utils/helpers.js';
-
+import { validatePost } from '../utils/validation.js';
 const createPostHandler = async (req, res) => {
-  const { title, content, image, tags } = req.body;
+  let { title, content, image, tags } = req.body;
   const userId = req.user.userId;
 
   // TODO validate inputs
+  ({image, title, content, tags } = validatePost(image,title, content, tags));
 
   const response = await createPost(
     userId,
     image,
     title,
     content,
-    tags?.split(',').map(tag => tag.trim()).filter(tag => tag !== '')
+    tags
   )
 
   if (!response.postCreated) {
@@ -115,20 +116,21 @@ router
       return res.status(400).json({ error: e.message });
     }
 
-    const { title, content, image, tags } = req.body;
+    let { title, content, image, tags } = req.body;
+    ({image, title, content, tags } = validatePost(image,title, content, tags));
     try {
       const response = await editPost(
         req.params.id,
         image,
         title,
         content,
-        tags?.split(',').map(tag => tag.trim()).filter(tag => tag !== '')
+        tags
       )
     } catch (e) {
-      return res.status(400).render('error', { error: "Failed to update post." });
+      return res.status(400).json({ error: "Failed to update post." });
     }
-
-    return res.redirect(`/posts/${req.params.id}`);
+    console.log("ig got here 2");
+    return res.status(200).json({postId: req.params.id});
   });
 
 
