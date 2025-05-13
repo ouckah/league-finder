@@ -30,35 +30,38 @@
 
 
   <h3 id="teams-owner" name="teams-owner">Owner</h3>
-  <p id="teams-ownerItem">{{owner}}</p>
+  <a href="/users/profile/{{owner.id}}" id="teams-ownerItem">{{owner.username}}</a>
 
-  <h3 id="teams-members" name="teams-members">Members</h3>
-  <ul id="teams-membersList" class="team-membersList">
+  <h3 id="teams-members" name="teams-members">members</h3>
+  <ul id="teams-memberslist" class="team-memberslist">
     {{#each members}}
-    <li id="teams-membersItem">{{this}}</li>
+    <li id="teams-membersitem"><a href="/users/profile/{{this.id}}">{{this.username}}</a></li>
     {{/each}}
   </ul>
 
-  <p id="teams-description">Description: {{team.description}}</p>
-
-  <h3 id="teams-chatHeader" name="teams-chatHeader">Chat</h3>
-  <ul id="teams-chatList" class="teams-chatList">
-    {{#each messages}}
-    <li id="teams-chatItem">{{this}}</li>
-    {{/each}}
-  </ul>
+  <p id="teams-description">description: {{team.description}}</p>
 
   {{#if ismember}}
-  <form action="/teams/{{team._id}}/chat" method="POST" id="teams-chatForm">
-    <textarea name="teamsMessage" id="teamsMessage"></textarea>
-    <button type="submit">Send</button>
+  <h3 id="teams-chatheader" name="teams-chatheader">chat</h3>
+  <ul id="teams-chatlist" class="teams-chatlist">
+    {{#each messages}}
+    <li id="teams-chatitem">{{this}}</li>
+    {{/each}}
+  </ul>
+
+  <form action="/teams/{{team._id}}/chat" method="post" id="teams-chatform">
+    <textarea name="teamsmessage" id="teamsmessage"></textarea>
+    <button type="submit">send</button>
   </form>
   {{/if}}
 
   <p id="error"></p>
 
   {{#if joinable}}
-  <a href="/teams/{{team._id}}/join">Request to Join</a>
+  <a href="/teams/{{team._id}}/join">request to join</a>
+  {{/if}}
+  {{#if requested}}
+  <p>You have already requested to join!</p>
   {{/if}}
 
   {{#if leavable}}
