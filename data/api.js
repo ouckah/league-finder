@@ -16,8 +16,12 @@ const API_KEY = process.env.RIOT_API_KEY;
 const getPuuid = async (summonerName, tagline, region) => {
     // Currently only have NA region, need to add other region codes
     let regionUrl = region
-    if (region == "NA") {
+    if (region === "NA") {
         regionUrl = "americas"
+    } else if (region === "KR") {
+        regionUrl = "asia"
+    } else if (region === "EUW") {
+        regionUrl = "europe"
     }
     const headers = { "X-Riot-Token": API_KEY };
     const puuidUrl = `https://${regionUrl}.api.riotgames.com/riot/account/v1/accounts/by-riot-id/${summonerName}/${tagline}`;
@@ -43,8 +47,12 @@ const getPuuid = async (summonerName, tagline, region) => {
  */
 const getRank = async (puuid, region) => {
     let regionUrl = region
-    if (region == "NA") {
+    if (region === "NA") {
         regionUrl = "na1"
+    } else if (region === "KR") {
+        regionUrl = "kr"
+    } else if (region === "EUW") {
+        regionUrl = "euw1"
     }
     const headers = { "X-Riot-Token": API_KEY };
     const rankUrl = `https://${regionUrl}.api.riotgames.com/lol/league/v4/entries/by-puuid/${puuid}`;
@@ -57,7 +65,7 @@ const getRank = async (puuid, region) => {
         let rank = "";
         let lp = 0;
         for (const entry of response.data) {
-            if (entry.queueType == "RANKED_SOLO_5x5") {
+            if (entry.queueType === "RANKED_SOLO_5x5") {
                 tier = entry.tier;
                 if (tier === "MASTER" || tier === "GRANDMASTER" || tier === "CHALLENGER") {
                     rank = "";
@@ -93,8 +101,12 @@ const getRank = async (puuid, region) => {
  */
 const getWinLoss = async (puuid, region) => {
     let regionUrl = region
-    if (region == "NA") {
+    if (region === "NA") {
         regionUrl = "na1"
+    } else if (region === "KR") {
+        regionUrl = "kr"
+    } else if (region === "EUW") {
+        regionUrl = "euw1"
     }
     const headers = { "X-Riot-Token": API_KEY };
     const playerInfoUrl = `https://${regionUrl}.api.riotgames.com/lol/league/v4/entries/by-puuid/${puuid}`;
@@ -102,7 +114,7 @@ const getWinLoss = async (puuid, region) => {
         const response = await axios.get(playerInfoUrl, { headers });
 
         for (const entry of response.data) {
-            if (entry.queueType == "RANKED_SOLO_5x5") {
+            if (entry.queueType === "RANKED_SOLO_5x5") {
                 const wins = entry.wins;
                 const losses = entry.losses;
                 const wr = ((wins / (wins + losses)) * 100).toFixed(2);
@@ -127,7 +139,7 @@ const getWinLoss = async (puuid, region) => {
  */
 const getMatchIds = async (puuid, count, region) => {
     let regionUrl = region;
-    if (region == "NA") {
+    if (region === "NA") {
         regionUrl = "americas";
     }
     const headers = { "X-Riot-Token": API_KEY };
@@ -148,8 +160,12 @@ const getMatchIds = async (puuid, count, region) => {
  */
 const getMatchData = async (puuid, matchId, region) => {
     let regionUrl = region;
-    if (region == "NA") {
-        regionUrl = "americas";
+    if (region === "NA") {
+        regionUrl = "americas"
+    } else if (region === "KR") {
+        regionUrl = "asia"
+    } else if (region === "EUW") {
+        regionUrl = "europe"
     }
     const headers = { "X-Riot-Token": API_KEY };
     const matchUrl = `https://${regionUrl}.api.riotgames.com/lol/match/v5/matches/${matchId}`;
@@ -199,8 +215,12 @@ const getRecentMatches = async (puuid, count, region) => {
  */
 const getMostPlayedChampions = async (puuid, region) => {
     let regionUrl = region;
-    if (region == "NA") {
-        regionUrl = "na1";
+    if (region === "NA") {
+        regionUrl = "na1"
+    } else if (region === "KR") {
+        regionUrl = "kr"
+    } else if (region === "EUW") {
+        regionUrl = "euw1"
     }
     const headers = { "X-Riot-Token": API_KEY };
     const topChampsUrl = `https://${regionUrl}.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-puuid/${puuid}/top?count=3`;
