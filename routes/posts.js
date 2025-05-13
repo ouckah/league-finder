@@ -2,6 +2,7 @@ import {Router} from 'express';
 const router = Router();
 import { createPost, getAllPosts, getPost,editPost, deletePost, searchPosts } from '../data/posts.js';
 import { getPostComments, deletePostComments } from '../data/comments.js';
+import { getFriends } from '../data/friends.js';
 import { protectedRoute} from '../utils/middleware.js';
 import helpers from '../utils/helpers.js';
 import { validatePost } from '../utils/validation.js';
@@ -30,12 +31,20 @@ router
   .route('/')
   .get(async (req, res) => {
     const posts = await getAllPosts();
+    
+    if (req.session.user) {
+      const friends = await getFriends(req.session.user.userId);
+      const friendIds = friends.map(f => f.friendId);
+
+      posts.sort((a, b) => friendIds.includes(b.userId) - friendIds.includes(a.userId));
+    }
+
     let returnedPosts = posts;
     if (req.query.postsSearch) {
       returnedPosts = await searchPosts(req.query.postsSearch);
     }
     
-    res.render('posts/posts', { 
+    res.render('posts/posts', {
       posts: returnedPosts,
       userId: req.session.user?.userId,
       title: 'Posts'

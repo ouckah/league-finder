@@ -1,5 +1,5 @@
 import helpers from './helpers.js';
-const { checkString, checkStringArray, checkStringWithLength} = helpers;
+const { checkString, checkStringArray, checkStringWithLength, checkId} = helpers;
 
 const validateName = (name, varname) => {
     name = checkString(name, varname);
@@ -116,9 +116,9 @@ const validatePost = (image,title, content, tags) => {
 }
 
 const validateComment = (postId, content) => {
-    postId = helpers.checkId(postId, "postId");
-    content = helpers.checkString(content, "content");
-    helpers.checkStringWithLength(content, 2, 1000, /^.+$/, "content");
+    postId = checkId(postId, "postId");
+    content = checkString(content, "content");
+    checkStringWithLength(content, 2, 1000, /^.+$/, "content");
   
     return {postId,content};
 }
