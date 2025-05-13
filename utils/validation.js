@@ -115,5 +115,13 @@ const validatePost = (image,title, content, tags) => {
     return {image,title, content, tags};
 }
 
-export { validateRegistration, validateTeam, validateLogin, validateEdit, validatePost }
+const validateComment = (postId, content) => {
+    postId = helpers.checkId(postId, "postId");
+    content = helpers.checkString(content, "content");
+    helpers.checkStringWithLength(content, 2, 1000, /^.+$/, "content");
+  
+    return {postId,content};
+}
+
+export { validateRegistration, validateTeam, validateLogin, validateEdit, validatePost, validateComment }
 

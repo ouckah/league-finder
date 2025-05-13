@@ -31,9 +31,11 @@ const createComment = async (
     
     const insertInfo = await commentCollection.insertOne(newComment);
     if (insertInfo.insertedId) {
-        return true; // return the inserted comment or comment id idk
+        newComment._id = insertInfo.insertedId;
+        return newComment;
+    } else{
+        throw 'Failed to create comment';
     }
-    throw 'Failed to create comment';
 }   
 
 const likeComment = async (
