@@ -15,7 +15,7 @@ const post2 = {
 }
 
 const post3 = {
-    image: 'https://static.wikia.nocookie.net/multiversology/images/f/f2/Azir_Base.jpg/revision/latest?cb=20210308181658',
+    image: 'https://static.wikia.nocookie.net/leagueoflegends/images/d/d6/Azir_Render.png/revision/latest?cb=20231105071801',
     title: 'Azir Buffed',
     content: 'Azir has received a buff in the latest patch, making him a more viable pick in the current meta. Players are excited to see how this will affect his performance in the game.',
     tags: ['gaming', 'esports', 'azir'],

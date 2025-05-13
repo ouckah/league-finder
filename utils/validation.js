@@ -7,8 +7,8 @@ const sanitizeInput = (input) => {
     if (typeof input === 'string') {
         return xss(input);
     } else if (Array.isArray(input)) {
-        for (let input of inputs) {
-            input = sanitizeInput(input);
+        for (let i of input) {
+            i= sanitizeInput(i);
         }
     }
     return input;

@@ -2,7 +2,7 @@ import {Router} from 'express';
 const router = Router();
 import { validateComment } from '../utils/validation.js';
 import { protectedRoute} from '../utils/middleware.js';
-import { createComment, likeComment } from '../data/comments.js';
+import { createComment } from '../data/comments.js';
 
 router
   .route('/')
