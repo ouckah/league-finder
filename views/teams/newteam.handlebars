@@ -1,10 +1,11 @@
-<p id = "error">{{errorMessage}}</p>
-<p id = "success" hidden></p>
+<p id="error">{{errorMessage}}</p>
+<p id="success" hidden></p>
 
-<form id="newteams-form" name="newteam-form" action="/teams" method="POST">
-    <label for="title">Title:</label>
-    <input type="text" id="title" name="title">
-    <br>
+<form id="newteams-form" name="newteam-form" class="newteam-form" action="/teams" method="POST">
+    <div class="form-group">
+        <label for="title">Team Name:</label>
+        <input type="text" id="title" name="title">
+    </div>
 
     <fieldset id="desiredRoles">
         <legend>Desired Roles</legend>
@@ -84,21 +85,23 @@
         </label>
     </fieldset>
 
-    <label for="region">Region:</label>
-    <select name="region" id="region">
-        <option value="na">NA</option>
-        <option value="eu">EU</option>
-        <option value="kr">KR</option>
-        <option value="sea">SEA</option>
-        <option value="cn">CN</option>
-        <option value="au">AU</option>
-    </select>
-    <br>
+    <div class="form-group">
+        <label for="region">Region:</label>
+        <select name="region" id="region">
+            <option value="na">NA</option>
+            <option value="eu">EU</option>
+            <option value="kr">KR</option>
+            <option value="sea">SEA</option>
+            <option value="cn">CN</option>
+            <option value="au">AU</option>
+        </select>
+    </div>
 
-    <label for="description">Description:</label>
-    <textarea id="description" name="description" rows="4" cols="50"></textarea>
+    <div class="form-group">
+        <label for="description">Description:</label>
+        <textarea id="description" name="description" rows="4" cols="50"></textarea>
+    </div>
     <br>
-
     <button type="submit" id="submitButton" name="submitButton" class="new-team">Sign Up</button>
 </form>
 
@@ -107,4 +110,3 @@
 <a href="/">Home Page</a>
 
 <script type="module" src="/public/js/teams/newteams.js"></script>
-
