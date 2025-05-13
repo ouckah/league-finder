@@ -206,42 +206,44 @@ router.route('/:id/accept').patch(async (req, res) => {
 	helpers.checkId(teamId);
 	helpers.checkId(userId);
     } catch (e) {
-	return res.status(400).render('error', {error: e.message});
+	return res.status(400).json({error: e.message});
     }
 
     const team = await teamData.getTeam(teamId);
     if (!team) {
-	res.status(404).render('error', {error: 'Team not found'});
+	res.status(404).json({error: 'Team not found'});
 	return;
     }
 
     if (!req.session.user) {
-	res.status(401).render('error', {error: 'You must be logged in to accept a request'});
+	res.status(401).json({error: 'You must be logged in to accept a request'});
     }
     const principal = req.session.user.userId;
 
     if (principal!= team.owner) {
-	res.status(403).render('error', {error: 'You are not the owner of this team'});
+	res.status(403).json({error: 'You are not the owner of this team'});
 	return;
     }
 
     if (team.members.includes(userId)) {
-	res.status(400).render('error', {error: 'This user is already a member of this team'});
+	res.status(400).json({error: 'This user is already a member of this team'});
 	return;
     }
 
-    try { await teamData.acceptTeamJoinRequest(teamId, userId);
+    try { 
+	await teamData.acceptTeamJoinRequest(teamId, userId);
     } catch (e) {
-	res.status(400).render('error', {error: e.message});
+	res.status(400).json({error: e.message});
+	return;
     }
+    return res.status(200).json({teamId: teamId});
 
-    res.redirect(`/teams/${teamId}`);
 })
 
 router.route('/:id/kick').patch(async (req, res) => {
     const teamId = req.params.id;
     if(!req.body.members) {
-	return res.status(400).render('error', {error: 'userId is required'});
+	return res.status(400).json({error: 'userId is required'});
     }
     const userId = req.body.members;
 
@@ -249,40 +251,41 @@ router.route('/:id/kick').patch(async (req, res) => {
 	helpers.checkId(teamId);
 	helpers.checkId(userId);
     } catch (e) {
-	return res.status(400).render('error', {error: e.message});
+	return res.status(400).json({error: e.message});
     }
 
     const team = await teamData.getTeam(teamId);
     if (!team) {
-	res.status(404).render('error', {error: 'Team not found'});
+	res.status(404).json({error: 'Team not found'});
 	return;
     }
 
     if (!req.session.user) {
-	res.status(401).render('error', {error: 'You must be logged in to kick a user'});
+	res.status(401).json({error: 'You must be logged in to kick a user'});
     }
     const principal = req.session.user.userId;
 
     if (principal != team.owner) {
-	res.status(403).render('error', {error: 'You are not the owner of this team'});
+	res.status(403).json({error: 'You are not the owner of this team'});
 	return;
     }
 
     if (!team.members.includes(userId)) {
-	res.status(400).render('error', {error: 'This user is not a member of this team'});
+	res.status(400).json({error: 'This user is not a member of this team'});
 	return;
     }
 
     if (userId === team.owner) {
-	res.status(400).render('error', {error: 'You cannot kick the owner of this team'});
+	res.status(400).json({error: 'You cannot kick the owner of this team'});
+	return
     }
 
     try { await teamData.removeUserFromTeam(teamId, userId);
     } catch (e) {
-	res.status(400).render('error', {error: e.message});
+	res.status(400).json({error: e.message});
+	return
     }
-
-    res.redirect(`/teams/${teamId}`);
+    return res.status(200).json({teamId: teamId});
 })
 
 router.route('/:id/admin').get(async (req, res) => {

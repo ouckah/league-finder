@@ -5,18 +5,28 @@
   <ul>
     {{#each team.desiredRank}}
     <li id="teams-desiredRankItem">{{this}}</li>
-    {{/each}}
-  </ul>
+  {{/each}}
+</ul>
+{{#unless team.desiredRank.length}}
+<p>No Desired Rank</p>
+{{/unless}}
 
   <h3 id="teams-desiredRole" name="teams-desiredRole">Desired Role</h3>
   <ul>
     {{#each team.desiredRole}}
     <li id="teams-desiredRoleItem">{{this}}</li>
-    {{/each}}
-  </ul>
+  {{/each}}
+</ul>
+{{#unless team.desiredRole.length}}
+<p>No Desired Role</p>
+{{/unless}}
 
-  <h3 id="teams-region" name="teams-region">Region</h3>
-  <p id="teams-regionItem">{{team.region}}</p>
+
+<h3 id="teams-region" name="teams-region">Region</h3>
+<p id="teams-regionItem">{{team.region}}</p>
+{{#unless team.region}}
+<p>No Desired Region</p>
+{{/unless}}
 
 
   <h3 id="teams-owner" name="teams-owner">Owner</h3>

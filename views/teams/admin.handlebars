@@ -1,26 +1,31 @@
 <h1 id="team-admin" class="team-admin">Admin Page</h1>
 
 <h3 id="requests">User Requests</h3>
-<form action="/teams/{{team._id}}/accept" method="POST">
+<form action="/teams/{{team._id}}/accept" method="PATCH" id="teamsRequestForm">
 <input type="hidden" name="_method" value="PATCH">
   {{#each requests}}
     <label>
       {{this.username}}
-      <input type="radio" name="requests" value="{{this.id}}">
-    </label>
+      <input type="radio" name="teamsRequests" id="teamsRequests" value="{{this.id}}">
+    </label><br>
   {{/each}}
   <button type="submit">Accept Selected</button>
 </form>
 
 <h3 id="kick">Kick Users</h3>
-<form action="/teams/{{team._id}}/kick" method="POST">
+<form action="/teams/{{team._id}}/kick" method="PATCH" id="teamsKickForm">
 <input type="hidden" name="_method" value="PATCH">
   {{#each members}}
     <label>
       {{this.username}}
-      <input type="radio" name="members" value="{{this.id}}">
-    </label>
+      <input type="radio" name="teamsMembers" id="teamsMembers" value="{{this.id}}">
+    </label><br>
   {{/each}}
   <button type="submit">Kick Selected</button>
 </form>
+
+<p id="error">{{errorMessage}}</p>
+<p id="success" hidden></p>
+
+<script type="module" src="/public/js/teams/admin.js"></script>
 
