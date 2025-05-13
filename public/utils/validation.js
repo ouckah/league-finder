@@ -102,7 +102,7 @@ const validateTeam = (
   checkString(description, 'description');
 }
 
-async function validateEdit (username, email, biography, riotId, region, preferredRoles, profilePicture) {
+async function validateEdit(username, email, biography, riotId, region, preferredRoles, profilePicture) {
   username = validateUsername(username, "username");
   email = validateEmail(email, "email");
   if (typeof biography !== 'string') {
@@ -113,8 +113,6 @@ async function validateEdit (username, email, biography, riotId, region, preferr
   }
   if (riotId.length > 0) {
     checkStringWithLength(riotId, 3, 22, /^.{1,16}#.{1,5}$/, 'Riot ID');
-    const riotName = riotId.split('#');
-    const puuid = await riotAPI.getPuuid(riotName[0], riotName[1], region);
   }
   if (typeof region !== 'string') {
     throw 'Region must be a string.';
@@ -184,7 +182,7 @@ const validateComment = (postId, content) => {
   content = checkString(content, "content");
   checkStringWithLength(content, 2, 1000, /^.+$/, "content");
 
-  return {postId,content};
+  return { postId, content };
 }
 
 export {

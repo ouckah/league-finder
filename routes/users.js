@@ -173,6 +173,10 @@ router
     let { username, email, biography, riotId, region, preferredRoles, profilePicture } = req.body;
     try {
       await validation.validateEdit(username, email, biography, riotId, region, preferredRoles, profilePicture);
+      if (riotId.length > 0) {
+        const riotName = riotId.split('#');
+        const puuid = await getPuuid(riotName[0], riotName[1], region);
+      }
       const updateUser = await editUser(req.session.user.userId, username, email, biography, riotId, region, preferredRoles, profilePicture);
       return res.status(200).json({ userId: req.session.user.userId });
     } catch (e) {

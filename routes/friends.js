@@ -144,8 +144,7 @@ const renderNotificationsPage = async (req, res) => {
 const renderFriendsPage = async (req, res) => {
   const owner = req.session.user.userId
   const friends = await friendsData.getFriends(owner)
-
-  res.render('friends/friends', { acceptedFriends: friends, title: owner.username + "'s Friends" })
+  res.render('friends/friends', { acceptedFriends: friends, title: "Friends" })
 }
 
 router. 
