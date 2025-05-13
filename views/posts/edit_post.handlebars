@@ -1,6 +1,7 @@
 <h2>Edit your Post</h2>
 
-<p id="error">{{errorMessage}}</p>
+<p id = "error">{{errorMessage}}</p>
+<p id = "success" hidden></p>
 
 <form id="editpost-form" name="editpost-form" action="/posts/{{post._id}}/edit" method="POST">
   <input type="hidden" name="_method" value="PATCH">

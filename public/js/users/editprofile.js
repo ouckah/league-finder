@@ -30,7 +30,8 @@ if (editProfileForm) {
           })
         });
         if (response.ok) {
-          window.location.href = '/';
+          const data = await response.json();
+          window.location.href = `/users/profile/${data.userId}`;
         } else {
           const data = await response.json();
           throwError(data.error,errorDiv);

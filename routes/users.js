@@ -141,8 +141,6 @@ router
   .route('/profile/:id/edit')
   .all(protectedRoute)
   .get(async (req, res) => {
-    // editing profile... 
-
     try {
       req.params.id = helpers.checkId(req.params.id.toString(), "id");
     } catch (e) {
@@ -152,7 +150,7 @@ router
     try {
       const user = await getUser(req.params.id);
 
-      res.render('users/editprofile', { title: user.username + "Edit Your Profile" }); // render the profile page with the user data
+      res.render('users/editprofile', { title: user.username + "Edit Your Profile", user}); // render the profile page with the user data
     } catch (e) {
       return res.status(400).render('users/editprofile', { title: "Edit Profile", errorMessage: e });
     }
@@ -168,6 +166,7 @@ router
     }
     let { username, email, biography, riotId, region, preferredRoles, profilePicture } = req.body;
     try {
+      validation.validateEdit(username, email, biography, riotId, region, preferredRoles, profilePicture);
       // Checks if provided riotId is real.
       if (riotId.length > 0) {
         helpers.checkStringWithLength(riotId, 3, 22, /^.{1,16}#.{1,5}$/);
@@ -175,7 +174,7 @@ router
         const puuid = await getPuuid(riotName[0], riotName[1], region);
       }
       const updateUser = await editUser(req.session.user.userId, username, email, biography, riotId, region, preferredRoles, profilePicture);
-      return res.status(200).json({ message: 'User updated successfully' });
+      return res.status(200).json({ userId: req.session.user.userId });
     } catch (e) {
       return res.status(500).json({ error: e });
     }
