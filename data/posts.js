@@ -187,7 +187,7 @@ const searchPosts = async (search) => {
     const allPosts = await getAllPosts();
     const options = {
 	includeScore: true,
-	keys: ['title', 'description']
+	keys: ['title', 'content']
     }
 
     const searchTerm = search;

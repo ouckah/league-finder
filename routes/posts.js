@@ -1,6 +1,6 @@
 import {Router} from 'express';
 const router = Router();
-import { createPost, getAllPosts, getPost,editPost, deletePost } from '../data/posts.js';
+import { createPost, getAllPosts, getPost,editPost, deletePost, searchPosts } from '../data/posts.js';
 import { getPostComments, deletePostComments } from '../data/comments.js';
 import { protectedRoute} from '../utils/middleware.js';
 import helpers from '../utils/helpers.js';
@@ -30,9 +30,13 @@ router
   .route('/')
   .get(async (req, res) => {
     const posts = await getAllPosts();
+    let returnedPosts = posts;
+    if (req.query.postsSearch) {
+      returnedPosts = await searchPosts(req.query.postsSearch);
+    }
     
     res.render('posts/posts', { 
-      posts,
+      posts: returnedPosts,
       userId: req.session.user?.userId
     });
   })

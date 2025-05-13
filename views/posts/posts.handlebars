@@ -5,6 +5,12 @@
     <a href="/posts/new" class="new-post">New Post</a>
 {{/if}}
 
+<form action="/posts" method="GET">
+  <label for="q">Search:</label>
+  <input type="text" id="postsSearch" name="postsSearch" placeholder="Search for a team!">
+  <button type="submit" id="posts-searchSubmit" class="posts-searchSubmit">Search</button>
+</form>
+
 {{#if message}}
     <p id="message">{{message}}</p>
 {{/if}}
