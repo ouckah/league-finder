@@ -294,7 +294,7 @@ router.route('/:id/kick').patch(async (req, res) => {
     return res.status(200).json({ teamId: teamId });
 })
 
-router.route('/:id/admin').get(async (req, res) => {
+router.route('/:id/admin').all(protectedRoute).get(async (req, res) => {
     const teamId = req.params.id;
     try {
 	helpers.checkId(teamId);
@@ -342,7 +342,7 @@ router.route('/:id/admin').get(async (req, res) => {
 
 router.route('/:id/chat').post(async (req, res) => {
     const teamId = req.params.id;
-    const message = req.body.teamsMessage;
+    const message = req.body.teamsmessage;
 
     if (!message) {
 	return res.status(400).render('error', { error: 'Message is required', title: 'Error' });
