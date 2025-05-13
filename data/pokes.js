@@ -29,7 +29,7 @@ const getPokes = async (userId) => {
 
   const populatedPokesList = await Promise.all(
     pokesList.map(async (poke) => {
-      const sender = await usersCollection.findOne({ _id: new ObjectId(poke.senderId) });
+      const sender = await usersCollection.findOne({ _id: new ObjectId(poke.pokerId) });
 
       return {
         ...poke,

@@ -39,7 +39,7 @@
     {{/each}}
   </ul>
 
-  <p id="teams-description">description: {{team.description}}</p>
+  <p id="teams-description">Description: {{team.description}}</p>
 
   {{#if ismember}}
   <h3 id="teams-chatheader" name="teams-chatheader">chat</h3>
@@ -58,7 +58,7 @@
   <p id="error"></p>
 
   {{#if joinable}}
-  <a href="/teams/{{team._id}}/join">request to join</a>
+  <a href="/teams/{{team._id}}/join">Request to Join</a>
   {{/if}}
   {{#if requested}}
   <p>You have already requested to join!</p>

@@ -7,7 +7,6 @@ let success = document.getElementById('success');
 if (teamForm) {
     teamForm.addEventListener('submit', async (event) => {
 	event.preventDefault();
-	console.log("1");
 	let title = document.getElementById('title').value;
 
 	// Not sure how we want to handle this. This works for now but it depends on how new team handblebars is done

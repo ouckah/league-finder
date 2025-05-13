@@ -28,7 +28,6 @@ if (editPostForm) {
             tags
           })
         });
-        console.log(response);
         if (response.ok) {
           const data = await response.json();
           window.location.href = `/posts/${data.postId}`;

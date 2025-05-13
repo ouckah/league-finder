@@ -134,7 +134,6 @@ router
     } catch (e) {
       return res.status(400).json({ error: "Failed to update post." });
     }
-    console.log("ig got here 2");
     return res.status(200).json({postId: req.params.id});
   });
 
