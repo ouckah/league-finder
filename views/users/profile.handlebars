@@ -6,7 +6,15 @@
   </form>
 </div>
 
-
+{{#if isOwner}}
+<div class="status-update">
+  <form id="status-form" method="POST" action="/users/profile/{{personalID}}/status">
+    <label for="status">Update Your Status:</label>
+    <input type="text" id="status" name="status" placeholder="e.g. Grinding ranked, away, etc." value="{{status}}">
+    <button type="submit">Save</button>
+  </form>
+</div>
+{{/if}}
 
 <div class="profile-container">
   <div class="profile-header">
@@ -97,3 +105,4 @@
 <script type="module" src="/public/js/friends/pokes.js"></script>
 <script type="module" src="/public/js/reputation.js"></script>
 <script type="module" src="/public/js/friends/friends.js"></script>
+<script type="module" src="/public/js/friends/status.js"></script>

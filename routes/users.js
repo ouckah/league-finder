@@ -4,7 +4,7 @@ import helpers from '../utils/helpers.js';
 import * as validation from '../utils/validation.js';
 import * as friendData from '../data/friends.js'
 import { getPuuid, getWinLoss } from '../data/api.js';
-import { createUser, editUser, loginUser, deleteUser, getUser, getWR, getMatches,getUserByUsername} from '../data/users.js';
+import { createUser, editUser, editStatus, loginUser, deleteUser, getUser, getStatus, getWR, getMatches,getUserByUsername} from '../data/users.js';
 import { protectedRoute, unAuthRoute } from '../utils/middleware.js';
 import { deleteUserComments } from '../data/comments.js';
 import { deleteUserPosts } from '../data/posts.js';
@@ -137,7 +137,7 @@ router
         wr = await getWR(req.params.id)
         matches = await getMatches(req.params.id)
       }
-      res.render('users/profile', { title: user.username + "'s Profile", isLoggedIn: isLoggedIn, id: user._id, isOwner: isOwner, isFriend: isFriend, profilePicture: user.profilePicture, username: user.username, biography: user.biography, riotId: user.riotId, region: user.region, preferredRoles: user.preferredRoles, rank: user.rank, wr: wr, reputation: user.reputation, friends: friends, matches: matches }); 
+      res.render('users/profile', { title: user.username + "'s Profile", isLoggedIn: isLoggedIn, id: user._id, isOwner: isOwner, isFriend: isFriend, profilePicture: user.profilePicture, username: user.username, biography: user.biography, riotId: user.riotId, region: user.region, preferredRoles: user.preferredRoles, rank: user.rank, wr: wr, reputation: user.reputation, friends: friends, matches: matches, status: user.status }); 
     } catch (e) {
       return res.status(400).json({ error: e });
     }
@@ -181,6 +181,30 @@ router
       return res.status(200).json({ userId: req.session.user.userId });
     } catch (e) {
       return res.status(500).json({ error: e });
+    }
+  });
+
+router
+  .route('/profile/:id/status')
+  .get(async (req, res) => {
+    try {
+      const status = await getStatus(req.session.user.userId)
+      return res.status(200).json({ userId: req.session.user.userId, status })
+    } catch (e) {
+      return res.status(500).json({ error: e })
+    }
+  })
+  .post(async (req, res) => {
+    if (!req.body) {
+      return res.status(400).json({ error: 'Fields are not filled out.' });
+    }
+    let { status } = req.body;
+    try {
+      helpers.checkString(status)
+      await editStatus(req.session.user.userId, status);
+      res.redirect(`/users/profile/${req.session.user.userId}`);
+    } catch (e) {
+      return res.status(500).json({ error: e.message });
     }
   });
 

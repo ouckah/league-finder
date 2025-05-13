@@ -48,6 +48,7 @@ const createUser = async (
         rank: "",
         reputation: 0,
         friends: [], // default friends list
+        status: "", // default status for user
     };
 
     const insertInfo = await usersCollection.insertOne(newUser);
@@ -159,6 +160,24 @@ const editUser = async (
     }
 }
 
+const editStatus = async (userId, status) => {
+    userId = helpers.checkId(userId, 'userId');
+    status = helpers.checkString(status);
+
+    status = status.trim();
+
+    const usersCollection = await users();
+
+    const updateResult = await usersCollection.findOneAndUpdate(
+        { _id: new ObjectId(userId) },
+        { $set: { status } },
+      );
+    
+      if (!updateResult) {
+        throw new Error('User not found or status not updated.');
+      }
+}
+
 const deleteUser = async (userId) => {
     // Check id and delete user from database
     userId = helpers.checkId(userId, 'userId');
@@ -180,6 +199,11 @@ const getUser = async (userId) => {
     const user = await userCollection.findOne({ _id: new ObjectId(userId) });
     if (!user) throw 'User not found';
     return user;
+}
+
+const getStatus = async (userId) => {
+    const user = await getUser(userId)
+    return user.status
 }
 
 // might not need this, but maybe when searching for users by username
@@ -257,9 +281,11 @@ const getMatches = async (userId) => {
 export {
     createUser,
     editUser,
+    editStatus,
     loginUser,
     deleteUser,
     getUser,
+    getStatus,
     getRankData,
     getWR,
     getMatches,
