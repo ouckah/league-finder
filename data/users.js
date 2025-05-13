@@ -47,6 +47,7 @@ const createUser = async (
         rank: "",
         reputation: 0,
         friends: [], // default friends list
+        status: "", // default status for user
     };
 
     const insertInfo = await usersCollection.insertOne(newUser);
@@ -132,7 +133,7 @@ const editUser = async (
             riotId: riotId,
             region: region,
             preferredRoles: preferredRoles,
-            profilePicture: profilePicture
+            profilePicture: profilePicture || "https://cdn.discordapp.com/attachments/1338571359940382811/1371512930855555122/IMG_8009.jpg?ex=6824b9f4&is=68236874&hm=03fb58d812df4263de9349217398b23d303bb049c5c6e00b6739c60989238476&format=webp", // default profile picture
         };
         const updateInfo = await userCollection.updateOne(
             { _id: new ObjectId(userId) },
@@ -154,6 +155,24 @@ const editUser = async (
     } catch (e) {
         throw e;
     }
+}
+
+const editStatus = async (userId, status) => {
+    userId = helpers.checkId(userId, 'userId');
+    status = helpers.checkString(status);
+
+    status = status.trim();
+
+    const usersCollection = await users();
+
+    const updateResult = await usersCollection.findOneAndUpdate(
+        { _id: new ObjectId(userId) },
+        { $set: { status } },
+      );
+    
+      if (!updateResult) {
+        throw new Error('User not found or status not updated.');
+      }
 }
 
 const deleteUser = async (userId) => {
@@ -179,6 +198,10 @@ const getUser = async (userId) => {
     return user;
 }
 
+const getStatus = async (userId) => {
+    const user = await getUser(userId)
+    return user.status
+}
 
 const getUserByUsername = async (username) => {
     if (!username) throw 'You must provide a username';
@@ -254,9 +277,11 @@ const getMatches = async (userId) => {
 export {
     createUser,
     editUser,
+    editStatus,
     loginUser,
     deleteUser,
     getUser,
+    getStatus,
     getRankData,
     getWR,
     getMatches,
