@@ -608,7 +608,7 @@ button {
   text-align: center;
 }
 
-.teams-searchSubmit {
+.teams-searchSubmit, .posts-searchSubmit {
   display: block;
   margin: 0.5em auto;
   /* vertically 0.5em, horizontally auto‑centered */
