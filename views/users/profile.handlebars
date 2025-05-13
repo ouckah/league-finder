@@ -1,4 +1,4 @@
-<div class = "player-search">
+<div class="player-search">
   <form action="/users/profile" method="GET" class="search-form">
     <label for="username">Search for a user:</label>
     <input type="text" name="username" placeholder="Search for a user..." required>
@@ -6,25 +6,27 @@
   </form>
 </div>
 
-{{#if isFriend}}
-  <button id="poke-btn" data-user-id="{{id}}">Poke</button>
-{{/if}}
 
 
 <div class="profile-container">
   <div class="profile-header">
+    {{#if isLoggedIn}}
+    {{#if isFriend}}
+    <button id="poke-btn" data-user-id="{{id}}">Poke</button>
+    {{/if}}
     {{#if isOwner}}
     <a href="{{personalID}}/edit" class="edit-profile">Edit Profile</a>
     {{/if}}
     {{#unless isOwner}}
     <button class="friend-request" id="send-friend-request" data-friend-id="{{id}}">Send Friend Request</button>
-     <div class="reputation-actions">
+    <div class="reputation-actions">
       <button id="thumbs-up" data-user-id="{{id}}">👍</button>
       <button id="thumbs-down" data-user-id="{{id}}">👎</button>
     </div>
     <script type="module" src="/public/js/reputation.js"></script>
     {{/unless}}
-    
+    {{/if}}
+
     <div class="profile-picture-container">
       {{#if profilePicture}}
       <img src="{{profilePicture}}" alt="Profile Picture" class="profile-picture">
@@ -32,10 +34,10 @@
       <p class="no-picture">No profile picture provided.</p>
       {{/if}}
     </div>
-    
+
     <h1>{{username}}</h1>
   </div>
-  
+
   <div class="player-info">
     <div class="player-details">
       <p><strong>Biography:</strong> {{#if biography}}{{biography}}{{else}}No bio yet.{{/if}}</p>
@@ -50,7 +52,7 @@
         </div>
       </div>
     </div>
-    
+
     <div class="stats-container">
       <div class="stat-box">
         <div class="stat-label">Rank</div>
@@ -69,7 +71,7 @@
         <div class="stat-value">{{#if friends}}{{friends.length}}{{else}}0{{/if}}</div>
       </div>
     </div>
-    
+
     {{#if matches}}
     <div class="match-history">
       <h2>Match History</h2>

@@ -76,6 +76,7 @@ textarea,
 select {
   display: block;
   margin: 0 auto;
+  margin-bottom: 10px;
 }
 
 .introduction,
@@ -86,6 +87,7 @@ select {
 .newpost-form,
 #deletePostForm,
 #editpost-form {
+  background-color: white;
   border: 1px solid #ccc;
   border-radius: 8px;
   margin: 1rem auto 1.5rem;
@@ -95,6 +97,7 @@ select {
   box-shadow: 0 2px 4px rgba(0, 0, 0, .08);
   text-align: center;
 }
+
 
 label {
   display: block;
@@ -160,7 +163,9 @@ button {
 .form-group input[type="email"],
 .form-group input[type="password"],
 .form-group select,
-.form-group textarea {
+.form-group textarea,
+.form-group input
+#confirm {
   width: 100%;
   padding: 0.75rem;
   border: 1px solid #ddd;
@@ -216,6 +221,25 @@ button {
   text-decoration: none;
   text-align: center;
   transition: background-color 0.3s ease;
+}
+
+#poke-btn {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background-color: #4a90e2;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+#poke-btn:hover,
+#thumbs-up:hover,
+#thumbs-down:hover {
+  background-color: #357abd;
 }
 
 .cancel-button,
@@ -593,7 +617,8 @@ button {
 
 
 /* Posts css */
-.new-post {
+.new-post,
+.post-back {
   display: inline-block;
   background-color: #4a90e2;
   color: white;
@@ -605,7 +630,12 @@ button {
   transition: background-color 0.2s;
 }
 
-.new-post:hover {
+.post-back {
+  margin-left: 20px;
+}
+
+.new-post:hover,
+.post-back:hover {
   background-color: #357abd;
 }
 

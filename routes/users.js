@@ -110,6 +110,10 @@ router
     } catch (e) {
       return res.status(400).json({ error: e });
     }
+    let isLoggedIn = false;
+    if (req.session.user) {
+      isLoggedIn = true;
+    }
 
     let isOwner = false;
     // check if user is logged in
@@ -133,7 +137,7 @@ router
         wr = await getWR(req.params.id)
         matches = await getMatches(req.params.id)
       }
-      res.render('users/profile', { title: user.username + "'s Profile", id: user._id, isOwner: isOwner, isFriend: isFriend, profilePicture: user.profilePicture, username: user.username, biography: user.biography, riotId: user.riotId, region: user.region, preferredRoles: user.preferredRoles, rank: user.rank, wr: wr, reputation: user.reputation, friends: friends, matches: matches }); 
+      res.render('users/profile', { title: user.username + "'s Profile", isLoggedIn: isLoggedIn, id: user._id, isOwner: isOwner, isFriend: isFriend, profilePicture: user.profilePicture, username: user.username, biography: user.biography, riotId: user.riotId, region: user.region, preferredRoles: user.preferredRoles, rank: user.rank, wr: wr, reputation: user.reputation, friends: friends, matches: matches }); 
     } catch (e) {
       return res.status(400).json({ error: e });
     }
