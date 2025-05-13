@@ -1,4 +1,5 @@
-<h1>Notifications</h1>
+<div class="notification-container">
+  <h1>Notifications</h1>
 
 {{!-- Friend Requests --}}
 {{#if friendRequests.length}}
@@ -8,7 +9,7 @@
       <li class="friend-request-item">
         <div class="user-info">
           <img src="{{this.fromUser.profilePicture}}" alt="pfp" class="pfp" />
-          <span class="username">{{this.fromUser.username}}</span>
+          <a href="/users/profile/{{this.fromUser._id}}" class="notis"><span class="username">{{this.fromUser.username}}</span></a>
         </div>
         <div class="actions">
           <button class="accept-btn" data-requester-id="{{this.userId}}">Accept</button>
@@ -27,7 +28,7 @@
       <li class="poke-item">
         <div class="user-info">
           <img src="{{this.senderUser.profilePicture}}" alt="pfp" class="pfp" />
-          <span class="username">{{this.senderUser.username}}</span>
+          <a href="/users/profile/{{this.senderUser._id}}" class="notis"><span class="username">{{this.senderUser.username}}</span></a>
           <span class="poke-message">poked you to play!</span>
         </div>
         <div class="actions">
@@ -43,6 +44,7 @@
     <p>You have no new notifications.</p>
   {{/unless}}
 {{/unless}}
+</div>
 
 <script type="module" src="/public/js/friends/friendRequests.js"></script>
 <script type="module" src="/public/js/friends/pokes.js"></script>

@@ -155,7 +155,7 @@ const getFriendRequests = async (userId) => {
       const sender = await usersCollection.findOne({ _id: new ObjectId(req.userId) });
       return {
         ...req,
-        fromUser: sender ? { _id: sender._id, username: sender.username } : null,
+        fromUser: sender ? { _id: sender._id, username: sender.username, profilePicture: sender.profilePicture } : null,
       };
     })
   );
