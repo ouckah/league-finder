@@ -285,9 +285,16 @@ button {
   flex: 1;
 }
 
+.remove-friend-btn {
+  background-color: #e54343;
+}
+
+.remove-friend-btn:hover {
+  background-color: #d22f2f;
+}
+
 .submit-button:hover,
 #submit_button:hover,
-.remove-friend-btn:hover,
 .accept-btn:hover,
 .reject-btn:hover,
 .acknowledge-poke-btn:hover {
