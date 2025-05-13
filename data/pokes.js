@@ -78,9 +78,23 @@ const acknowledgePoke = async (userId, pokedId) => {
   }, { $set: { acknowledged: true } })
 }
 
+const clearPokes = async (userId) => {
+  helpers.checkId(userId)
+
+  const pokesCollection = await pokes()
+
+  await pokesCollection.deleteMany({
+    $or: [
+      { userId: userId },
+      { pokerId: userId }
+    ]
+  })
+}
+
 export {
   pokeUser,
   getPokes,
   getPokeStatus,
   acknowledgePoke,
+  clearPokes,
 }

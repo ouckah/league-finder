@@ -3,6 +3,7 @@ import { getUser } from './users.js';
 import { MongoNetworkTimeoutError, ObjectId } from 'mongodb';
 import helpers from '../utils/helpers.js';
 import { deletePostComments } from './comments.js';
+import Fuse from 'fuse.js';
 
 const createPost = async (
     userId,
@@ -182,4 +183,18 @@ const deleteUserPosts = async (
     };
 }
 
-export { createPost, getPost, getAllPosts, getUserPosts, editPost, deletePost, deleteUserPosts };
+const searchPosts = async (search) => {
+    const allPosts = await getAllPosts();
+    const options = {
+	includeScore: true,
+	keys: ['title', 'description']
+    }
+
+    const searchTerm = search;
+    const fuse = new Fuse(allPosts, options)
+    const searchResult = fuse.search(searchTerm);
+    const filteredResult = searchResult.filter(result => result.score < 0.5);
+    return filteredResult.map(result => result.item);
+}
+
+export { createPost, getPost, getAllPosts, getUserPosts, editPost, deletePost, deleteUserPosts, searchPosts };
