@@ -149,6 +149,7 @@ async function handleFormSubmit(form, data, successRedirect) {
 }
 
 export { 
+  checkString,
   validateRegistration, 
   validateTeam, 
   validateLogin, 

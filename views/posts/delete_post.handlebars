@@ -1,6 +1,7 @@
 <h2>Delete Post</h2>
 
 <p id = "error">{{errorMessage}}</p>
+<p id = "success">{{successMessage}}</p>
 
 <form action="/posts/{{postID}}/delete" id="deletePostForm" method="POST">
     <input type="hidden" name="_method" value="DELETE">

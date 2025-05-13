@@ -1,9 +1,9 @@
-<p id="error">{{errorMessage}}</p>
+<p id="error" hidden></p>
+<p id="success" hidden></p>
 
 <div class="edit-profile-container">
     <h3>Edit Profile</h3>
     <form id="edit-profile-form" action="/users/profile/{{personalID}}/edit" method="POST">
-        <input type="hidden" name="_method" value="PATCH">
         <div class="form-group">
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" value="{{user.username}}" required>
@@ -77,6 +77,9 @@
             <a href="/users/profile/{{personalID}}" class="cancel-button">Cancel</a>
         </div>
     </form>
+        <div class="delete-button">            
+            <a href="/users/profile/{{personalID}}/delete" class="delete-button">Delete Account</a>
+        </div>
 </div>
 
 <script type="module" src="/public/js/users/editprofile.js"></script>

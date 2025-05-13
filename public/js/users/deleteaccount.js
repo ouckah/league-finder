@@ -1,7 +1,8 @@
-import { throwError } from '../../utils/validation.js';
+import { throwError, checkString } from '../../utils/validation.js';
 
 let deleteAccountForm = document.getElementById('deleteAccountForm');
 let errorDiv = document.getElementById('error');
+let successDiv = document.getElementById('success');  
 
 
 // todo, fix this and the route(lowercase username not working)
@@ -9,29 +10,32 @@ if (deleteAccountForm) {
     deleteAccountForm.addEventListener('submit', async (event) => {
       event.preventDefault();
       let confirm = document.getElementById('confirm').value;
-  
-      if (!confirm) {
-        return; // handle empty confirmation 
-      }
-      
       try {
+        if (!confirm) {
+          throw 'Confirmation is required'; // handle empty confirmation 
+        }
+
+        confirm = checkString(confirm, 'confirm');
+
+        // Show success message before form submission
+        errorDiv.hidden = true;
+        successDiv.hidden = false;
+        successDiv.innerHTML = 'Deleting account...';
         const response = await fetch(deleteAccountForm.action, {
           method: 'DELETE',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {'Content-Type': 'application/json'},
           body: JSON.stringify({ confirm })
         });
-  
         if (response.ok) {
-          window.location.href = '/';  // Redirect after successful deletion
+          window.location.href = '/';
         } else {
-          const data = await response.json();
-          throwError('Bad Response: ' + data.error); // handle error message
-          return; // handle error message
+          const result = await response.json();
+          throw result.error;
         }
       } catch (e) {
-        throwError(e,errorDiv);
-        return; // handle error message
+        throwError(e,errorDiv,successDiv);
       }
     });
   }
+  
   
