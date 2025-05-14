@@ -9,6 +9,15 @@ const upvote = async (voterId, userId) => {
   const usersCollection = await users()
   const votesCollection = await votes()
 
+  const existingUpvote = await votesCollection.findOne({
+    voterId,
+    userId,
+    type: "upvote",
+  })
+  if (existingUpvote) {
+    return 0
+  }
+
   let change = 1;
 
   const result = await votesCollection.findOneAndDelete({
@@ -41,6 +50,15 @@ const downvote = async (voterId, userId) => {
 
   const usersCollection = await users()
   const votesCollection = await votes()
+
+  const existingDownvote = await votesCollection.findOne({
+    voterId,
+    userId,
+    type: "downvote",
+  })
+  if (existingDownvote) {
+    return 0
+  }
 
   let change = -1;
 

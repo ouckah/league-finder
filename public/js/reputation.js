@@ -2,7 +2,7 @@ const thumbsUpButton = document.getElementById('thumbs-up');
 const thumbsDownButton = document.getElementById('thumbs-down');
 
 if (thumbsUpButton || thumbsDownButton) {
-  let currentVote = 'none'; // 'none' | 'upvote' | 'downvote'
+  let currentVote = 'pending'; // 'none' | 'upvote' | 'downvote'
 
   const getReputationElement = () => {
     const statBoxes = document.querySelectorAll('.stat-box');
@@ -115,12 +115,14 @@ if (thumbsUpButton || thumbsDownButton) {
 
   if (thumbsUpButton) {
     thumbsUpButton.addEventListener('click', () => {
+      if (currentVote == "pending") return
       handleUpvoteClick(userId);
     });
   }
 
   if (thumbsDownButton) {
     thumbsDownButton.addEventListener('click', () => {
+      if (currentVote == "pending") return
       handleDownvoteClick(userId);
     });
   }
