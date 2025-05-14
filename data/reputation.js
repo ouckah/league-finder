@@ -1,7 +1,6 @@
 import {users, votes} from '../config/mongoCollections.js';
 import {MongoNetworkTimeoutError, ObjectId} from 'mongodb';
 import helpers from '../utils/helpers.js';
-import * as validation from '../utils/validation.js';
 
 const upvote = async (voterId, userId) => {
   helpers.checkId(voterId)

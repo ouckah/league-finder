@@ -5,7 +5,6 @@ let errorDiv = document.getElementById('error');
 let successDiv = document.getElementById('success');  
 
 
-// todo, fix this and the route(lowercase username not working)
 if (deleteAccountForm) {
     deleteAccountForm.addEventListener('submit', async (event) => {
       event.preventDefault();

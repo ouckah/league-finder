@@ -1,7 +1,6 @@
 import { posts } from '../config/mongoCollections.js';
 import { getUser } from './users.js';
 import { MongoNetworkTimeoutError, ObjectId } from 'mongodb';
-import helpers from '../utils/helpers.js';
 import { deletePostComments } from './comments.js';
 import Fuse from 'fuse.js';
 

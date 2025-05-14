@@ -21,14 +21,4 @@ router
 
   });
 
-/*
-router
-  .route('/')
-  .all(protectedRoute)
-  .post(async (req, res) => {
-  });
-*/
-
-
-
 export default router;

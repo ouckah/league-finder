@@ -21,10 +21,10 @@ const createPostHandler = async (req, res) => {
   )
 
   if (!response.postCreated) {
-    return res.render('posts/new_post', { error: "Failed to create post.", title: 'Failed Post Create' });
+    return res.status(400).json({ error: "Failed to create post." });
   }
 
-  return res.redirect('/posts');
+  return res.status(200).json({ message: "Post created successfully." });
 }
 
 router

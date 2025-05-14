@@ -1,7 +1,6 @@
 import {pokes, users} from '../config/mongoCollections.js';
 import {MongoNetworkTimeoutError, ObjectId} from 'mongodb';
 import helpers from '../utils/helpers.js';
-import * as validation from '../utils/validation.js';
 
 const pokeUser = async (pokerId, userId) => {
   helpers.checkId(pokerId)
