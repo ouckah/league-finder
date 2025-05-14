@@ -62,7 +62,7 @@ router
     try {
       req.params.id = helpers.checkId(req.params.id.toString(),"id");
     } catch (e) {
-      return res.status(400).json({ error: e.message });
+      return res.status(400).render('error', { error: e, title: 'Error' });
     }
     const postId = req.params.id;
     let post;
@@ -71,7 +71,7 @@ router
       post = await getPost(postId);
       comments = await getPostComments(postId);
     } catch (e) {
-      return res.status(400).json({ error: e.message });
+      return res.status(400).render('error', { error: e, title: 'Error' });
     }
 
     res.render('posts/view_post', { 
@@ -89,7 +89,7 @@ router
     try {
       req.params.id = helpers.checkId(req.params.id.toString(),"id");
     } catch (e) {
-      return res.status(400).json({ error: e.message });
+      return res.status(400).render('error', { error: e, title: 'Error' });
     }
     const postId = req.params.id;
     let post;
@@ -101,7 +101,7 @@ router
         return res.status(403).render('error', { error: "You don't have permission to edit this post.", title: 'Error' });
       }
     } catch (e) {
-      return res.status(400).json({ error: e.message });
+      return res.status(400).json({ error: e});
     }
 
     res.render('posts/edit_post', {title: "Edit Post", post});
