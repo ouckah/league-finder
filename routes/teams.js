@@ -13,16 +13,16 @@ router.route('/new')
     })
 
 router.route('/')
-    .all(protectedRoute)
     .post(async (req, res) => {
+	if(!req.session.user) {
+	    return res.status(401).json({ error: 'You must be logged in to create a team' });
+	}
+
+	const owner = req.session.user.userId;
 	if(!req.body.title) {
 	    return res.status(400).json({ error: 'Title is required' });
 	}
 	const title = req.body.title;
-	if(!req.session.user) {
-	    return res.status(401).json({ error: 'You must be logged in to create a team' });
-	}
-	const owner = req.session.user.userId;
 
 	let desiredRank = []
 	if(req.body.desiredRank) {
