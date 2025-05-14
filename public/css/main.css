@@ -873,3 +873,8 @@ button {
   flex: 1;
   height: 100%
 }
+
+.status-update {
+  position: relative;
+  left: -40%;
+}
