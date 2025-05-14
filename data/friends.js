@@ -74,7 +74,8 @@ const getFriends = async (userId) => {
               profilePicture: otherUser.profilePicture,
               riotId: otherUser.riotId,
               region: otherUser.region,
-              rank: otherUser.rank
+              rank: otherUser.rank,
+              status: otherUser.status,
             }
           : null,
       };

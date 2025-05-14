@@ -6,8 +6,6 @@
   </form>
 </div>
 
-
-
 <div class="profile-container">
   <div class="profile-header">
     {{#if isLoggedIn}}
@@ -16,6 +14,12 @@
     {{/if}}
     {{#if isOwner}}
     <a href="{{personalID}}/edit" class="edit-profile">Edit Profile</a>
+    <div class="status-update">
+      <form id="status-form" method="POST" action="/users/profile/{{personalID}}/status">
+        <input type="text" id="status" name="status" placeholder="Your status" value="{{status}}">
+        <button type="submit">Save</button>
+      </form>
+    </div>
     {{/if}}
     {{#unless isOwner}}
     <button class="friend-request" id="send-friend-request" data-friend-id="{{id}}">Send Friend Request</button>
@@ -40,7 +44,10 @@
 
   <div class="player-info">
     <div class="player-details">
-      <p><strong>Biography:</strong> {{#if biography}}{{biography}}{{else}}No bio yet.{{/if}}</p>
+      <p><strong>Biography:</strong>{{#if biography}}{{biography}}{{else}} No bio yet.{{/if}}</p>
+      {{#if isFriend}}
+      <p><strong>Status: </strong>{{#if status}}{{status}}{{else}}No status.{{/if}}</p>
+      {{/if}}
       <p><strong>Riot ID:</strong> {{riotId}}</p>
       <p><strong>Region:</strong> {{region}}</p>
       <div class="roles-container">
@@ -97,3 +104,4 @@
 <script type="module" src="/public/js/friends/pokes.js"></script>
 <script type="module" src="/public/js/reputation.js"></script>
 <script type="module" src="/public/js/friends/friends.js"></script>
+<script type="module" src="/public/js/friends/status.js"></script>
