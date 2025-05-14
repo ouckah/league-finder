@@ -142,7 +142,7 @@ const validatePost = (image,title, content, tags) => {
 const validateComment = (postId, content) => {
     postId = checkId(postId, "postId");
     content = checkString(content, "content");
-    checkStringWithLength(content, 2, 1000, /^.+$/, "content");
+    checkStringWithLength(content, 2, 1000, /^[\s\S]+$/, "content");
     postId = sanitizeInput(postId);
     content = sanitizeInput(content);
   
