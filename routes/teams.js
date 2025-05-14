@@ -13,29 +13,48 @@ router.route('/new')
     })
 
 router.route('/')
+    .all(protectedRoute)
     .post(async (req, res) => {
+	if(!req.body.title) {
+	    return res.status(400).json({ error: 'Title is required' });
+	}
 	const title = req.body.title;
+	if(!req.session.user) {
+	    return res.status(401).json({ error: 'You must be logged in to create a team' });
+	}
 	const owner = req.session.user.userId;
 
-	let desiredRank = req.body.desiredRank;
-	if (!desiredRank) {
-	    desiredRank = [];
-	}
-	let desiredRole = req.body.desiredRole;
-	if (!desiredRole) {
-	    desiredRole = [];
+	let desiredRank = []
+	if(req.body.desiredRank) {
+	    desiredRank = req.body.desiredRank;
 	}
 
+	let desiredRole = [];
+	if (req.body.desiredRole) {
+	    desiredRole = req.body.desiredRole;
+	}
+
+	if(!req.body.region) {
+	    return res.status(400).json({ error: 'Region is required' });
+	}
 	const region = req.body.region;
+
+	if(!req.body.description) {
+	    return res.status(400).json({ error: 'Description is required' });
+	}
 	const description = req.body.description;
 
-	validation.validateTeam(
-	    title,
-	    desiredRank,
-	    desiredRole,
-	    region,
-	    description
-	);
+	try {
+	    validation.validateTeam(
+		title,
+		desiredRank,
+		desiredRole,
+		region,
+		description
+	    );
+	} catch (e) {
+	    return res.status(400).json({ error: e.message });
+	}
 
 	desiredRank = desiredRank.map(rank => rank.trim());
 	desiredRole = desiredRole.map(role => role.trim());
@@ -49,7 +68,7 @@ router.route('/')
 	    owner
 	);
 
-	res.redirect(`/teams/${id}`);
+	return res.status(200).json({ id: id });
     })
     .get(async (req, res) => {
 	let returnedTeams = [];
