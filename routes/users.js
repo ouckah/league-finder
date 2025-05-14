@@ -108,7 +108,7 @@ router
     try {
       req.params.id = helpers.checkId(req.params.id.toString(), "id");
     } catch (e) {
-      return res.status(400).json({ error: e });
+      return res.status(400).render('error', { error: e, title: 'Error' });
     }
     let isLoggedIn = false;
     if (req.session.user) {
@@ -139,7 +139,7 @@ router
       }
       res.render('users/profile', { title: user.username + "'s Profile", isLoggedIn: isLoggedIn, id: user._id, isOwner: isOwner, isFriend: isFriend, profilePicture: user.profilePicture, username: user.username, biography: user.biography, riotId: user.riotId, region: user.region, preferredRoles: user.preferredRoles, rank: user.rank, wr: wr, reputation: user.reputation, friends: friends, matches: matches, status: user.status }); 
     } catch (e) {
-      return res.status(400).json({ error: e });
+      return res.status(400).render('error', { error: e, title: 'Error' });
     }
   });
 

@@ -29,8 +29,9 @@ router
     const posts = await getAllPosts();
     
     if (req.session.user) {
-      const friends = await getFriends(req.session.user.userId);
-      const friendIds = friends.map(f => f.friendId);
+      const userId = req.session.user.userId;
+      const friends = await getFriends(userId);
+      const friendIds = friends.map(f => f.userId === userId ? f.friendId : f.userId);
 
       posts.sort((a, b) => friendIds.includes(b.userId) - friendIds.includes(a.userId));
     }
