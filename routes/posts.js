@@ -12,19 +12,15 @@ const createPostHandler = async (req, res) => {
 
   ({image, title, content, tags } = validatePost(image,title, content, tags));
 
-  const response = await createPost(
+  const postId = await createPost(
     userId,
     image,
     title,
     content,
     tags
-  )
+  );
 
-  if (!response.postCreated) {
-    return res.status(400).json({ error: "Failed to create post." });
-  }
-
-  return res.status(200).json({ message: "Post created successfully." });
+  return res.status(200).json({ postId: postId });
 }
 
 router
