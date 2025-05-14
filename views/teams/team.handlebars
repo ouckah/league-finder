@@ -4,7 +4,7 @@
   <h3 id="teams-desiredRankHeader" class="teams-desiredRankHeader">Desired Rank</h3>
   <ul>
     {{#each team.desiredRank}}
-    <li id="teams-desiredRankItem">{{this}}</li>
+    <li class="teams-desiredRankItem">{{this}}</li>
   {{/each}}
 </ul>
 {{#unless team.desiredRank.length}}
@@ -14,7 +14,7 @@
   <h3 id="teams-desiredRole" class="teams-desiredRole">Desired Role</h3>
   <ul>
     {{#each team.desiredRole}}
-    <li id="teams-desiredRoleItem">{{this}}</li>
+    <li class="teams-desiredRoleItem">{{this}}</li>
   {{/each}}
 </ul>
 {{#unless team.desiredRole.length}}
@@ -35,7 +35,7 @@
   <h3 id="teams-members" class="teams-members">members</h3>
   <ul id="teams-memberslist" class="team-memberslist">
     {{#each members}}
-    <li id="teams-membersitem"><a href="/users/profile/{{this.id}}">{{this.username}}</a></li>
+    <li class="teams-membersitem"><a href="/users/profile/{{this.id}}">{{this.username}}</a></li>
     {{/each}}
   </ul>
 
@@ -45,7 +45,7 @@
   <h3 id="teams-chatheader" class="teams-chatheader">chat</h3>
   <ul id="teams-chatlist" class="teams-chatlist">
     {{#each messages}}
-    <li id="teams-chatitem">{{this}}</li>
+    <li class="teams-chatitem">{{this}}</li>
     {{/each}}
   </ul>
 
