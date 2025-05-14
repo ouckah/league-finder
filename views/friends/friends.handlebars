@@ -6,9 +6,8 @@
     {{#each acceptedFriends}}
     <li class="friend-item">
       <div class="user-info">
-        <img src="{{this.friendUser.profilePicture}}" alt="pfp" class="pfp" />
+        <img src="{{this.friendUser.profilePicture}}" alt="pfp" class="pfp">
         <a href="/users/profile/{{this.friendUser._id}}" class="notis"><span class="username">{{this.friendUser.username}}</span></a>
-        <br/>
         <p>{{this.friendUser.status}}</p>
       </div>
       <div class="actions">
