@@ -89,14 +89,17 @@ router.route('/:id')
 	try {
 	    helpers.checkId(teamId);
 	} catch (e) {
-	    return res.status(400).render('error', { error: e.message, title: 'Error' });
+	    console.log("HI");
+	    return res.status(400).render('error', { error: e, title: 'Error' });
 	}
 
-	const team = await teamData.getTeam(teamId);
-	if (!team) {
-	    res.status(404).render('error', { error: 'Team not found', title: 'Error' });
-	    return;
+	let team = "";
+	try {
+	    team = await teamData.getTeam(teamId);
+	} catch (e) {
+	    return res.status(404).render('error', { error: e, title: 'Error' });
 	}
+
 
 	let joinable = false;
 	let leavable = false;
@@ -146,36 +149,36 @@ router.route('/:id/leave').all(protectedRoute)
 	try {
 	    helpers.checkId(teamId);
 	} catch (e) {
-	    return res.status(400).render('error', { error: e.message, title: 'Error' });
+	    return res.status(400).json({ error: e.message, title: 'Error' });
 	}
 
 	const team = await teamData.getTeam(teamId);
 	if (!team) {
-	    res.status(404).render('error', { error: 'Team not found', title: 'Error' });
+	    res.status(404).json({ error: 'Team not found', title: 'Error' });
 	    return;
 	}
 
 	if (!req.session.user) {
-	    res.status(401).render('error', { error: 'You must be logged in to leave a team', title: 'Error' });
+	    res.status(401).json({ error: 'You must be logged in to leave a team', title: 'Error' });
 	    return;
 	}
 
 	const user = req.session.user.userId;
 
 	if (user === team.owner) {
-	    res.status(400).render('error', { error: 'You cannot leave your own team', title: 'Error' });
+	    res.status(400).json({ error: 'You cannot leave your own team', title: 'Error' });
 	    return;
 	}
 
 	if (!team.members.includes(user)) {
-	    res.status(400).render('error', { error: 'You are not a member of this team', title: 'Error' });
+	    res.status(400).json({ error: 'You are not a member of this team', title: 'Error' });
 	    return;
 	}
 
 	try {
 	    await teamData.removeUserFromTeam(teamId, user);
 	} catch (e) {
-	    res.status(400).render('error', { error: e.message, title: 'Error' });
+	    res.status(400).json({ error: e.message, title: 'Error' });
 	}
 
 	res.redirect(`/teams/${teamId}`);
@@ -186,34 +189,34 @@ router.route('/:id/join').all(protectedRoute).get(async (req, res) => {
     try {
 	helpers.checkId(teamId);
     } catch (e) {
-	return res.status(400).render('error', { error: e.message, title: 'Error' });
+	return res.status(400).json({ error: e.message, title: 'Error' });
     }
 
     const team = await teamData.getTeam(teamId);
     if (!team) {
-	res.status(404).render('error', { error: 'Team not found', title: 'Error' });
+	res.status(404).json({ error: 'Team not found', title: 'Error' });
 	return;
     }
 
     if (!req.session.user) {
-	res.status(401).render('error', { error: 'You must be logged in to join a team', title: 'Error' });
+	res.status(401).json({ error: 'You must be logged in to join a team', title: 'Error' });
     }
     const user = req.session.user.userId;
 
     if (user === team.owner) {
-	res.status(400).render('error', { error: 'You cannot join your own team', title: 'Error' });
+	res.status(400).json({ error: 'You cannot join your own team', title: 'Error' });
 	return;
     }
 
     if (team.requests.includes(user)) {
-	res.status(400).render('error', { error: 'You have already requested to join this team', title: 'Error' });
+	res.status(400).json({ error: 'You have already requested to join this team', title: 'Error' });
 	return;
     }
 
     try {
 	await teamData.requestToJoinTeam(teamId, user);
     } catch (e) {
-	res.status(400).render('error', { error: e.message, title: 'Error' });
+	res.status(400).json({ error: e.message, title: 'Error' });
     }
 
     res.redirect(`/teams/${teamId}`);
@@ -222,7 +225,7 @@ router.route('/:id/join').all(protectedRoute).get(async (req, res) => {
 router.route('/:id/accept').all(protectedRoute).patch(async (req, res) => {
     const teamId = req.params.id;
     if (!req.body.requests) {
-	return res.status(400).render('error', { error: 'userId is required', title: 'Error' });
+	return res.status(400).json({ error: 'userId is required', title: 'Error' });
     }
     const userId = req.body.requests;
 
@@ -318,24 +321,24 @@ router.route('/:id/admin').all(protectedRoute).get(async (req, res) => {
     try {
 	helpers.checkId(teamId);
     } catch (e) {
-	return res.status(400).render('error', { error: e.message, title: 'Error' });
+	return res.status(400).json({ error: e.message, title: 'Error' });
     }
 
     const team = await teamData.getTeam(teamId);
     if (!team) {
-	res.status(404).render('error', { error: 'Team not found', title: 'Error' });
+	res.status(404).json({ error: 'Team not found', title: 'Error' });
 	return;
     }
 
     if (!req.session.user) {
-	res.status(401).render('error', { error: 'You must be logged in to view this page', title: 'Error' });
+	res.status(401).json({ error: 'You must be logged in to view this page', title: 'Error' });
 	return;
     }
 
     const user = req.session.user.userId;
 
     if (user != team.owner) {
-	res.status(403).render('error', { error: 'You are not the owner of this team', title: 'Error' });
+	res.status(403).json({ error: 'You are not the owner of this team', title: 'Error' });
 	return;
     }
 
