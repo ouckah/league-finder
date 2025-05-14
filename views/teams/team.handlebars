@@ -1,20 +1,20 @@
 <div class="team-container">
-  <h1 id="teams-title" name="teams-title">{{team.title}}</h1>
+  <h1 id="teams-title" class="teams-title">{{team.title}}</h1>
 
-  <h3 id="teams-desiredRankHeader" name="teams-desiredRankHeader">Desired Rank</h3>
+  <h3 id="teams-desiredRankHeader" class="teams-desiredRankHeader">Desired Rank</h3>
   <ul>
     {{#each team.desiredRank}}
-    <li id="teams-desiredRankItem">{{this}}</li>
+    <li class="teams-desiredRankItem">{{this}}</li>
   {{/each}}
 </ul>
 {{#unless team.desiredRank.length}}
 <p>No Desired Rank</p>
 {{/unless}}
 
-  <h3 id="teams-desiredRole" name="teams-desiredRole">Desired Role</h3>
+  <h3 id="teams-desiredRole" class="teams-desiredRole">Desired Role</h3>
   <ul>
     {{#each team.desiredRole}}
-    <li id="teams-desiredRoleItem">{{this}}</li>
+    <li class="teams-desiredRoleItem">{{this}}</li>
   {{/each}}
 </ul>
 {{#unless team.desiredRole.length}}
@@ -22,30 +22,30 @@
 {{/unless}}
 
 
-<h3 id="teams-region" name="teams-region">Region</h3>
+<h3 id="teams-region" class="teams-region">Region</h3>
 <p id="teams-regionItem">{{team.region}}</p>
 {{#unless team.region}}
 <p>No Desired Region</p>
 {{/unless}}
 
 
-  <h3 id="teams-owner" name="teams-owner">Owner</h3>
+  <h3 id="teams-owner" class="teams-owner">Owner</h3>
   <a href="/users/profile/{{owner.id}}" id="teams-ownerItem">{{owner.username}}</a>
 
-  <h3 id="teams-members" name="teams-members">members</h3>
+  <h3 id="teams-members" class="teams-members">members</h3>
   <ul id="teams-memberslist" class="team-memberslist">
     {{#each members}}
-    <li id="teams-membersitem"><a href="/users/profile/{{this.id}}">{{this.username}}</a></li>
+    <li class="teams-membersitem"><a href="/users/profile/{{this.id}}">{{this.username}}</a></li>
     {{/each}}
   </ul>
 
   <p id="teams-description">Description: {{team.description}}</p>
 
   {{#if ismember}}
-  <h3 id="teams-chatheader" name="teams-chatheader">chat</h3>
+  <h3 id="teams-chatheader" class="teams-chatheader">chat</h3>
   <ul id="teams-chatlist" class="teams-chatlist">
     {{#each messages}}
-    <li id="teams-chatitem">{{this}}</li>
+    <li class="teams-chatitem">{{this}}</li>
     {{/each}}
   </ul>
 

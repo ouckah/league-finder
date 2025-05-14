@@ -24,7 +24,8 @@ if (teamForm) {
 	    error.hidden = true;
 	    success.hidden = false;
 	    success.innerHTML = 'Attempting to create team...';
-	    await validation.handleFormSubmit(teamForm, { title, desiredRanks, desiredRoles, region, description }, '/teams');
+	    const id = (await validation.handleFormSubmit(teamForm, { title, desiredRanks, desiredRoles, region, description }, null)).id;
+	    window.location.href = `/teams/${id}`;
 	} catch (e) {
 	    validation.throwError(e,error,success);
 	    return;

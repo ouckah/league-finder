@@ -738,7 +738,7 @@ button {
   margin-top: 25px;
 }
 
-#teams-description {
+.teams-description {
   background-color: #e9f1ff;
   padding: 15px;
   margin-top: 20px;
@@ -749,7 +749,7 @@ button {
 }
 
 
-#teams-chatList {
+.teams-chatList {
   list-style: none;
   padding-left: 0;
   margin: 10px 0;
@@ -760,16 +760,16 @@ button {
   border-radius: 4px;
 }
 
-#teams-chatItem {
+.teams-chatItem {
   padding: 10px;
   border-bottom: 1px solid #eee;
 }
 
-#teams-chatItem:last-child {
+.teams-chatItem:last-child {
   border-bottom: none;
 }
 
-#teams-chatForm {
+#teams-chatform {
   margin-top: 15px;
   text-align: center;
 }
