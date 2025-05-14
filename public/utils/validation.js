@@ -143,7 +143,12 @@ async function handleFormSubmit(form, data, successRedirect) {
     });
 
     if (response.ok) {
-      window.location.href = successRedirect;
+      if(successRedirect) {
+	  window.location.href = successRedirect;
+      } else {
+	  const result = await response.json();
+	  return result;
+      }
     } else {
       const result = await response.json();
       throw result.error;
