@@ -140,7 +140,7 @@ router.route('/:id')
 	res.render('teams/team', { team: team, joinable: joinable, leavable: leavable, members: members, isowner: isowner, owner: owner, messages: messages, ismember: ismember, title: team.title, requested:requested});
     })
 
-router.route('/:id/leave')
+router.route('/:id/leave').all(protectedRoute)
     .get(async (req, res) => {
 	const teamId = req.params.id;
 	try {
@@ -181,7 +181,7 @@ router.route('/:id/leave')
 	res.redirect(`/teams/${teamId}`);
     })
 
-router.route('/:id/join').get(async (req, res) => {
+router.route('/:id/join').all(protectedRoute).get(async (req, res) => {
     const teamId = req.params.id;
     try {
 	helpers.checkId(teamId);
@@ -219,7 +219,7 @@ router.route('/:id/join').get(async (req, res) => {
     res.redirect(`/teams/${teamId}`);
 })
 
-router.route('/:id/accept').patch(async (req, res) => {
+router.route('/:id/accept').all(protectedRoute).patch(async (req, res) => {
     const teamId = req.params.id;
     if (!req.body.requests) {
 	return res.status(400).render('error', { error: 'userId is required', title: 'Error' });
@@ -264,7 +264,7 @@ router.route('/:id/accept').patch(async (req, res) => {
 
 })
 
-router.route('/:id/kick').patch(async (req, res) => {
+router.route('/:id/kick').all(protectedRoute).patch(async (req, res) => {
     const teamId = req.params.id;
     if (!req.body.members) {
 	return res.status(400).json({ error: 'userId is required' });
@@ -359,46 +359,45 @@ router.route('/:id/admin').all(protectedRoute).get(async (req, res) => {
     res.render('teams/admin', { team: team, members: members, requests: requests, title: 'Team Admin Page' });
 })
 
-router.route('/:id/chat').post(async (req, res) => {
+router.route('/:id/chat').all(protectedRoute).post(async (req, res) => {
     const teamId = req.params.id;
     const message = req.body.teamsmessage;
 
     if (!message) {
-	return res.status(400).render('error', { error: 'Message is required', title: 'Error' });
+	return res.status(400).json({ error: 'Message is required', title: 'Error' });
     }
 
     try {
 	helpers.checkId(teamId);
     } catch (e) {
-	return res.status(400).render('error', { error: e.message, title: 'Error' });
+	return res.status(400).json({ error: e.message, title: 'Error' });
     }
 
     const team = await teamData.getTeam(teamId);
     if (!team) {
-	res.status(404).render('error', { error: 'Team not found', title: 'Error' });
+	res.status(404).json({ error: 'Team not found', title: 'Error' });
 	return;
     }
 
     if (!req.session.user) {
-	res.status(401).render('error', { error: 'You must be logged in to send a message', title: 'Error' });
+	res.status(401).json({ error: 'You must be logged in to send a message', title: 'Error' });
 	return;
     }
 
     const userId = req.session.user.userId;
 
     if (!team.members.includes(userId)) {
-	res.status(403).render('error', { error: 'You are not a member of this team', title: 'Error' });
+	res.status(403).json({ error: 'You are not a member of this team', title: 'Error' });
 	return;
     }
 
     try {
 	await teamData.addMessage(teamId, userId, message);
     } catch (e) {
-	res.status(400).render('error', { error: e.message, title: 'Error' });
+	res.status(400).json({ error: e.message, title: 'Error' });
 	return;
     }
-
-    res.redirect(`/teams/${teamId}`);
+    return res.status(200).json({ teamId: teamId });
 })
 
 

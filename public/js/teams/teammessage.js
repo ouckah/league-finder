@@ -1,21 +1,27 @@
 import * as validation from '../../utils/validation.js';
 
-let chatForm = document.getElementById('teams-chatForm');
+let chatForm = document.getElementById('teams-chatform');
 let error = document.getElementById('error');
 
 
 if (chatForm) {
-  chatForm.addEventListener('submit', (event) => {
+  chatForm.addEventListener('submit', async (event) => {
     event.preventDefault();
     error.hidden = true;
-    let message = document.getElementById('teamsMessage').value;
+    let teamsmessage = document.getElementById('teamsmessage').value;
     
-    if (message.length == 0 || message.length > 128) {
+    if (teamsmessage.length == 0 || teamsmessage.length > 128) {
 	error.innerHTML = "Message must be between 1 and 128 characters";
 	error.hidden = false;
 	return;
     }
-    chatForm.submit();
+    try {
+	await validation.handleFormSubmit(chatForm, {teamsmessage}, null);
+	window.location.reload();
+    } catch (e) {
+	error.innerHTML = e.error;
+	error.hidden = false;
+    }
     error.hidden = true;
   });
 }
