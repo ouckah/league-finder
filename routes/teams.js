@@ -12,7 +12,7 @@ router.route('/new')
 	res.render('teams/newteam', { title: "Create Team" });
     })
 
-router.route('/').all(protectedRoute)
+router.route('/')
     .post(async (req, res) => {
 	if(!req.session.user) {
 	    return res.status(401).json({ error: 'You must be logged in to create a team' });
