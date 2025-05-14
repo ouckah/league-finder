@@ -364,41 +364,40 @@ router.route('/:id/chat').post(async (req, res) => {
     const message = req.body.teamsmessage;
 
     if (!message) {
-	return res.status(400).render('error', { error: 'Message is required', title: 'Error' });
+	return res.status(400).json({ error: 'Message is required', title: 'Error' });
     }
 
     try {
 	helpers.checkId(teamId);
     } catch (e) {
-	return res.status(400).render('error', { error: e.message, title: 'Error' });
+	return res.status(400).json({ error: e.message, title: 'Error' });
     }
 
     const team = await teamData.getTeam(teamId);
     if (!team) {
-	res.status(404).render('error', { error: 'Team not found', title: 'Error' });
+	res.status(404).json({ error: 'Team not found', title: 'Error' });
 	return;
     }
 
     if (!req.session.user) {
-	res.status(401).render('error', { error: 'You must be logged in to send a message', title: 'Error' });
+	res.status(401).json({ error: 'You must be logged in to send a message', title: 'Error' });
 	return;
     }
 
     const userId = req.session.user.userId;
 
     if (!team.members.includes(userId)) {
-	res.status(403).render('error', { error: 'You are not a member of this team', title: 'Error' });
+	res.status(403).json({ error: 'You are not a member of this team', title: 'Error' });
 	return;
     }
 
     try {
 	await teamData.addMessage(teamId, userId, message);
     } catch (e) {
-	res.status(400).render('error', { error: e.message, title: 'Error' });
+	res.status(400).json({ error: e.message, title: 'Error' });
 	return;
     }
-
-    res.redirect(`/teams/${teamId}`);
+    return res.status(200).json({ teamId: teamId });
 })
 
 
